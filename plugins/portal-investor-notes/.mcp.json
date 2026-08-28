@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "otter": {
+      "type": "http",
+      "url": "https://mcp.otter.ai/mcp"
+    },
+    "airtable": {
+      "type": "http",
+      "url": "https://mcp.airtable.com/mcp"
+    }
+  }
+}
