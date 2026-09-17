@@ -3,8 +3,6 @@ import defaultComponents from "fumadocs-ui/mdx";
 
 import { Fact, Facts } from "@/components/facts";
 import { Flow, FlowStep } from "@/components/flow";
-import { Hero } from "@/components/hero";
-import { PluginCard, PluginCards } from "@/components/plugin-card";
 import { Appended, Chip, Field, Fields, Hint, Legend, LegendItem, Record } from "@/components/record";
 import { Say } from "@/components/say";
 import { Screenshot } from "@/components/screenshot";
@@ -21,12 +19,9 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Fields,
     Flow,
     FlowStep,
-    Hero,
     Hint,
     Legend,
     LegendItem,
-    PluginCard,
-    PluginCards,
     Record,
     Say,
     Screenshot,
