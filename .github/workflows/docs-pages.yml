@@ -33,12 +33,13 @@ jobs:
           cache: npm
           cache-dependency-path: docs/package-lock.json
 
+      # One-time repo setup: Settings > Pages > Build and deployment >
+      # Source: "GitHub Actions". This step fails until that is done.
+      # Do not add `enablement: true` here — creating a Pages site needs repo
+      # admin, which GITHUB_TOKEN never has, so it fails with
+      # "Resource not accessible by integration" and hides the real cause.
       - name: Setup Pages
         uses: actions/configure-pages@v6
-        with:
-          # Turns Pages on (build type: workflow) if it is not already enabled,
-          # so this repo needs no manual Settings > Pages step.
-          enablement: true
 
       - name: Install deps
         run: npm ci

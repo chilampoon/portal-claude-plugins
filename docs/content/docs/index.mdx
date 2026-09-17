@@ -1,34 +1,59 @@
 ---
-title: Portal Claude plugins
-description: Say it once, and it files itself.
+title: Getting started
+description: Install the plugins and connect your accounts.
 ---
 
-Two Claude plugins that take something you already said or wrote and file it in
-the Venture Airtable base — after you have read it and said yes.
+Two Claude plugins that file work you have already done into the Venture Airtable
+base, after you have read the draft and approved it.
 
-## The two plugins
+**Investor meeting summary** turns an Otter transcript into a structured note on
+the firm's record. **Triage note updates** takes a triage note you wrote — a Word
+doc, a PDF, or an email — and appends it to the company's Deal Flow record.
 
-**Investor meeting summary.** After a VC meeting, tell Claude one sentence. It
-reads your Otter transcript, drafts a structured note about what you learned,
-matches the firm, and files it on that firm's record.
+## 1. Add the Portal marketplace
 
-**Triage note updates.** Hand Claude your triage note — a Word doc, a PDF, or an
-email you paste in. It organizes the note into Portal's triage template and
-appends it to that company's Deal Flow record.
+In Claude, open **Directory → Plugins** and click the **+** button. Paste this
+into the URL field, leave **Sync automatically** switched on, and click **Sync**:
 
-## The shape is the same
+```
+https://github.com/chilampoon/portal-claude-plugins
+```
 
-You supply the source. Claude drafts. You read it. You say yes. Only then does
-anything reach Airtable.
+With automatic sync on, later improvements reach you without reinstalling.
 
-Neither plugin invents content, creates companies or firms that are not already
-in the base, or overwrites what a colleague wrote. When either one is unsure —
-which meeting, which firm, which company — it stops and asks instead of guessing.
+## 2. Install what you need
 
-## Start here
+Open the **Personal** tab in the plugin directory. Install either or both:
 
-1. [Install the plugins](/docs/getting-started/install)
-2. [Connect your accounts](/docs/getting-started/connect)
+| Plugin | Install it if you |
+| --- | --- |
+| **Investor Meeting Summary** | meet investors and want the notes filed in the VC CRM |
+| **Triage Note Updates** | write triage notes on startups and want them on the Deal Flow record |
 
-Then jump to [logging a meeting](/docs/investor-meeting-summary) or
-[filing a triage note](/docs/triage-note-updates).
+## 3. Connect your accounts
+
+The first time you use a plugin, Claude asks you to sign in. Investor Meeting
+Summary needs **Otter.ai and Airtable**; Triage Note Updates needs **Airtable**.
+
+Approve with your own Portal accounts. Claude only sees what you can already see
+in those tools — Otter searches run against your own conversations, and Airtable
+reads and writes as you. So if a colleague recorded the meeting, it is not in your
+Otter: ask them to share the conversation with you, or let them log it themselves.
+
+Both plugins check their connectors before doing anything else. If one is missing
+or a sign-in has expired, the plugin stops before reading or writing anything and
+names the connector to reconnect. In a chat that is the **+** menu →
+**Connectors**.
+
+## What to expect
+
+Both plugins draft first and show you what they are about to write — the content,
+the record they matched, and every field they intend to set. Nothing reaches
+Airtable until you confirm.
+
+Neither plugin invents content, creates firms or companies that are not already in
+the base, or overwrites what a colleague wrote. When either is unsure which
+meeting, firm or company you mean, it asks instead of guessing.
+
+Next: [log an investor meeting](/docs/investor-meeting-summary) or
+[file a triage note](/docs/triage-note-updates).

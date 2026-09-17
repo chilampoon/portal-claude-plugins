@@ -6,10 +6,10 @@ description: The note format, the twelve sections, and the fields the form sets.
 One new note record, linked to the firm. Nothing that already exists is edited or
 overwritten.
 
-## It is filed through the form, on purpose
+## Why it is filed through the form
 
 The plugin submits the **New meeting or firm updates** form rather than creating
-the row directly through the API. That distinction matters more than it sounds.
+the row directly through the API.
 
 Two automations in the base trigger on *form submitted*, not on *record created*.
 One of them tags you as the **Portal Contact** on everyone you met with — which is
@@ -23,8 +23,7 @@ lost by doing it this way.
 ## The note
 
 Twelve possible sections. **A section appears only if the conversation actually
-produced it** — most notes use four or five. A heading with "not discussed"
-underneath is worse than no heading.
+produced it** — most notes use four or five.
 
 1. Since last time
 2. Key highlights
@@ -43,8 +42,8 @@ Sections 4, 5 and 6 stay separate deliberately. They are three different
 obligations, and collapsing them into one "companies discussed" list loses which
 one you owe.
 
-Bullets only, no prose blocks. There is no word limit — a cap just makes facts get
-dropped to fit — but notes land naturally between about 150 and 350 words.
+Bullets only, no prose blocks. There is no word limit, since a cap causes facts to
+be dropped to fit. Notes land naturally between about 150 and 350 words.
 
 ## What is left out
 
@@ -56,8 +55,7 @@ exceptions, because each is information about the investor:
   ("the New Jersey angle is what interests them");
 - a company we committed to send them.
 
-The filter is relevance to the investor, not caution. It is never a reason to
-write a thinner note about something sensitive.
+The filter is relevance to the investor, not caution.
 
 ## Example
 
@@ -79,9 +77,8 @@ write a thinner note about something sensitive.
 > - Ignacio: send the non-confidential summary on the cardiovascular device company.
 > - Dana: make the co-investor introduction.
 
-Eight of the twelve sections appeared in the full version of that note. The other
-four are absent because that conversation did not produce them. That is the
-correct output, not an incomplete one.
+Eight of the twelve sections appeared in the full version of that note. The rest
+are absent because that conversation did not produce them.
 
 ## The fields it sets
 
