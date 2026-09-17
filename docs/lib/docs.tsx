@@ -45,7 +45,7 @@ function docPage(path: string, mod: MdxModule, eyebrow: string): DocPage {
 }
 
 export const docsPages: DocPage[] = [
-  docPage("", gettingStarted, "Portal · Claude plugins"),
+  docPage("", gettingStarted, "Portal Innovations · Claude plugins"),
   docPage("investor-meeting-summary", investorMeetingSummary, "Portal · Claude plugin"),
   docPage("triage-note-updates", triageNoteUpdates, "Portal · Claude plugin")
 ];
