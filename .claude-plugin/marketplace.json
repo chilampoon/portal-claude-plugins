@@ -1,11 +1,13 @@
 {
   "name": "portal-plugins",
-  "owner": { "name": "Portal" },
+  "owner": {
+    "name": "Portal"
+  },
   "plugins": [
     {
       "name": "investor-meeting-summary",
       "source": "./plugins/investor-meeting-summary",
-      "description": "Log investor meetings: pull the Otter.ai transcript, distill an investor-focused summary, and file it on the firm's record in the Venture Airtable CRM."
+      "description": "Log investor meetings: pull the Otter.ai transcript, distill a structured investor-focused note, and file it through the CRM form so the Portal Contact tagging actually runs."
     },
     {
       "name": "triage-note-updates",
