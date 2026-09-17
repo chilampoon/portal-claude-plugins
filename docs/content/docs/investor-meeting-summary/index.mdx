@@ -1,0 +1,57 @@
+---
+title: Log an investor meeting
+description: After a VC meeting, say one sentence and Claude files the note from your Otter transcript.
+---
+
+Check the meeting is in your Otter, then say the line.
+
+## 1. Say what happened
+
+> I just met with Redpine Ventures — check Otter and update Airtable.
+
+Add the date if the meeting was not today. If you want something extra in this
+one note, ask in the same message — for example, *"...and include the technical
+discussion this time."*
+
+## 2. Read the draft
+
+Claude shows you the note it wrote and the exact firm record it matched.
+
+**Check the firm match.** This is the step most worth your attention. The base
+holds genuinely different companies with near-identical names — WuXi Biologics,
+WuXi AppTec and WuXi STA are three separate records whose CDAs do not cover each
+other — and Otter mangles proper nouns, rendering one firm as "Wushi", "Wuji" and
+"Wu Xi" in a single transcript.
+
+Claude therefore prefers the **attendee's email domain** over the name it heard,
+normalises trailing suffixes like Inc and Ventures before comparing, and breaks
+ties on who is already linked to the firm. It deliberately ignores how many notes
+a record already has, since that only reflects past use and would make a wrong
+match reinforce itself. Confirm it anyway.
+
+## 3. Say yes
+
+Reply yes. Claude submits the CRM form, and the note appears on the firm's record
+under your name and today's date.
+
+## Things you can ask for in the same breath
+
+None of these happen unless you ask:
+
+- **A follow-up reminder** in 1–4 weeks. This sends a real email.
+- **Notify a colleague**, by adding them to the notification list. Also email.
+- **Credit the others who were on the call**, so they are recorded as Portal
+  Contacts too. They have to be Airtable collaborators; anyone who is not gets
+  named in the note text instead.
+- **Flag someone who has left the firm.** Whenever it comes up in conversation,
+  this is a free bit of CRM cleanup — they get hidden from the firm's people list.
+- **Record a diligence status change** for a Portal company.
+- **Update the firm's stats** — AUM, check sizes, whether they lead, fund stage,
+  fund focus — when they actually told you.
+
+## If you promised to send something
+
+If the note records a commitment by you to send a company, a deck or a
+non-confidential summary, Claude may offer to check whether it actually went out.
+It can only do that if you have a mail connector available in that chat; it will
+not claim to have checked when it has not.

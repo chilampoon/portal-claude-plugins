@@ -1,0 +1,47 @@
+---
+title: What lands in Airtable
+description: Which field each triage section is appended to, and what is deliberately never touched.
+---
+
+The **Deals** interface shows each company through a record page backed by the
+Startups table. That is where the note goes — the same record you would open by
+clicking the company in Deal Flow.
+
+## The mapping
+
+Each triage section is appended to one rich-text field:
+
+| Triage section | Airtable field |
+| --- | --- |
+| Startup Overview | Value Proposition |
+| Strengths | Secret Sauce |
+| Weaknesses | Key Risks |
+| Obstacles | Outstanding Key Issues |
+| Questions | Questions for Company |
+| Recommendation | Rationale for Venture Evaluation |
+
+Claude reads each field's current contents before writing, so it can append rather
+than replace. If it cannot read a field, it stops rather than risk writing over
+what is there.
+
+## What it never touches
+
+Two fields are deliberately off-limits, and Claude will tell you to make the
+change yourself rather than doing it:
+
+**Pipeline Stage.** Changing it fires automations that email the venture team and
+write a Stage History row. Moving a company to Triage, or passing on it, is a
+human decision — so even if your note says "move to Triage", Claude leaves the
+stage alone and says so.
+
+**Investment Chain of Logic.** This is a curated, numbered argument carrying
+confidence markers, built during diligence. Dumping a triage strengths list into
+it would destroy what it is for.
+
+Beyond those two, Claude only writes the six fields above. It does not touch
+formulas, lookups, rollups, or anything else on the record.
+
+## Optional
+
+If **Triage Start** is empty and the note clearly supports a date, Claude offers
+to set it. If it already has a value, it leaves it alone.

@@ -1,2 +1,10 @@
 .DS_Store
 */.DS_Store
+
+# docs site (Next.js + Fumadocs)
+docs/node_modules/
+docs/.next/
+docs/.source/
+docs/out/
+docs/*.tsbuildinfo
+docs/next-env.d.ts

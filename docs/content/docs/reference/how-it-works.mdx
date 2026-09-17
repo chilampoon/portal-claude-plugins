@@ -1,0 +1,55 @@
+---
+title: How it works
+description: Approvals, what Claude can see, and the rules both plugins follow.
+---
+
+## Nothing is written without your yes
+
+Both plugins draft first and show you what they are about to do — the content, the
+record they matched, and every field they intend to set. Writing happens only
+after you confirm. This is not a setting you can turn off, and it applies to the
+fields that send email just as much as the note itself.
+
+## Claude only sees what you already see
+
+You sign in with your own accounts, so Otter searches run against your own
+conversations and Airtable reads and writes as you. A plugin cannot reach a
+meeting recording or a base you do not have access to.
+
+## Neither plugin invents content
+
+The investor plugin summarises a transcript. The triage plugin reorganises a note
+a person wrote. Neither fills a gap from general knowledge of the company. If a
+note is thin, it gets filed thin — the alternative is worse.
+
+The same applies to structure: a section that the source did not produce is left
+out rather than padded with "not discussed".
+
+## Neither plugin creates records
+
+If the firm or the startup is not already in the base, the plugin stops and tells
+you to add it through the proper form. This avoids duplicate and half-populated
+records appearing in the CRM.
+
+## Existing work is preserved
+
+The investor plugin creates one new note record per meeting and never edits an old
+one. The triage plugin appends under a dated header and keeps whatever is already
+in the field.
+
+## Select values are never invented
+
+Category tags and other select options come from the list that already exists in
+the base. A plugin will not create a new option to make something fit.
+
+## When it is unsure, it asks
+
+Two firms with similar names, no transcript for that day, a company not in the
+base, an ambiguous section — each of these stops the run and produces a question,
+not a guess.
+
+## If a connector drops mid-run
+
+Both plugins check their connectors before starting. If one fails partway through,
+the plugin stops, tells you, and re-checks before continuing, rather than
+improvising around a dead connection.

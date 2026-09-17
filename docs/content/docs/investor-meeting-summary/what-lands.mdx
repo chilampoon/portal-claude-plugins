@@ -1,0 +1,97 @@
+---
+title: What lands in Airtable
+description: The note format, the twelve sections, and the fields the form sets.
+---
+
+One new note record, linked to the firm. Nothing that already exists is edited or
+overwritten.
+
+## It is filed through the form, on purpose
+
+The plugin submits the **New meeting or firm updates** form rather than creating
+the row directly through the API. That distinction matters more than it sounds.
+
+Two automations in the base trigger on *form submitted*, not on *record created*.
+One of them tags you as the **Portal Contact** on everyone you met with — which is
+how the base records who at Portal owns that relationship, and what the form's own
+helper text promises. A row created through the API looks perfect and silently
+skips it, so nobody gets tagged and nothing signals that anything went wrong.
+
+Submitting the form also triggers everything a created record would, so nothing is
+lost by doing it this way.
+
+## The note
+
+Twelve possible sections. **A section appears only if the conversation actually
+produced it** — most notes use four or five. A heading with "not discussed"
+underneath is worse than no heading.
+
+1. Since last time
+2. Key highlights
+3. Fund and thesis
+4. Companies they are working on
+5. Companies they are sharing with us
+6. Companies we are sharing with them
+7. Passes and negatives
+8. Their process
+9. Co-investors they named
+10. People and personal
+11. Follow-ups
+12. Next contact
+
+Sections 4, 5 and 6 stay separate deliberately. They are three different
+obligations, and collapsing them into one "companies discussed" list loses which
+one you owe.
+
+Bullets only, no prose blocks. There is no word limit — a cap just makes facts get
+dropped to fit — but notes land naturally between about 150 and 350 words.
+
+## What is left out
+
+Nothing about Portal itself: our fundraising, our metrics, our product. Three
+exceptions, because each is information about the investor:
+
+- commitments the investor made to us;
+- their reaction to something of ours, where the reaction *is* the point
+  ("the New Jersey angle is what interests them");
+- a company we committed to send them.
+
+The filter is relevance to the investor, not caution. It is never a reason to
+write a thinner note about something sensitive.
+
+## Example
+
+> **Redpine Ventures, 2026-08-26. Dana Whitfield (Partner). Meeting.**
+>
+> **Key highlights**
+> - Fund III is closing early next year and Dana said they will be writing bigger first checks out of it.
+> - They are actively looking at ADC platforms following two portfolio exits.
+>
+> **Fund and thesis**
+> - First checks moving up from roughly $1M–$2M to $3M–$5M.
+> - Stays at seed and Series A, does not follow into B.
+> - Invests nationally, and Dana was specific that non-coastal is not a barrier.
+>
+> **Companies they are sharing with us**
+> - Dana offered to send two oncology startups once she has cleared it with the founders.
+>
+> **Follow-ups**
+> - Ignacio: send the non-confidential summary on the cardiovascular device company.
+> - Dana: make the co-investor introduction.
+
+Eight of the twelve sections appeared in the full version of that note. The other
+four are absent because that conversation did not produce them. That is the
+correct output, not an incomplete one.
+
+## The fields it sets
+
+| Field | What goes in |
+| --- | --- |
+| Submitted by | You, plus any colleagues who were on the call |
+| Firm | The one firm record, after you confirm it |
+| Your contacts | The investor-side people, linked when they are already in the CRM |
+| Update type | Meeting, or non-meeting update |
+| Notes | The note above |
+| Notes cateogry | Tagged from the four existing options — never a new one |
+
+Everything else on the form is optional and only set if you ask for it.

@@ -1,0 +1,50 @@
+---
+title: File a triage note
+description: Hand Claude your triage note as a Word doc, PDF or pasted email and it updates the Deal Flow record.
+---
+
+Triage notes tend to live in a Word doc or an email thread and never make it into
+Airtable. This moves them across.
+
+## 1. Hand Claude the note
+
+Attach the Word doc or PDF, or paste the email in, and say:
+
+> Here are my triage notes on Veil Therapeutics — add them to Airtable.
+
+Several people's notes on the same company at once is fine. Say so, and Claude
+merges them while keeping each person's contribution attributable.
+
+**Claude will not write the triage note for you.** This workflow files notes that a
+person wrote. If you hand it nothing, it asks for the note rather than drafting
+one from what it knows about the company.
+
+## 2. Read the draft
+
+Claude reorganises the note into Portal's six triage sections — Startup Overview,
+Strengths, Weaknesses, Obstacles, Questions, Recommendation — keeping your
+substance and your ordering, and tightening the wording rather than adding
+analysis you did not write. A section you left empty stays empty.
+
+It also shows you the Startup record it matched, with the company's current
+pipeline stage. Confirm it. Claude never creates a startup record; if the company
+is not in the base yet, it stops and tells you to add it through the new-startup
+form first.
+
+## 3. Say yes
+
+Claude shows you, field by field, exactly what it is about to write and whether
+each one is a first write or an append. Only after you confirm does it write.
+
+## Notes from more than one person
+
+Triage notes accumulate. If a field already has someone else's note in it, Claude
+keeps that text exactly as it is and adds yours underneath, under a dated header:
+
+```
+**Triage — Chi-Lam Poon, 2026-09-17**
+```
+
+Nothing anyone wrote before is replaced. See
+[what lands in Airtable](/docs/triage-note-updates/what-lands) for the field
+mapping.
