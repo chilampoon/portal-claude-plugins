@@ -1,11 +1,18 @@
 {
   "name": "portal-plugins",
-  "owner": { "name": "Portal" },
+  "owner": {
+    "name": "Portal"
+  },
   "plugins": [
     {
-      "name": "portal-investor-notes",
-      "source": "./plugins/portal-investor-notes",
-      "description": "Log investor meetings: pull the Otter.ai transcript, distill an investor-focused summary, and file it on the firm's record in the Venture Airtable CRM."
+      "name": "investor-meeting-summary",
+      "source": "./plugins/investor-meeting-summary",
+      "description": "Log investor meetings: pull the Otter.ai transcript, distill a structured investor-focused note, and file it through the CRM form so the Portal Contact tagging actually runs."
+    },
+    {
+      "name": "triage-note-updates",
+      "source": "./plugins/triage-note-updates",
+      "description": "File startup triage notes from a Word doc, PDF or email into the company's Deal Flow record in the Venture Airtable base."
     }
   ]
 }

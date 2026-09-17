@@ -1,0 +1,16 @@
+{
+  "name": "investor-meeting-summary",
+  "displayName": "Investor Meeting Summary",
+  "version": "2.0.0",
+  "description": "Log investor meetings: pull the Otter.ai transcript, distill a structured investor-focused note, and file it through the CRM form so the Portal Contact tagging actually runs.",
+  "author": {
+    "name": "Portal"
+  },
+  "keywords": [
+    "investor-relations",
+    "crm",
+    "airtable",
+    "otter",
+    "meeting-notes"
+  ]
+}
