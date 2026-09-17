@@ -1,7 +1,7 @@
 {
-  "name": "portal-investor-notes",
-  "displayName": "Portal Investor Notes",
-  "version": "1.1.0",
+  "name": "investor-meeting-summary",
+  "displayName": "Investor Meeting Summary",
+  "version": "1.2.0",
   "description": "Log investor meetings: pull the Otter.ai transcript, distill an investor-focused summary, and append it to the firm's record in Portal's Airtable CRM.",
   "author": {
     "name": "Portal"

@@ -1,11 +1,11 @@
-# Portal Investor Notes — Claude plugin
+# Investor Meeting Summary — Claude plugin
 
 Logs investor meetings for the whole team: pulls the Otter.ai transcript, distills a short investor-focused summary (highlights, companies shared, investor updates, relationship details — nothing about Portal itself), and logs it as a new note record linked to the firm in the Airtable VC CRM after the user confirms.
 
 ## What's inside
 
 ```
-portal-investor-notes/
+investor-meeting-summary/
 ├── .claude-plugin/plugin.json        # plugin metadata shown in the catalog
 ├── skills/log-investor-meeting/
 │   └── SKILL.md                      # the workflow — triggers on "I just met with [firm]..."
@@ -41,7 +41,7 @@ Create a **private** GitHub repo laid out as:
 ```
 portal-claude-plugins/
 ├── .claude-plugin/marketplace.json
-└── plugins/portal-investor-notes/    # this folder
+└── plugins/investor-meeting-summary/    # this folder
 ```
 
 with `marketplace.json`:
@@ -52,8 +52,8 @@ with `marketplace.json`:
   "owner": { "name": "Portal" },
   "plugins": [
     {
-      "name": "portal-investor-notes",
-      "source": "./plugins/portal-investor-notes",
+      "name": "investor-meeting-summary",
+      "source": "./plugins/investor-meeting-summary",
       "description": "Log investor meetings from Otter.ai into the Airtable CRM"
     }
   ]
