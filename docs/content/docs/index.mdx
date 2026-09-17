@@ -1,14 +1,20 @@
 ---
 title: Getting started
-description: Install the plugins and connect your accounts.
+description: Two Claude plugins for Portal's Venture base. Tell Claude what happened, read the draft it shows you, say yes, and the note lands on the right record.
 ---
 
-## Plugins
+<Hero eyebrow="Portal · Claude plugins" title="Say it once. It files itself.">
 
-| Plugin | What it does |
-| --- | --- |
-| [Investor meeting summary](/docs/investor-meeting-summary) | After an investor meeting, turns your Otter transcript into a structured note on the firm's record in the Venture base. |
-| [Triage note updates](/docs/triage-note-updates) | Takes a triage note you wrote, as a Word doc, PDF or email, and appends it to the company's Deal Flow record. |
+After an investor meeting or a startup triage, tell Claude one sentence. It drafts
+the note, shows you exactly what it is about to write, and files it in the
+**Venture base** once you say yes.
+
+</Hero>
+
+<PluginCards>
+  <PluginCard n="01" href="/docs/investor-meeting-summary" title="Investor meeting summary" needs="Otter.ai and Airtable">After an investor meeting, turns your Otter transcript into a structured note on the firm's record.</PluginCard>
+  <PluginCard n="02" href="/docs/triage-note-updates" title="Triage note updates" needs="Airtable">Takes a triage note you wrote, as a Word doc, PDF or email, and appends it to the company's Deal Flow record.</PluginCard>
+</PluginCards>
 
 ## Set up once
 
@@ -32,8 +38,8 @@ With automatic sync on, later improvements reach you without reinstalling.
 </Step>
 <Step n="02" title="Install a plugin">
 
-Open the **Personal** tab in the plugin directory, find the plugin you want from
-the table above, and click **Install**. Install either or both.
+Open the **Personal** tab in the plugin directory, find the plugin you want, and
+click **Install**. Install either or both.
 
 <Screenshot src="/screenshots/install-plugin.png" alt="A plugin card on the Personal tab with its Install button." />
 
@@ -49,7 +55,7 @@ If a connector is missing or a sign-in has expired, the plugin stops before
 reading or writing anything and names the connector to reconnect. In a chat that
 is the **+** menu → **Connectors**.
 
-<Screenshot src="/screenshots/connect-airtable.png" alt="Claude asking you to sign in to Airtable the first time a plugin runs." />
+<Screenshot src="/screenshots/connect-airtable.png" width={420} alt="Claude asking you to sign in to Airtable the first time a plugin runs." />
 
 </Step>
 </Steps>

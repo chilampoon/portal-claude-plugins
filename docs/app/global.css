@@ -182,7 +182,7 @@
   text-decoration: none;
 }
 
-.prose a:not(:where(h1, h2, h3, h4) a) {
+.prose a:not(:where(h1, h2, h3, h4) a, .not-prose *) {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
@@ -192,7 +192,7 @@
     color 150ms ease;
 }
 
-.prose a:not(:where(h1, h2, h3, h4) a):hover {
+.prose a:not(:where(h1, h2, h3, h4) a, .not-prose *):hover {
   text-decoration-color: currentColor;
 }
 

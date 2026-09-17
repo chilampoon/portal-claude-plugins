@@ -8,6 +8,8 @@ type ScreenshotProps = {
   src: string;
   alt: string;
   caption?: string;
+  /** Maximum display width in CSS pixels. Defaults to the full column. */
+  width?: number;
 };
 
 /**
@@ -18,7 +20,7 @@ type ScreenshotProps = {
  * A plain <img> is used on purpose. next/image with `unoptimized` does not
  * prepend basePath, and markdown images fail the build when the file is missing.
  */
-export function Screenshot({ src, alt, caption }: ScreenshotProps) {
+export function Screenshot({ src, alt, caption, width }: ScreenshotProps) {
   const exists = fs.existsSync(path.join(process.cwd(), "public", src));
 
   if (!exists) {
@@ -36,7 +38,7 @@ export function Screenshot({ src, alt, caption }: ScreenshotProps) {
   }
 
   return (
-    <figure className="not-prose my-5">
+    <figure className="not-prose my-5" style={width ? { maxWidth: width } : undefined}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={withBasePath(src)}

@@ -44,8 +44,11 @@ function docPage(path: string, mod: MdxModule, eyebrow: string): DocPage {
   };
 }
 
+/** The front page at `/`: getting started, rendered without the docs sidebar. */
+export const landingPage = docPage("", gettingStarted, "Portal · Claude plugins");
+
+/** Pages under `/docs/*`, rendered inside the docs layout. */
 export const docsPages: DocPage[] = [
-  docPage("", gettingStarted, "Portal · Claude plugins"),
   docPage("investor-meeting-summary", investorMeetingSummary, "Portal · Claude plugin"),
   docPage("triage-note-updates", triageNoteUpdates, "Portal · Claude plugin")
 ];
@@ -61,10 +64,9 @@ function separator(name: string): ReactNode {
 export const docsPageTree: Root = {
   name: "Portal Claude plugins",
   children: [
-    { type: "page", name: docsPages[0].title, url: "/docs" },
+    { type: "page", name: landingPage.title, url: "/" },
     { type: "separator", name: separator("Plugins") },
-    { type: "page", name: docsPages[1].title, url: "/docs/investor-meeting-summary" },
-    { type: "page", name: docsPages[2].title, url: "/docs/triage-note-updates" }
+    ...docsPages.map((page) => ({ type: "page" as const, name: page.title, url: `/docs/${page.path}` }))
   ]
 };
 
