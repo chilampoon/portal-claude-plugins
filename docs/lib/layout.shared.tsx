@@ -4,7 +4,7 @@ export function baseOptions(): BaseLayoutProps {
   return {
     nav: {
       title: (
-        <span className="font-semibold tracking-tight text-neutral-950 dark:text-neutral-50">
+        <span className="font-display text-[0.95rem] font-bold tracking-[-0.01em] text-fd-foreground">
           Portal Claude plugins
         </span>
       )

@@ -1,50 +1,105 @@
 ---
-title: File a triage note
-description: Hand Claude your triage note as a Word doc, PDF or pasted email and it updates the Deal Flow record.
+title: Triage note updates
+description: Hand Claude a triage note you wrote, as a Word doc, PDF or pasted email. It sorts the note into Portal's six triage sections and appends them to the company's Deal Flow record once you have said yes.
 ---
+
+<Flow label="Your triage note, a Claude draft you approve, the company's Deal Flow record">
+  <FlowStep n="01" title="Your triage note" note="Word doc, PDF or email" />
+  <FlowStep n="02" title="Claude sorts it into six sections" note="You check the match and say yes" emphasis />
+  <FlowStep n="03" title="Appended to the Deal Flow record" note="Six fields, nothing replaced" />
+</Flow>
+
+## After every triage
 
 Triage notes usually live in a Word doc or an email thread. This moves them onto
 the company's record.
 
-## 1. Hand Claude the note
+<Steps>
+<Step n="01" title="Hand Claude the note">
 
 Attach the Word doc or PDF, or paste the email in, and say:
 
-> Here are my triage notes on Veil Therapeutics — add them to Airtable.
+<Say>Here are my triage notes on Marrowlight Bio — add them to Airtable.</Say>
 
 Several people's notes on the same company at once is fine. Say so, and Claude
 merges them while keeping each person's contribution attributable.
 
-**Claude will not write the triage note for you.** This workflow files notes that a
-person wrote. If you hand it nothing, it asks for the note rather than drafting one
-from what it knows about the company.
+</Step>
+<Step n="02" title="Read the draft">
 
-## 2. Read the draft
-
-Claude reorganises the note into Portal's six triage sections — Startup Overview,
-Strengths, Weaknesses, Obstacles, Questions, Recommendation — keeping your
-substance and your ordering, and tightening the wording rather than adding
-analysis you did not write. A section you left empty stays empty.
+Claude reorganises the note into Portal's six triage sections: Startup Overview,
+Strengths, Weaknesses, Obstacles, Questions, Recommendation. It keeps your
+substance and your ordering and tightens the wording; it does not add analysis
+you did not write. A section you left empty stays empty.
 
 It also shows you the Startup record it matched, with the company's current
-pipeline stage. Confirm it. Claude never creates a startup record; if the company
-is not in the base yet, it stops and tells you to add it through the new-startup
-form first.
+pipeline stage. Confirm it.
 
-## 3. Say yes
+</Step>
+<Step n="03" title="Say yes">
 
-Claude shows you, field by field, exactly what it is about to write and whether
-each one is a first write or an append. Only after you confirm does it write.
+Claude lists, field by field, exactly what it is about to write and whether each
+one is a first write or an append. Only after you confirm does it write.
 
-## Notes from more than one person
+</Step>
+</Steps>
 
-Triage notes accumulate. If a field already has someone else's note in it, Claude
-keeps that text exactly as it is and adds yours underneath, under a dated header:
+## What lands in Airtable
 
-```
+The company's record in the Startups table, which is what the **Deals**
+interface opens when you click the company in Deal Flow. Each triage section is
+appended to one rich-text field. Text that is already there stays exactly as it
+is; yours goes underneath, under a dated header.
+
+<Record title="Marrowlight Bio" table="Startups">
+  <Fields>
+    <Field label="Pipeline Stage"><Chip tone="muted">Triage</Chip><Hint>never changed by the plugin</Hint></Field>
+    <Field label="Triage Start"><Chip>2026-09-17</Chip><Hint>set only if it was empty, and only if you agree</Hint></Field>
+  </Fields>
+<Field label="Value Proposition">
+**Triage — Colleague Name, 2026-08-14**
+
+- Non-invasive imaging for early liver fibrosis, aimed at hepatology clinics first.
+
+<Appended>
+
 **Triage — Your Name, 2026-09-17**
-```
 
-Nothing anyone wrote before is replaced. See
-[what lands in Airtable](/docs/triage-note-updates/what-lands) for the field
-mapping.
+- Same platform, now pitched as a companion diagnostic for two NASH drugs in Phase 3.
+
+</Appended>
+
+</Field>
+<Field label="Secret Sauce">
+<Appended>
+
+**Triage — Your Name, 2026-09-17**
+
+- Proprietary contrast agent with an issued composition-of-matter patent to 2041.
+- The founders ran the imaging core at a major academic centre.
+
+</Appended>
+
+</Field>
+</Record>
+
+*Tinted blocks are what the plugin adds; everything else was already on the record. Two of the six fields are shown. The mapping below covers all of them.*
+
+<Legend>
+  <LegendItem k="Startup Overview">Appended to **Value Proposition**</LegendItem>
+  <LegendItem k="Strengths">Appended to **Secret Sauce**</LegendItem>
+  <LegendItem k="Weaknesses">Appended to **Key Risks**</LegendItem>
+  <LegendItem k="Obstacles">Appended to **Outstanding Key Issues**</LegendItem>
+  <LegendItem k="Questions">Appended to **Questions for Company**</LegendItem>
+  <LegendItem k="Recommendation">Appended to **Rationale for Venture Evaluation**</LegendItem>
+</Legend>
+
+## Good to know
+
+<Facts>
+  <Fact title="Nothing is written without your yes">You see every field it will touch, and whether each is a first write or an append.</Fact>
+  <Fact title="It files notes, it does not write them">Hand it nothing and it asks for your note.</Fact>
+  <Fact title="Nothing existing is replaced">It reads each field first and appends underneath. If it cannot read a field, it stops.</Fact>
+  <Fact title="Two fields are off limits">Pipeline Stage, because changing it emails the venture team, and Investment Chain of Logic.</Fact>
+  <Fact title="It never creates a startup record">Add the company through the new-startup form first.</Fact>
+</Facts>

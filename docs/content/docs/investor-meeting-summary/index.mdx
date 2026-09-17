@@ -1,37 +1,45 @@
 ---
-title: Log an investor meeting
-description: After a VC meeting, say one sentence and Claude files the note from your Otter transcript.
+title: Investor meeting summary
+description: After an investor meeting, say one sentence. Claude reads your Otter transcript, drafts a short note about the investor, and files it on the firm's record once you have said yes.
 ---
 
-Make sure the meeting is in your Otter, then run the plugin.
+<Flow label="Your Otter recording, a Claude draft you approve, a note on the firm's Airtable record">
+  <FlowStep n="01" title="Your Otter recording" note="The meeting, as it happened" />
+  <FlowStep n="02" title="Claude drafts the note" note="You read it and say yes" emphasis />
+  <FlowStep n="03" title="Note on the firm's record" note="Filed through the CRM form" />
+</Flow>
 
-## 1. Say what happened
+## After every meeting
 
-> I just met with Redpine Ventures — check Otter and update Airtable.
+Check the meeting is in your Otter, then say the line.
 
-Add the date if the meeting was not today. If you want something extra in this
-one note, ask in the same message — for example, *"...and include the technical
+<Steps>
+<Step n="01" title="Say what happened">
+
+<Say>I just met with Redpine Ventures — check Otter and update Airtable.</Say>
+
+Add the date if the meeting was not today. Want something extra in this one
+note? Ask in the same message, for example *"…and include the technical
 discussion this time."*
 
-## 2. Read the draft
+</Step>
+<Step n="02" title="Read the draft">
 
 Claude shows you the note it wrote and the exact firm record it matched.
+**Check the firm match.** The base holds different companies with near-identical
+names (WuXi Biologics, WuXi AppTec and WuXi STA are three separate records), and
+Otter mangles proper nouns. Claude prefers the attendee's email domain over the
+name it heard and ignores suffixes like Inc and Ventures when comparing, but
+confirm it anyway.
 
-**Check the firm match.** The base holds genuinely different companies with near-identical names — WuXi Biologics,
-WuXi AppTec and WuXi STA are three separate records whose CDAs do not cover each
-other — and Otter mangles proper nouns, rendering one firm as "Wushi", "Wuji" and
-"Wu Xi" in a single transcript.
+</Step>
+<Step n="03" title="Say yes">
 
-Claude therefore prefers the **attendee's email domain** over the name it heard,
-normalises trailing suffixes like Inc and Ventures before comparing, and breaks
-ties on who is already linked to the firm. It deliberately ignores how many notes
-a record already has, since that only reflects past use and would make a wrong
-match reinforce itself. Confirm it anyway.
+Reply **yes**. Claude submits the CRM form, and the note appears on the firm's
+record under your name and today's date.
 
-## 3. Say yes
-
-Reply yes. Claude submits the CRM form, and the note appears on the firm's record
-under your name and today's date.
+</Step>
+</Steps>
 
 ## Things you can ask for in the same breath
 
@@ -42,14 +50,70 @@ None of these happen unless you ask:
 - **Credit the others who were on the call**, so they are recorded as Portal
   Contacts too. They have to be Airtable collaborators; anyone who is not gets
   named in the note text instead.
-- **Flag someone who has left the firm.** Whenever it comes up in conversation,
-  this is a free bit of CRM cleanup — they get hidden from the firm's people list.
+- **Flag someone who has left the firm.** A free bit of CRM cleanup: they get
+  hidden from the firm's people list.
 - **Record a diligence status change** for a Portal company.
-- **Update the firm's stats** — AUM, check sizes, whether they lead, fund stage,
-  fund focus — when they actually told you.
+- **Update the firm's stats**, such as AUM, check sizes, whether they lead, fund
+  stage and fund focus, when they actually told you.
+- **Check whether you sent what you promised.** If the note records that you owe
+  them a company, a deck or a non-confidential summary, Claude can check it went
+  out, provided a mail connector is available in that chat.
 
-## If you promised to send something
+## What lands in Airtable
 
-If the note records a commitment by you to send a company, a deck or a
-non-confidential summary, Claude may offer to check whether it went out. It can
-only do that if a mail connector is available in that chat.
+One new note record, linked to the firm. Nothing that already exists is edited
+or overwritten.
+
+<Record title="Your Name, 08/26/26" table="Investor Viewer Updater">
+  <Fields>
+    <Field label="Firm"><Chip>Redpine Ventures</Chip></Field>
+    <Field label="Your contacts"><Chip>Dana Whitfield</Chip></Field>
+    <Field label="Update type"><Chip>Meeting</Chip></Field>
+    <Field label="Notes cateogry"><Chip tone="mark">Fund thesis/updates</Chip><Chip tone="mark">Other dealflow</Chip></Field>
+  </Fields>
+<Field label="Notes">
+**Key highlights**
+
+- Fund III is closing early next year; they will write bigger first checks out of it.
+- Actively looking at ADC platforms after two portfolio exits.
+
+**Fund and thesis**
+
+- First checks moving up from roughly $1M–$2M to $3M–$5M.
+- Seed and Series A only; does not follow into B.
+
+**Companies they are sharing with us**
+
+- Two oncology startups, once Dana has cleared it with the founders.
+
+**Follow-ups**
+
+- You: send the non-confidential summary on the cardiovascular device company.
+- Dana: make the co-investor introduction.
+
+</Field>
+</Record>
+
+<Legend>
+  <LegendItem k="Title">Your name and the date, filled in by the form.</LegendItem>
+  <LegendItem k="Firm">The one firm record, after you confirm it.</LegendItem>
+  <LegendItem k="Contacts">The investor-side people, linked when they are already in the CRM.</LegendItem>
+  <LegendItem k="Category">Tagged from the four existing options. Never a new one.</LegendItem>
+  <LegendItem k="Notes">Bullets only, grouped under up to twelve headings. A heading appears only when the conversation produced it, so most notes use four or five. Between about 150 and 350 words, never a transcript.</LegendItem>
+</Legend>
+
+The twelve headings, in order: since last time, key highlights, fund and thesis,
+companies they are working on, companies they are sharing with us, companies we
+are sharing with them, passes and negatives, their process, co-investors they
+named, people and personal, follow-ups, next contact. The three "companies"
+headings stay separate on purpose: they are three different obligations.
+
+## Good to know
+
+<Facts>
+  <Fact title="Nothing is written without your yes">Claude drafts, you approve. It never edits an existing note or creates a firm record.</Fact>
+  <Fact title="Claude only sees your own Otter">Ask a colleague to share their recording, or let them log it themselves.</Fact>
+  <Fact title="The note is about the investor, not us">Portal's own fundraising talk is left out, except what they committed to us and what we promised them.</Fact>
+  <Fact title="It goes through the CRM form on purpose">Submitting the form is what tags you as Portal Contact on everyone you met.</Fact>
+  <Fact title="When unsure, it asks">Similar firm names or no transcript that day, and it stops rather than guesses.</Fact>
+</Facts>

@@ -2,63 +2,250 @@
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
 
+/* ------------------------------------------------------------------------
+ * Fonts. Loaded with next/font in app/layout.tsx, which puts the --font-*
+ * variables on <html>. Tailwind derives the page font from --font-sans and
+ * the code font from --font-mono; --font-display is ours for headings.
+ * --------------------------------------------------------------------- */
+@theme inline {
+  --font-sans: var(--font-instrument-sans), "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: var(--font-bricolage), var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+
+  /* Extra tokens for the record facsimile and the highlighted "say" line. */
+  --color-mark: var(--mark);
+  --color-mark-soft: var(--mark-soft);
+  --color-mark-border: var(--mark-border);
+  --color-chip: var(--chip);
+  --color-chip-border: var(--chip-border);
+}
+
+/* ------------------------------------------------------------------------
+ * Palette. Paper, ink, slate and a single green signal colour, shared with
+ * the printed guide. Fumadocs reads the --color-fd-* variables everywhere.
+ * --------------------------------------------------------------------- */
 :root {
   color-scheme: light;
+
+  --color-fd-background: #f2f4f1;
+  --color-fd-foreground: #101a16;
+  --color-fd-muted: #e9ece8;
+  --color-fd-muted-foreground: #57665f;
+  --color-fd-popover: #ffffff;
+  --color-fd-popover-foreground: #101a16;
+  --color-fd-card: #ffffff;
+  --color-fd-card-foreground: #101a16;
+  --color-fd-border: #d8dcd6;
+  --color-fd-primary: #1f6b52;
+  --color-fd-primary-foreground: #f2f4f1;
+  --color-fd-secondary: #eaf0ec;
+  --color-fd-secondary-foreground: #101a16;
+  --color-fd-accent: #e4e8e3;
+  --color-fd-accent-foreground: #101a16;
+  --color-fd-ring: #1f6b52;
+
+  --mark: #e9e064;
+  --mark-soft: #fbf7d4;
+  --mark-border: #ede6a8;
+  --chip: #eaf0ec;
+  --chip-border: #d5ded8;
+
+  --card-shadow: 0 1px 0 rgba(16, 26, 22, 0.04), 0 12px 28px -22px rgba(16, 26, 22, 0.5);
 }
 
 .dark {
   color-scheme: dark;
+
+  --color-fd-background: #0f1512;
+  --color-fd-foreground: #e7ece8;
+  --color-fd-muted: #1a221d;
+  --color-fd-muted-foreground: #9aa89f;
+  --color-fd-popover: #161d19;
+  --color-fd-popover-foreground: #e7ece8;
+  --color-fd-card: #161d19;
+  --color-fd-card-foreground: #e7ece8;
+  --color-fd-border: #26312b;
+  --color-fd-primary: #8bd0ae;
+  --color-fd-primary-foreground: #0f1512;
+  --color-fd-secondary: #1e2823;
+  --color-fd-secondary-foreground: #e7ece8;
+  --color-fd-accent: #1e2722;
+  --color-fd-accent-foreground: #e7ece8;
+  --color-fd-ring: #8bd0ae;
+
+  --mark: rgba(233, 224, 100, 0.32);
+  --mark-soft: rgba(233, 224, 100, 0.1);
+  --mark-border: rgba(233, 224, 100, 0.3);
+  --chip: #1e2823;
+  --chip-border: #2c3a32;
+
+  --card-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 12px 28px -22px rgba(0, 0, 0, 0.8);
 }
 
-@media (min-width: 768px) {
-  /* Keep the Fumadocs sidebar narrower than its default 268px desktop width. */
-  #nd-docs-layout,
-  #nd-docs-layout [data-sidebar-placeholder] {
-    --fd-sidebar-width: clamp(190px, 13vw, 240px);
-  }
+/* neutral.css re-tints these three inside the sidebar in dark mode. */
+.dark #nd-sidebar {
+  --color-fd-muted: #1a221d;
+  --color-fd-secondary: #1e2823;
+  --color-fd-muted-foreground: #9aa89f;
 }
 
-@media (min-width: 1280px) {
-  /*
-   * Fumadocs centers the whole docs grid, which leaves a very large blank
-   * gutter before the sidebar on wide screens. Keep that gutter proportional
-   * and split the remaining space around the article content.
-   */
+/* ------------------------------------------------------------------------
+ * Docs layout. The grid template itself is set in app/docs/layout.tsx; these
+ * are its column sizes. Below xl it reduces to `sidebar | 0 | 1fr | 0 | 0`,
+ * which is what Fumadocs renders there anyway. From xl the article column is
+ * centred in the viewport (equal gutters, pad = sidebar column) and does not
+ * move when the sidebar collapses. Fumadocs animates the column change, but
+ * minmax() tracks snap; since the article stays put only the sidebar's own
+ * slide is visible.
+ * --------------------------------------------------------------------- */
+#nd-docs-layout {
+  --docs-article-max: 760px;
+  --docs-gutter: 0px;
+  --docs-main: 1fr;
+  --docs-pad: 0px;
+}
+
+@media (width >= 48rem) {
   #nd-docs-layout {
-    grid-template:
-      "sidebar sidebar content-gap header toc toc"
-      "sidebar sidebar content-gap toc-popover toc toc"
-      "sidebar sidebar content-gap main toc toc" 1fr /
-      clamp(16px, 2.5vw, 56px)
-      var(--fd-sidebar-col)
-      minmax(24px, 1fr)
-      minmax(0, 900px)
-      var(--fd-toc-width)
-      minmax(24px, 1fr) !important;
-  }
-
-  #nd-docs-layout[data-sidebar-collapsed="true"] {
-    grid-template:
-      "sidebar sidebar toc-offset content-gap header right-gap toc"
-      "sidebar sidebar toc-offset content-gap toc-popover right-gap toc"
-      "sidebar sidebar toc-offset content-gap main right-gap toc" 1fr /
-      0px
-      var(--fd-sidebar-col)
-      max(0px, var(--fd-toc-width))
-      minmax(24px, 1fr)
-      minmax(0, 900px)
-      minmax(24px, 1fr)
-      var(--fd-toc-width) !important;
+    --fd-sidebar-width: 240px;
   }
 }
 
-body {
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+@media (width >= 80rem) {
+  #nd-docs-layout {
+    --fd-toc-width: 220px;
+    --docs-gutter: minmax(0, 1fr);
+    --docs-main: var(--docs-article-max);
+    --docs-pad: var(--fd-sidebar-col);
+  }
 }
 
-code,
-pre,
-kbd,
-samp {
-  font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+#nd-page {
+  max-width: var(--docs-article-max);
+}
+
+/* The TOC sits at the article's right edge; give its text some air. */
+#nd-toc {
+  padding-inline-start: 0.75rem;
+}
+
+/* ------------------------------------------------------------------------
+ * Sidebar
+ * --------------------------------------------------------------------- */
+#nd-sidebar a[data-active="true"] {
+  font-weight: 500;
+}
+
+/* ------------------------------------------------------------------------
+ * Prose
+ * --------------------------------------------------------------------- */
+.prose {
+  --tw-prose-size: 1.03125; /* 16.5px body */
+  --tw-prose-body: var(--color-fd-foreground);
+  --tw-prose-links: var(--color-fd-primary);
+  line-height: 1.6;
+}
+
+.prose :is(h1, h2, h3, h4):not(.not-prose, .not-prose *) {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Section headings read as bands: a hairline above, generous space. */
+.prose h2:not(.not-prose, .not-prose *) {
+  font-size: 1.55em;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-top: 2.6em;
+  margin-bottom: 0.75em;
+  padding-top: 1.35em;
+  border-top: 1px solid var(--color-fd-border);
+}
+
+.prose > h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.prose h3:not(.not-prose, .not-prose *) {
+  font-size: 1.15em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-top: 1.9em;
+  margin-bottom: 0.55em;
+}
+
+.prose h2 a,
+.prose h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.prose a:not(:where(h1, h2, h3, h4) a) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in oklab, var(--color-fd-primary) 45%, transparent);
+  transition:
+    text-decoration-color 150ms ease,
+    color 150ms ease;
+}
+
+.prose a:not(:where(h1, h2, h3, h4) a):hover {
+  text-decoration-color: currentColor;
+}
+
+.prose :not(pre) > code {
+  font-size: 0.86em;
+  font-weight: 500;
+  background: var(--color-fd-accent);
+  border: 0;
+  border-radius: 4px;
+  padding: 0.12em 0.4em;
+}
+
+.prose thead th {
+  font-family: var(--font-mono);
+  font-size: 0.72em;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-fd-muted-foreground);
+}
+
+.prose th,
+.prose td {
+  padding-block: 0.7em;
+}
+
+/* ------------------------------------------------------------------------
+ * Small utilities used by the components
+ * --------------------------------------------------------------------- */
+
+/* Marker-pen highlight behind a line of text. */
+.mark {
+  background-image: linear-gradient(transparent 12%, var(--mark) 12%, var(--mark) 92%, transparent 92%);
+  padding: 0 0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Rise-in on load. Set --rise-i on the element to stagger. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.rise {
+  --rise-i: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 0.65s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+    animation-delay: calc(var(--rise-i) * 70ms);
+  }
 }

@@ -3,14 +3,19 @@ title: Getting started
 description: Install the plugins and connect your accounts.
 ---
 
-Two Claude plugins that file work you have already done into the Venture Airtable
-base, after you have read the draft and approved it.
+## Plugins
 
-**Investor meeting summary** turns an Otter transcript into a structured note on
-the firm's record. **Triage note updates** takes a triage note you wrote — a Word
-doc, a PDF, or an email — and appends it to the company's Deal Flow record.
+| Plugin | What it does |
+| --- | --- |
+| [Investor meeting summary](/docs/investor-meeting-summary) | After an investor meeting, turns your Otter transcript into a structured note on the firm's record in the Venture base. |
+| [Triage note updates](/docs/triage-note-updates) | Takes a triage note you wrote, as a Word doc, PDF or email, and appends it to the company's Deal Flow record. |
 
-## 1. Add the Portal marketplace
+## Set up once
+
+Two minutes, and you never touch it again.
+
+<Steps>
+<Step n="01" title="Add the Portal marketplace">
 
 In Claude, open **Directory → Plugins** and click the **+** button. Paste this
 into the URL field, leave **Sync automatically** switched on, and click **Sync**:
@@ -21,39 +26,29 @@ https://github.com/chilampoon/portal-claude-plugins
 
 With automatic sync on, later improvements reach you without reinstalling.
 
-## 2. Install what you need
+<Screenshot src="/screenshots/add-marketplace.png" alt="The Add marketplace dialog with the Portal repository URL pasted in." />
 
-Open the **Personal** tab in the plugin directory. Install either or both:
+</Step>
+<Step n="02" title="Install a plugin">
 
-| Plugin | Install it if you |
-| --- | --- |
-| **Investor Meeting Summary** | meet investors and want the notes filed in the VC CRM |
-| **Triage Note Updates** | write triage notes on startups and want them on the Deal Flow record |
+Open the **Personal** tab in the plugin directory, find the plugin you want from
+the table above, and click **Install**. Install either or both.
 
-## 3. Connect your accounts
+<Screenshot src="/screenshots/install-plugin.png" alt="A plugin card on the Personal tab with its Install button." />
 
-The first time you use a plugin, Claude asks you to sign in. Investor Meeting
-Summary needs **Otter.ai and Airtable**; Triage Note Updates needs **Airtable**.
+</Step>
+<Step n="03" title="Connect your accounts">
 
+The first time you use a plugin, Claude asks you to sign in. Investor meeting
+summary needs **Otter.ai and Airtable**; Triage note updates needs **Airtable**.
 Approve with your own Portal accounts. Claude only sees what you can already see
-in those tools — Otter searches run against your own conversations, and Airtable
-reads and writes as you. So if a colleague recorded the meeting, it is not in your
-Otter: ask them to share the conversation with you, or let them log it themselves.
+in those tools, and it writes to Airtable as you.
 
-Both plugins check their connectors before doing anything else. If one is missing
-or a sign-in has expired, the plugin stops before reading or writing anything and
-names the connector to reconnect. In a chat that is the **+** menu →
-**Connectors**.
+If a connector is missing or a sign-in has expired, the plugin stops before
+reading or writing anything and names the connector to reconnect. In a chat that
+is the **+** menu → **Connectors**.
 
-## What to expect
+<Screenshot src="/screenshots/connect-airtable.png" alt="Claude asking you to sign in to Airtable the first time a plugin runs." />
 
-Both plugins draft first and show you what they are about to write — the content,
-the record they matched, and every field they intend to set. Nothing reaches
-Airtable until you confirm.
-
-Neither plugin invents content, creates firms or companies that are not already in
-the base, or overwrites what a colleague wrote. When either is unsure which
-meeting, firm or company you mean, it asks instead of guessing.
-
-Next: [log an investor meeting](/docs/investor-meeting-summary) or
-[file a triage note](/docs/triage-note-updates).
+</Step>
+</Steps>

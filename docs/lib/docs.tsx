@@ -1,69 +1,70 @@
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode } from "react";
 import type { Root } from "fumadocs-core/page-tree";
+import type { TOCItemType } from "fumadocs-core/toc";
 import type { MDXComponents } from "mdx/types";
 
-import GettingStartedPage from "@/content/docs/index.mdx";
-import InvestorUsePage from "@/content/docs/investor-meeting-summary/index.mdx";
-import InvestorLandsPage from "@/content/docs/investor-meeting-summary/what-lands.mdx";
-import TriageUsePage from "@/content/docs/triage-note-updates/index.mdx";
-import TriageLandsPage from "@/content/docs/triage-note-updates/what-lands.mdx";
+// fumadocs-mdx compiles every imported .mdx file and exports the component,
+// its table of contents and its frontmatter (see mdx.d.ts for the types).
+import * as gettingStarted from "@/content/docs/index.mdx";
+import * as investorMeetingSummary from "@/content/docs/investor-meeting-summary/index.mdx";
+import * as triageNoteUpdates from "@/content/docs/triage-note-updates/index.mdx";
 
-type MdxPageComponent = ComponentType<{ components?: MDXComponents }>;
+type MdxModule = {
+  default: ComponentType<{ components?: MDXComponents }>;
+  toc: TOCItemType[];
+  frontmatter: { title?: string; description?: string };
+};
 
 export type DocPage = {
-  description: string;
-  group: "Getting started" | "Investor meeting summary" | "Triage note updates";
   path: string;
   slug: string[];
   title: string;
-  component: MdxPageComponent;
+  description: string;
+  /** Small mono label above the title. */
+  eyebrow: string;
+  toc: TOCItemType[];
+  component: MdxModule["default"];
 };
 
-function docPage(
-  path: string,
-  title: string,
-  description: string,
-  group: DocPage["group"],
-  component: MdxPageComponent
-): DocPage {
+function docPage(path: string, mod: MdxModule, eyebrow: string): DocPage {
+  const { title, description } = mod.frontmatter;
+
+  if (!title || !description) {
+    throw new Error(`content/docs/${path || "index"}: frontmatter needs both title and description.`);
+  }
+
   return {
     path,
+    slug: path === "" ? [] : path.split("/"),
     title,
     description,
-    group,
-    component,
-    slug: path === "" ? [] : path.split("/")
+    eyebrow,
+    toc: mod.toc,
+    component: mod.default
   };
 }
 
 export const docsPages: DocPage[] = [
-  docPage("", "Getting started", "Install the plugins and connect your accounts.", "Getting started", GettingStartedPage),
-  docPage("investor-meeting-summary", "Log an investor meeting", "After a VC meeting, say one sentence and Claude files the note from your Otter transcript.", "Investor meeting summary", InvestorUsePage),
-  docPage("investor-meeting-summary/what-lands", "What lands in Airtable", "The note format, the twelve sections, and the fields the form sets.", "Investor meeting summary", InvestorLandsPage),
-  docPage("triage-note-updates", "File a triage note", "Hand Claude your triage note as a Word doc, PDF or pasted email and it updates the Deal Flow record.", "Triage note updates", TriageUsePage),
-  docPage("triage-note-updates/what-lands", "What lands in Airtable", "Which field each triage section is appended to, and what is deliberately never touched.", "Triage note updates", TriageLandsPage)
+  docPage("", gettingStarted, "Portal · Claude plugins"),
+  docPage("investor-meeting-summary", investorMeetingSummary, "Portal · Claude plugin"),
+  docPage("triage-note-updates", triageNoteUpdates, "Portal · Claude plugin")
 ];
+
+function separator(name: string): ReactNode {
+  return (
+    <span className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-fd-muted-foreground">
+      {name}
+    </span>
+  );
+}
 
 export const docsPageTree: Root = {
   name: "Portal Claude plugins",
   children: [
-    { type: "page", name: "Getting started", url: "/docs" },
-    {
-      type: "folder",
-      name: "Investor meeting summary",
-      children: [
-        { type: "page", name: "Log an investor meeting", url: "/docs/investor-meeting-summary" },
-        { type: "page", name: "What lands in Airtable", url: "/docs/investor-meeting-summary/what-lands" }
-      ]
-    },
-    {
-      type: "folder",
-      name: "Triage note updates",
-      children: [
-        { type: "page", name: "File a triage note", url: "/docs/triage-note-updates" },
-        { type: "page", name: "What lands in Airtable", url: "/docs/triage-note-updates/what-lands" }
-      ]
-    }
+    { type: "page", name: docsPages[0].title, url: "/docs" },
+    { type: "separator", name: separator("Plugins") },
+    { type: "page", name: docsPages[1].title, url: "/docs/investor-meeting-summary" },
+    { type: "page", name: docsPages[2].title, url: "/docs/triage-note-updates" }
   ]
 };
 

@@ -1,9 +1,32 @@
 import type { MDXComponents } from "mdx/types";
 import defaultComponents from "fumadocs-ui/mdx";
 
+import { Fact, Facts } from "@/components/facts";
+import { Flow, FlowStep } from "@/components/flow";
+import { Appended, Chip, Field, Fields, Hint, Legend, LegendItem, Record } from "@/components/record";
+import { Say } from "@/components/say";
+import { Screenshot } from "@/components/screenshot";
+import { Step, Steps } from "@/components/steps";
+
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
     ...defaultComponents,
+    Appended,
+    Chip,
+    Fact,
+    Facts,
+    Field,
+    Fields,
+    Flow,
+    FlowStep,
+    Hint,
+    Legend,
+    LegendItem,
+    Record,
+    Say,
+    Screenshot,
+    Step,
+    Steps,
     ...components
   } satisfies MDXComponents;
 }
