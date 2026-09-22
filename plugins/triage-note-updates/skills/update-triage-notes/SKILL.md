@@ -1,89 +1,109 @@
 ---
 name: update-triage-notes
-description: File a startup's triage notes into Portal's Airtable Deal Flow record. Use this whenever someone shares triage notes — an uploaded Word doc or PDF, a forwarded email, or pasted text — about a company they screened and wants them organized, filed, or added to Airtable, e.g. "here are my triage notes on Veil Therapeutics, update Airtable", "add these triage notes to the Deal Flow record", "I triaged Ensemble Biosystems, put this in Deals". Also use when someone asks to update a startup's Deal Flow / Deals record with screening notes, strengths, weaknesses, obstacles, questions for the company, or a meet/pass recommendation.
+description: File a startup's triage notes into Portal's Airtable record and finish the triage — propose where each piece of the note lands, move the Pipeline Stage, and reply to the notification that tells the fellows. Use this whenever someone shares triage notes — an uploaded Word doc or PDF, a forwarded email, or pasted text — about a company they screened, e.g. "here are my triage notes on Veil Therapeutics, update Airtable", "add these triage notes to the Deal Flow record", "I triaged Ensemble Biosystems, put this in Deals". Also use it when someone states a triage decision and wants the record to reflect it — "we're passing on Veil", "move Ensemble to deep diligence", "finish triage on this one".
 ---
 
 # Update a startup's triage notes
 
-Take triage notes that already exist — in a Word doc, a PDF, an email, or pasted into chat — organize them into Portal's triage template, and APPEND them to that company's record in the "Startups" table, which is what the Deals interface shows as the Deal Flow record.
+Take triage notes that already exist — a Word doc, a PDF, an email, or text pasted into chat — file them onto that company's record in the "Startups" table, and move the record to the stage the triage decision calls for.
 
-Triage notes are written by different people at different times. This workflow **adds** to what is already on the record; it never replaces another person's notes.
+Two things shape every run. **Triage notes are written by different people at different times**, so this workflow *adds* to what is on the record; it never replaces another person's notes unless the user says so. And **the decision decides how much gets written** — a pass and an advance are not the same amount of writing, so read the recommendation before planning the write.
 
-## Configuration (verified against the live base schema on 17 Sep 2026)
+## Configuration
 
-- AIRTABLE_BASE: "Venture" — baseId `appAX3sMfPtCKv4nB`
-- STARTUPS_TABLE: "Startups" — tableId `tblkuk4Fpb1pYp4Ux`, search the primary field "Name" (`fld3itRTH4JpDjbMz`)
-- This table is what the "Deals" interface (`pbd32g4sVn4WnA3c6`) opens as a Deal Flow record page (`pagEE4hR4JW5uv0qc`). "Update the Veil form in Deal Flow" means update the Veil Therapeutics record in this table.
+IDs below were pulled from the live base schema. `get_table_schema` on the table is the source of truth — run it if anything here looks wrong, and especially before trusting a PIPELINE_STAGE option string.
 
-Triage template section → field to write (every one is rich text, so markdown bullets and bold are fine):
+- AIRTABLE_BASE: "Venture" — `appAX3sMfPtCKv4nB`, the only base on the account.
+- STARTUPS_TABLE: "Startups" — `tblkuk4Fpb1pYp4Ux`, primary field "Name" `fld3itRTH4JpDjbMz`. This is the table behind the "Deals" interface and the Deal Flow record pages. **There is no "Deal Flow" table.**
+- Record page, to link once you have written: `https://airtable.com/appAX3sMfPtCKv4nB/pagEE4hR4JW5uv0qc/<recId>?home=pag56exCQcCiTSB6z`
+- PIPELINE_STAGE: `fldX6aVYsZ0CdBaVR`, single select. The options this workflow uses, exact strings — submit them character for character: `0.0 - Outside of Core Geographies` (see step 5) · `1.1 - On Deck` · `1.2 - Monitoring by BD & Venture (Venture has met, awaiting...)` · `2.1 - Triage` · `2.2 - Triaged & Waiting` · `3.1 - Deep Diligence` · `5.1 - Soft Pass` · `5.2 - Passed / Not a Fit`
+- Stage dates: Triage Start `fldAxUNpcVHRTCxnH` · Deep Diligence Start `fldIIBBNAo31aFGVx` · Passed Date `fldseeAXS1MrR4tQ4` · Prioritization Date `fldpCkddwW1dshyLH`
+- NOTES: `fldlbxnXwd42pqXSf`, rich text — the catch-all and the archive.
 
-| Triage section | Airtable field | Field ID |
-| --- | --- | --- |
-| Startup Overview | "Value Proposition" | `fldUTvTnK0AKNPxjr` |
-| Strengths | "Secret Sauce" | `flda5JIPbWF8bzqWh` |
-| Weaknesses | "Key Risks" | `fldHCnh6cw5aLPtH9` |
-| Obstacles | "Outstanding Key Issues" | `fldvJtDe9TjWEd9jt` |
-| Questions | "Questions for Company" | `fldlw3iPk5DeVXz63` |
-| Recommendation | "Rationale for Venture Evaluation" | `fldAj8tpqPnWoUgG1` |
+**Common landing spots — hints, not a map.** The table has far more fields than these. Read the schema and choose what fits the note in front of you; these are only where content usually ends up:
 
-Optional, only when the note clearly supports it and the user agrees:
-- "Triage Start" (`fldAxUNpcVHRTCxnH`, date) — set only if it is currently empty.
+weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions for Company `fldlw3iPk5DeVXz63` · tech description → Tech: Summary `fld4cGrEjrBnyNs5f` · team → Team Analysis `fld0RouGgSh7gCi2v` · next steps / obstacles → Company: Next Steps `fld0Bjr8Mg0HmDj8M` · funding history → Past Sources of Funding `fld5HxGmZLsJpZRaf`
 
-**Never write these**, even if they look relevant:
-- "Pipeline Stage" (`fldX6aVYsZ0CdBaVR`) — changing it fires Airtable automations that email the venture team and write Stage History rows. Stage changes are a human decision. If the note says "move to Triage" or "pass", tell the user to make that change themselves in Airtable.
-- "Investment Chain of Logic" (`fldW6ux85s2zVfweH`) — a curated numbered argument with 🟢/🟡/🟠 confidence markers, built during diligence, not triage.
-- Any formula, lookup, rollup or `Created`/`Last Modified` field.
-- Any field not listed in this Configuration section.
+**Nothing goes in a field unless the notes support it.** No inference, no filling a gap from your own knowledge of the company. A field left empty is the correct output for content the author did not write.
+
+**Never write** formula, lookup, rollup, count or lastModified fields.
 
 ## Pipeline
 
-0. **Preflight — verify the Airtable connector before doing anything else.** Confirm Airtable's tools are in your toolkit, then make one cheap call (`ping`, or `list_bases`). If the tools are missing or the call fails with an auth error, STOP — run no other step — and tell the user to enable or re-authenticate the Airtable connector (in a chat: + menu → Connectors → toggle it on; on first use of this plugin: accept the authentication prompt when it appears). Resume only after they confirm.
+0. **Preflight — verify the Airtable connector before doing anything else.** Confirm Airtable's tools are in your toolkit, then make one cheap call (`ping`, or `list_bases`). If the tools are missing or the call fails with an auth error, STOP — run no other step — and tell the user to enable or re-authenticate the Airtable connector (in a chat: + menu → Connectors → toggle it on; on first use of this plugin: accept the authentication prompt). Resume only after they confirm.
 
-1. **Get the triage note.** The note comes from whatever the user provided:
-   - **Uploaded Word doc or PDF** — if the text is already extracted into the conversation, use it. If you have a shell and only the raw file, run `scripts/extract_docx.py <file.docx>` from this plugin to get the text.
-   - **Email** — pasted text or a forwarded thread. Strip greetings, signatures, and scheduling chatter.
-   - **Pasted notes** — use as-is.
-   - **Several sources at once** (e.g. one person's doc plus another's email) — merge them, and keep each author's contribution attributable in step 2.
+   Then check for a mail tool (Microsoft 365 / Outlook), which step 8 uses to reply to the stage-change notification. This one is **optional**: if it is missing, say so once and carry on — a missing mail tool falls back to printing the reply text and must never block the Airtable work.
 
-   If no note content was actually provided, ask for it. Never draft a triage note from your own knowledge of the company — this workflow files notes that a person wrote.
+1. **Get the note.** Use whatever the user provided: an uploaded Word doc or PDF (if the text is already extracted into the conversation, use it; if you have a shell and only the raw file, run `scripts/extract_docx.py <file>` from this plugin), a pasted or forwarded email (strip greetings, signatures and scheduling chatter), or pasted notes as-is. Several sources at once is fine — merge them and keep each author attributable.
 
-2. **Organize into Portal's triage template.** Rewrite the note into these sections, keeping the author's substance and judgement — tighten wording, do not add analysis they did not write:
-   - **Startup Overview** — synopsis: stage, location, technology, and the deal (round and amount they are raising).
-   - **Strengths** — ordered most to least significant.
-   - **Weaknesses** — risks, ordered most to least significant.
-   - **Obstacles** — what could keep them from hitting milestones.
-   - **Questions** — remaining questions for the company, grouped under the subheadings the note uses, typically Scientific / Regulatory / IP & Business / Market / Team.
-   - **Recommendation** — meet or pass, with the justification.
+   Keep the author's own structure. Tighten wording; do not reorganize their note into a template, and do not add analysis they did not write. If no note content was provided, ask for it — never draft a triage note from your own knowledge of the company.
 
-   Drop a section entirely if the note has nothing for it — never invent content to fill it. Keep the author's numbered lists and ordering.
+   **Images.** If the source contains figures, charts or pasted slides, list them for the user now and say plainly that you cannot upload them: the Airtable MCP has no attachment-upload tool, and attachments can only be set from a URL Airtable fetches for itself. Ask them to drop the images into the relevant attachment field themselves, and carry this to the hand-off in step 8 — never let an image go silently missing.
 
-3. **Find the startup's record.** Search STARTUPS_TABLE's "Name" field and keep the record ID. The table holds thousands of companies and near-duplicates exist, so show the user which record you matched (name plus current Pipeline Stage) and confirm before writing. If several plausibly match, list them and ask. If nothing matches, stop and ask — never create a startup record here; new companies are added through the "Enter a new startup into Airtable" form.
+2. **Read the decision.** The note usually ends with a recommendation. Classify it:
+   - **Meet / advance** → the full proposed mapping, step 4a.
+   - **Pass / soft pass** → the reduced write, step 4b.
+   - **Uncertain, ambiguous or absent** → **ask the user.** Never guess a stage, and never infer a decision from how harsh the risks section sounds.
 
-4. **Read the current values** of the six target fields on that record, so you can append instead of overwrite.
+3. **Find the record.** Search "Name" `fld3itRTH4JpDjbMz` and keep the record ID. The table holds thousands of companies and near-duplicates exist, so show the user which record you matched — name plus current PIPELINE_STAGE — and confirm before writing. If several plausibly match, list them and ask. If nothing matches, stop and ask; **never create a startup record** here, new companies go through the "Enter a new startup into Airtable" form.
 
-5. **Build each field's new value.**
-   - Ask once for the note author's name and the triage date if they are not obvious from the document or the conversation; default to the person running the workflow and today's date.
-   - If the field is **empty**, write the section content on its own.
-   - If the field **already has content**, keep it verbatim and append below it:
+4. **Build the proposal.** Call `get_table_schema` on `tblkuk4Fpb1pYp4Ux`, then read the current value of every field you intend to touch, so an append is a real append.
 
-     ```
-     <existing content>
+   - **4a — meet / advance.** Decide for yourself which fields fit the content in front of you, starting from the landing-spot hints rather than being bound by them.
+   - **4b — pass / soft pass. Write less on purpose** — nobody reads a teardown on a dead company. Only: the stage-change note; the risks, framed as *what would have to change for us to re-engage*, into Key Risks `fldHCnh6cw5aLPtH9`; the full note into NOTES `fldlbxnXwd42pqXSf` as the archive; plus the stage and its date. Skip the full mapping.
 
-     **Triage — <Author>, <YYYY-MM-DD>**
-     <new section content>
-     ```
+   Present it as one table — **Field | Action (append / replace / leave) | Content** — using field names the user will recognise. Append is the default; *replace* needs its own explicit yes. Every append carries a dated attribution header, matching how the base already reads:
 
-   This matches how the base already reads — existing notes carry headers like `Anna Slezak, 2023-07-24` and `### July 2024 – Questions regarding ...`.
+   ```
+   <existing content>
 
-6. **Confirm, then write.** Show the user, per field: the field name, whether it is a first write or an append, and the exact text going in. Only after they confirm, make ONE `update_records_for_table` call setting all the fields at once. Report back what was written, and mention any section you had to drop for lack of content.
+   **Triage — <Author>, <YYYY-MM-DD>**
+   <new content>
+   ```
+
+   Ask once for the author and the triage date if they are not obvious from the document or the conversation; default to the person running the workflow and today's date. **Write nothing until the user confirms or edits this table.**
+
+5. **Propose the stage change.** Show **old → new** verbatim and get explicit confirmation for *that specific change*, separately from the field table. Warn every time: the write fires Airtable automations — "Pipeline Stage Change" emails the venture fellows, and "Pipeline History - Record Updated" writes a Stage History record. Airtable treats an API write exactly like a manual edit, so the plugin can neither send that email itself nor suppress it.
+
+   **One stage is higher-consequence than the rest.** Moving to `0.0 - Outside of Core Geographies` can fire "Cold Outreach Response", which emails *outside* the team when "Send BD Outreach?" is set. Say so at the confirm gate, before the user approves that particular move.
+
+   Then the date, written directly as part of the same write — Triage Start `fldAxUNpcVHRTCxnH` for `2.1`, Deep Diligence Start `fldIIBBNAo31aFGVx` for `3.1`, Passed Date `fldseeAXS1MrR4tQ4` for `5.1`/`5.2`, Prioritization Date `fldpCkddwW1dshyLH` only if the user asks. No automation stamps these; you write them.
+
+6. **Compose the stage-change note — once, used twice.** A couple of sentences on why the stage changed. The same text is appended to NOTES `fldlbxnXwd42pqXSf` *and* becomes the body of the reply in step 8. Generate it once so the two cannot drift; if the user edits it at a confirm gate, both uses take the edit.
+
+7. **Confirm, then write.** With the field table, the stage, the date and the note all confirmed, make ONE `update_records_for_table` call setting everything at once. Report what was written and link the record page.
+
+8. **Reply-all on the Airtable notification.** The stage write triggers "Pipeline Stage Change" (`wflKohvvhrsLTqud3`), whose steps are *wait 15 seconds → send email*. **That** email is what gets the reply — not the intake thread the notes came from. Subject `Pipeline Stage Change: {Company} moved to {New Stage}`, from `{Person} (via Airtable) <noreply+automations@airtable.com>`, to Venture Fellows and cc'ing whoever moved it; the body asks for a reply-all explaining why, to be copied onto the record.
+
+   1. **Wait at least 20 seconds before searching.** The automation sleeps 15, so an immediate search always misses.
+   2. Search for a subject containing "Pipeline Stage Change" and the company name.
+   3. **Check that the old → new stages in the body match what you just wrote.** If they do not, it is a stale thread from an earlier move — leave it alone and fall through to substep 5 below.
+   4. Draft the reply-all using the step 6 sentences. Show the draft and the full recipient list, then send **only on explicit confirmation**. This reaches the whole fellows list, so it gets its own yes, separate from every gate before it.
+   5. If the email has not arrived, or no mail tool is available, print the text for the user to send themselves and say which of the two it is. Never invent a thread, and never report an email as sent unless the send actually succeeded.
+
+   **No stage change means no notification — skip this step entirely.** And nothing ever goes to the intake thread, where a senior associate forwarded the company and the fellows wrote the note up; that thread is not part of this workflow.
+
+9. **Hand off what you could not do.** The images and which attachment field they belong in, and the reply text if it did not go out.
+
+## Signing what Claude wrote
+
+Text you composed ends with `_(summarized by Claude <model name>)_`, so a reader can tell it from the author's own words. Use the model actually running this session — do not hard-code a version string.
+
+- **Sign** field content you condensed from the note, the stage-change note, and the reply body.
+- **Do not sign verbatim source.** The original note archived into NOTES `fldlbxnXwd42pqXSf` is the author's own words; labelling those as Claude's is worse than no signature at all.
+- The signature goes at the end of the block. The `**Triage — <Author>, <YYYY-MM-DD>**` header stays at the top, naming the human.
 
 ## Rules
 
-- Append, never overwrite. If you cannot read a field's current value, stop and say so rather than writing over it.
+- Append, never overwrite, unless the user explicitly approved a *replace* on that field. If you cannot read a field's current value, stop and say so rather than writing over it.
+- Nothing is written before the user confirms the proposal table.
+- Never write PIPELINE_STAGE without its own explicit old → new confirmation, and never guess a stage from an absent or ambiguous recommendation — ask.
 - One record per run. Never batch-update several startups from one note.
-- Never change Pipeline Stage — it emails the team. Same for any field outside the Configuration table.
-- Never invent triage content, and never fill a section from your own knowledge of the company. If the note is thin, file it thin.
+- Never invent triage content, and never fill a field from your own knowledge of the company. If the note is thin, file it thin.
 - Never create a startup record. If the company is not in the base, stop and tell the user to add it through the new-startup form first.
-- If a write fails on field validation, re-check the schema with `get_table_schema`, adjust, and confirm with the user before retrying.
+- The reply-all goes out only on its own explicit confirmation — it reaches the whole fellows list. Reply to the Airtable notification, never to the intake thread, and never report an email as sent unless the send actually succeeded.
+- Never claim to have uploaded an attachment. You cannot.
+- If a write fails on field validation, re-check with `get_table_schema`, adjust, and confirm with the user before retrying.
 - Never skip step 0. If the connector drops mid-run, stop, tell the user, and re-run the preflight before continuing.
-- When unsure about anything — which company, which section, whose notes — ask instead of guessing.
+- Sign what you composed; never sign the author's own words.
+- When unsure about anything — which company, which field, which stage — ask instead of guessing.

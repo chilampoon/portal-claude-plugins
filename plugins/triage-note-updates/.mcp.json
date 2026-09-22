@@ -3,6 +3,10 @@
     "airtable": {
       "type": "http",
       "url": "https://mcp.airtable.com/mcp"
+    },
+    "microsoft365": {
+      "type": "http",
+      "url": "https://microsoft365.mcp.claude.com/mcp"
     }
   }
 }

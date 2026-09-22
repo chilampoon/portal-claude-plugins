@@ -1,105 +1,159 @@
 ---
 title: Triage note updates
-description: Hand Claude a triage note you wrote, as a Word doc, PDF or pasted email. It sorts the note into Portal's six triage sections and appends them to the company's Deal Flow record once you have said yes.
+description: Hand Claude the triage note you wrote, as a Word doc, PDF or pasted email. It works out where each piece belongs on the company's Deal Flow record, moves the pipeline stage to match your decision, and replies to the notification that stage change sends the fellows — once you have said yes to all of it.
 ---
 
-<Flow label="Your triage note, a Claude draft you approve, the company's Deal Flow record">
-  <FlowStep n="01" title="Your triage note" note="Word doc, PDF or email" />
-  <FlowStep n="02" title="Claude sorts it into six sections" note="You check the match and say yes" emphasis />
-  <FlowStep n="03" title="Appended to the Deal Flow record" note="Six fields, nothing replaced" />
+<Flow label="Your triage note, a proposal you approve, the company's record moved on">
+  <FlowStep n="01" title="Your triage note" note="Word doc, PDF or email, ending in your recommendation" />
+  <FlowStep n="02" title="Claude proposes where it all goes" note="Field by field, plus the stage move. You edit it or approve it" emphasis />
+  <FlowStep n="03" title="Record updated, fellows told" note="One write, then a reply-all on the notification it sets off" />
 </Flow>
 
-## After every triage
+## Finishing a triage
 
-Triage notes usually live in a Word doc or an email thread. This moves them onto
-the company's record.
+A triage ends with a decision, and the decision is what moves the company. This
+takes the note you already wrote and makes the record say so.
 
 <Steps>
 <Step n="01" title="Hand Claude the note">
 
 Attach the Word doc or PDF, or paste the email in, and say:
 
-<Say>Here are my triage notes on Marrowlight Bio — add them to Airtable.</Say>
+<Say>Here are my triage notes on Marrowlight Bio — we're passing.</Say>
 
 Several people's notes on the same company at once is fine. Say so, and Claude
 merges them while keeping each person's contribution attributable.
 
-</Step>
-<Step n="02" title="Read the draft">
+Claude keeps your structure. It tightens the wording; it does not reorganise your
+note into a template, and it does not add analysis you did not write.
 
-Claude reorganises the note into Portal's six triage sections: Startup Overview,
-Strengths, Weaknesses, Obstacles, Questions, Recommendation. It keeps your
-substance and your ordering and tightens the wording; it does not add analysis
-you did not write. A section you left empty stays empty.
+</Step>
+<Step n="02" title="Read the proposal">
+
+There is no fixed field map. Claude reads the table's live schema and proposes
+where each piece of your note belongs, as a table: the field, whether it is
+appending or replacing, and the exact text going in. Appending is the default —
+replacing takes its own separate yes.
+
+Edit the proposal, or approve it. Nothing is written until you do.
 
 It also shows you the Startup record it matched, with the company's current
-pipeline stage. Confirm it.
+pipeline stage, so you can catch a near-duplicate before anything lands.
 
 </Step>
-<Step n="03" title="Say yes">
+<Step n="03" title="Confirm the stage move on its own">
 
-Claude lists, field by field, exactly what it is about to write and whether each
-one is a first write or an append. Only after you confirm does it write.
+The stage change is confirmed separately from everything else, showing the old
+value and the new one. Claude will remind you every time that moving this field
+fires Airtable automations — it writes a Stage History row and emails the venture
+team.
+
+If the recommendation in your note is ambiguous, or you did not write one, Claude
+asks which stage you want. It never picks one for you.
+
+</Step>
+<Step n="04" title="Approve the reply to the fellows">
+
+Moving the stage makes Airtable email the venture fellows, asking whoever moved
+it to reply-all with why. Claude waits for that email to land, checks the stages
+in it match what it just wrote, and drafts the reply using the same sentences that
+went onto the record — so the two cannot drift.
+
+It shows you the draft and everyone on it, and sends only when you say so. That is
+its own separate yes, because the reply reaches the whole fellows list. Without a
+mail connector, or if the notification has not turned up, Claude hands you the text
+to send yourself and tells you which it is.
+
+The thread your note came in on — where a senior associate forwarded the company —
+is never touched.
+
+</Step>
+<Step n="05" title="Take what comes back">
+
+A link to the updated record, the reply if you had Claude send it, and a list of
+any images from your note, because Claude cannot upload those for you.
 
 </Step>
 </Steps>
 
+## Your decision sets the size of the write
+
+- **Meet, or advance to diligence** — the full treatment. Everything in the note
+  that fits a field gets proposed.
+- **Pass, or soft pass** — deliberately less. The reason for the move, the risks
+  written as what would have to change for us to re-engage, your full note
+  archived in **Notes**, and the stage and date. Nobody reads a teardown on a
+  dead company.
+- **Ambiguous, or no recommendation** — Claude asks rather than guessing.
+
 ## What lands in Airtable
 
-The company's record in the Startups table, which is what the **Deals**
-interface opens when you click the company in Deal Flow. Each triage section is
-appended to one rich-text field. Text that is already there stays exactly as it
-is; yours goes underneath, under a dated header.
+The company's record in the Startups table, which is what the **Deals** interface
+opens when you click the company in Deal Flow. Text that is already there stays
+exactly as it is; yours goes underneath, under a dated header. Below is the
+shape of a **pass** — the short version.
 
 <Record title="Marrowlight Bio" table="Startups">
   <Fields>
-    <Field label="Pipeline Stage"><Chip tone="muted">Triage</Chip><Hint>never changed by the plugin</Hint></Field>
-    <Field label="Triage Start"><Chip>2026-09-17</Chip><Hint>set only if it was empty, and only if you agree</Hint></Field>
+    <Field label="Pipeline Stage"><Chip tone="muted">2.1 - Triage</Chip> → <Chip tone="mark">5.1 - Soft Pass</Chip><Hint>confirmed on its own, because it emails the team</Hint></Field>
+    <Field label="Passed Date"><Chip tone="mark">2026-09-17</Chip><Hint>only if an automation is not already stamping it</Hint></Field>
   </Fields>
-<Field label="Value Proposition">
+<Field label="Key Risks">
 **Triage — Colleague Name, 2026-08-14**
 
-- Non-invasive imaging for early liver fibrosis, aimed at hepatology clinics first.
+- Contrast agent manufacturing has never been run above bench scale.
 
 <Appended>
 
 **Triage — Your Name, 2026-09-17**
 
-- Same platform, now pitched as a companion diagnostic for two NASH drugs in Phase 3.
+- Passing for now on the clinical path: the two NASH readouts they are keyed to are both 2028.
+- We would re-engage on a signed pharma companion-diagnostic deal, or a CMC partner for the contrast agent.
+
+_(summarized by Claude Opus 5)_
 
 </Appended>
 
 </Field>
-<Field label="Secret Sauce">
-<Appended>
+<Field label="Notes">
+<Appended label="Added by the plugin — and used as the reply">
 
-**Triage — Your Name, 2026-09-17**
+Soft passing Marrowlight at triage. The science holds up and the patent position is real, but the companion-diagnostic thesis depends on two Phase 3 readouts that are both 2028, which puts them outside our window. Worth revisiting if they sign a pharma partner.
 
-- Proprietary contrast agent with an issued composition-of-matter patent to 2041.
-- The founders ran the imaging core at a major academic centre.
+_(summarized by Claude Opus 5)_
 
 </Appended>
 
 </Field>
 </Record>
 
-*Tinted blocks are what the plugin adds; everything else was already on the record. Two of the six fields are shown. The mapping below covers all of them.*
+*Tinted blocks are what the plugin adds; everything else was already on the
+record. The Notes block is also the text of the reply that goes to the fellows. An
+advance would propose more fields than this, not fewer.*
+
+### Where things usually land
+
+Habits, not rules. Claude reads the live schema on every run and proposes what
+actually fits your note — these are just the places content tends to go.
 
 <Legend>
-  <LegendItem k="Startup Overview">Appended to **Value Proposition**</LegendItem>
-  <LegendItem k="Strengths">Appended to **Secret Sauce**</LegendItem>
-  <LegendItem k="Weaknesses">Appended to **Key Risks**</LegendItem>
-  <LegendItem k="Obstacles">Appended to **Outstanding Key Issues**</LegendItem>
-  <LegendItem k="Questions">Appended to **Questions for Company**</LegendItem>
-  <LegendItem k="Recommendation">Appended to **Rationale for Venture Evaluation**</LegendItem>
+  <LegendItem k="Weaknesses">**Key Risks**</LegendItem>
+  <LegendItem k="Questions">**Questions for Company**</LegendItem>
+  <LegendItem k="The technology">**Tech: Summary**</LegendItem>
+  <LegendItem k="The team">**Team Analysis**</LegendItem>
+  <LegendItem k="Next steps">**Company: Next Steps**</LegendItem>
+  <LegendItem k="Funding history">**Past Sources of Funding**</LegendItem>
 </Legend>
 
 ## Good to know
 
 <Facts>
-  <Fact title="Nothing is written without your yes">You see every field it will touch, and whether each is a first write or an append.</Fact>
-  <Fact title="It files notes, it does not write them">Hand it nothing and it asks for your note.</Fact>
-  <Fact title="Nothing existing is replaced">It reads each field first and appends underneath. If it cannot read a field, it stops.</Fact>
-  <Fact title="Two fields are off limits">Pipeline Stage, because changing it emails the venture team, and Investment Chain of Logic.</Fact>
+  <Fact title="Nothing is written without your yes">You see every field it will touch, and whether each is an append or a replace, before anything lands.</Fact>
+  <Fact title="The stage move is a separate yes">It is shown as old → new. Claude tells you each time that the write sets off Airtable automations — a Stage History row, and the email to the fellows. Airtable treats the write like a manual edit, so Claude can neither send that email nor stop it. Moving a company to <strong>0.0 - Outside of Core Geographies</strong> is flagged on its own, because it can email outside the team.</Fact>
+  <Fact title="The reply needs its own yes">Nothing goes out until you have seen the draft and the full recipient list. It is a reply-all to every venture fellow, so it never rides along on an earlier approval.</Fact>
+  <Fact title="Claude signs what Claude wrote">Anything it composed for you ends with <em>(summarized by Claude)</em> and the model that wrote it. Your own words — including the full note archived into Notes — are never signed that way.</Fact>
+  <Fact title="Nothing existing is replaced by default">It reads each field first and appends underneath. If it cannot read a field, it stops rather than writing over it.</Fact>
+  <Fact title="It files notes, it does not write them">Nothing goes in a field unless your note supports it. Hand it nothing and it asks for your note.</Fact>
+  <Fact title="You have to upload the images yourself">Claude has no way to put an attachment into Airtable, so it lists the figures it found and leaves them to you.</Fact>
   <Fact title="It never creates a startup record">Add the company through the new-startup form first.</Fact>
 </Facts>

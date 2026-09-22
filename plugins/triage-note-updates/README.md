@@ -1,9 +1,19 @@
 # Triage Note Updates — Claude plugin
 
-Files startup triage notes into Airtable. Someone uploads their triage note (Word
-doc, PDF) or pastes it from an email, and Claude organizes it into Portal's triage
-template and appends it to that company's Deal Flow record in the Venture base,
-after they confirm.
+Files startup triage notes into Airtable and finishes the triage. Someone hands
+Claude their triage note (Word doc, PDF, or pasted from an email), and Claude
+works out where each piece of it belongs on the company's Deal Flow record in
+the Venture base, moves the Pipeline Stage to match the decision, and replies to
+the notification Airtable sends the fellows — all of it after they have said yes.
+
+> **Not yet run end to end.** The workflow has been reasoned through against a
+> real triage doc, but never executed against a live record, and the email path in
+> particular is completely unexercised. On the first real run, check two things:
+> that the 20-second wait is long enough for the notification to arrive, and
+> whether it attributes the move to you or comes back unattributed — the Startups
+> table has a formula field called "Modified by Anonymous?", which suggests API
+> writes have shown up without a name before. If that happens the email still
+> sends, just without yours on it.
 
 Companion to **investor-meeting-summary**, which does the same job for investor
 meetings. That one reads Otter and writes to the VC CRM; this one reads a
@@ -17,40 +27,69 @@ triage-note-updates/
 ├── skills/update-triage-notes/
 │   └── SKILL.md                        # the workflow — triggers on "here are my triage notes on [company]"
 ├── scripts/extract_docx.py             # stdlib-only .docx/.pdf text extraction, for when Claude has a shell
-├── .mcp.json                           # bundles the Airtable connector
+├── .mcp.json                           # bundles Airtable, plus Microsoft 365 for the reply
 └── README.md
 ```
 
-## Where the notes land
+## How a run goes
 
-The "Deals" interface shows each company through a record page backed by the
-**Startups** table. Each triage section is appended to one rich-text field on
-that record:
+**The decision routes everything.** The note usually ends with a recommendation,
+and Claude reads it before planning any write:
 
-| Triage section | Airtable field |
-| --- | --- |
-| Startup Overview | Value Proposition |
-| Strengths | Secret Sauce |
-| Weaknesses | Key Risks |
-| Obstacles | Outstanding Key Issues |
-| Questions | Questions for Company |
-| Recommendation | Rationale for Venture Evaluation |
+- **Meet or advance** — the full treatment. Claude reads the live table schema
+  and proposes which fields fit the content actually in the note.
+- **Pass or soft pass** — deliberately less. The reason for the stage change, the
+  risks framed as what would have to change for us to re-engage, the full note
+  archived in **Notes**, and the stage and date. Nobody reads a teardown on a
+  dead company.
+- **Ambiguous or missing** — Claude asks. It never guesses a stage.
 
-Existing content is never overwritten — a new triage note is appended under a
-`**Triage — <Author>, <date>**` header, matching how the base already reads.
+**There is no fixed field map.** Portal's triage docs don't follow one template,
+so the plugin doesn't pretend they do. Claude proposes a mapping as a table —
+field, append or replace, and the exact content — and writes nothing until you
+confirm or edit it. Appending is the default, under a dated
+`**Triage — <Author>, <date>**` header; replacing takes its own yes.
 
-Deliberately out of scope: **Pipeline Stage** is never touched (it fires
-automations that email the venture team), and neither is **Investment Chain of
-Logic**, which is a diligence-stage artifact rather than a triage one.
+**Pipeline Stage is writable now**, because moving the stage is what finishing
+triage means. It gets its own confirmation showing the old value and the new one,
+with a reminder that the write fires Airtable automations: "Pipeline Stage Change"
+emails the venture fellows, and "Pipeline History - Record Updated" writes a Stage
+History row. Airtable treats an API write like a manual edit, so the plugin can
+neither send that email itself nor suppress it. Moving a company to `0.0 - Outside
+of Core Geographies` is called out separately, because it can email outside the
+team.
 
-Table, field and page IDs in `SKILL.md` were pulled from the live "Venture" base
-schema on 17 Sep 2026, so the workflow survives cosmetic renames. If the schema
-changes, update the Configuration section and re-upload.
+**The stage-change note is written once and used twice**: appended to the record,
+and used as the body of a reply-all on the notification Airtable just sent. Not on
+the intake thread the note came from — that one stays untouched. Claude waits for
+the notification to land, checks the stages in it match what it just wrote, shows
+you the draft and the full recipient list, and sends only when you say so. It
+reaches the whole fellows list, so it gets its own yes on top of every other gate.
+Without a mail tool, or if the notification hasn't shown up, Claude prints the text
+for you to send and says which it is.
+
+**Claude signs what Claude wrote.** Anything it composed — content condensed from
+your note, the stage-change note, the reply — ends with
+`_(summarized by Claude <model>)_`. Your own words, including the full note
+archived into Notes, are never signed that way.
+
+## Limitations
+
+**Claude cannot upload images or attachments.** The Airtable MCP has no
+attachment-upload tool — attachments can only be set from a URL Airtable fetches
+for itself, and we have nowhere to host one. So Claude flags every figure, chart
+or pasted slide it finds in your note and asks you to drop them into the
+attachment field yourself.
+
+**The mail connector is optional.** The plugin bundles Microsoft 365 for the
+reply, but nothing in the Airtable half depends on it. Skip it and Claude prints
+the reply for you to send by hand.
 
 ## Using it
 
-Each person authenticates Airtable with their own account on first use, so Claude
-only sees what they can see. Then they just say:
+Each person authenticates Airtable — and Microsoft 365, if they want the reply
+sent for them — with their own account on first use, so Claude only sees what they
+can see, and writes and sends as them. Then they just say:
 
 > Here are my triage notes on Veil Therapeutics — add them to Airtable.
 

@@ -1,8 +1,8 @@
 {
   "name": "triage-note-updates",
   "displayName": "Triage Note Updates",
-  "version": "0.1.0",
-  "description": "File startup triage notes into Airtable: read the note from a Word doc, PDF or pasted email, organize it into Portal's triage template, and append it to the company's Deal Flow record in the Venture base.",
+  "version": "0.3.0",
+  "description": "Finish a startup triage in Airtable: read the note from a Word doc, PDF or pasted email, propose where each piece lands on the company's Deal Flow record, move the Pipeline Stage, and reply to the stage-change notification that goes to the fellows — every step after you confirm.",
   "author": {
     "name": "Portal"
   },
@@ -10,6 +10,7 @@
     "dealflow",
     "triage",
     "airtable",
+    "outlook",
     "venture",
     "screening"
   ]
