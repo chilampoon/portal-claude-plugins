@@ -68,10 +68,29 @@ reaches the whole fellows list, so it gets its own yes on top of every other gat
 Without a mail tool, or if the notification hasn't shown up, Claude prints the text
 for you to send and says which it is.
 
+**Diligence support gets a changelog.** Any run that writes emails the people
+named on the record's Diligence support field — company, record link, the stage
+move if there was one, and a line per field touched. Recipients are resolved off
+the record and shown to you; nothing sends until you say so.
+
+**What it writes has a shape.** Questions for Company come back grouped under
+their subheadings — Scientific, Regulatory, IP & Business, Market, Team — and
+numbered within each group, one question per line, because someone is going to
+work down that list in front of the company. Every other field leads with the
+point, bullets the evidence under it, and closes with the takeaway. The
+`**Triage — <name>, <date>**` header is a boundary marker, not a byline: it
+appears only where your text is going underneath someone else's, never stamped
+down every field on the record.
+
 **Claude signs what Claude wrote.** Anything it composed — content condensed from
 your note, the stage-change note, the reply — ends with
-`_(summarized by Claude <model>)_`. Your own words, including the full note
-archived into Notes, are never signed that way.
+`_(summarized by Claude <model>, <date time>)_`. Your own words, including the
+full note archived into Notes, are never signed that way.
+
+**It reads a field before it writes to one.** A field's name is not its
+definition — "Origin" records where the deal came from, not where your note came
+from — so Claude checks what is actually in a field before proposing it, and puts
+no workflow metadata (filenames, field lists, run summaries) on the record at all.
 
 ## Limitations
 

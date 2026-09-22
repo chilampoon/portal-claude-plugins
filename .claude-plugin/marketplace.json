@@ -12,7 +12,7 @@
     {
       "name": "triage-note-updates",
       "source": "./plugins/triage-note-updates",
-      "description": "File startup triage notes from a Word doc, PDF or email into the company's Deal Flow record, move the pipeline stage, and reply to the notification it sends the fellows."
+      "description": "File startup triage notes from a Word doc, PDF or email into the company's Deal Flow record, move the pipeline stage, and tell the team what changed."
     }
   ]
 }

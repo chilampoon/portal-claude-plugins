@@ -22,7 +22,13 @@ IDs below were pulled from the live base schema. `get_table_schema` on the table
 
 **Common landing spots — hints, not a map.** The table has far more fields than these. Read the schema and choose what fits the note in front of you; these are only where content usually ends up:
 
-weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions for Company `fldlw3iPk5DeVXz63` · tech description → Tech: Summary `fld4cGrEjrBnyNs5f` · team → Team Analysis `fld0RouGgSh7gCi2v` · next steps / obstacles → Company: Next Steps `fld0Bjr8Mg0HmDj8M` · funding history → Past Sources of Funding `fld5HxGmZLsJpZRaf`
+strengths → Secret Sauce `flda5JIPbWF8bzqWh` · what the company does → Value Proposition `fldUTvTnK0AKNPxjr` · weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions for Company `fldlw3iPk5DeVXz63` · tech description → Tech: Summary `fld4cGrEjrBnyNs5f` · team → Team Analysis `fld0RouGgSh7gCi2v` · next steps / obstacles → Company: Next Steps `fld0Bjr8Mg0HmDj8M` · funding history → Past Sources of Funding `fld5HxGmZLsJpZRaf`
+
+**A field's name is not its definition.** Before you propose a field you have not written before, read what is already in it — on this record and on a couple of others. The existing content is what defines the field; the name is a label someone chose years ago. If it is empty and its purpose is not obvious, leave it alone and say why.
+
+"Origin" is the standing example: it records **where the deal came from** — who sent us the company or the deck. It is not the origin of your note, and triage content does not belong there.
+
+**Workflow metadata never goes on the record.** The source filename, which fields you wrote, how many sections you mapped — that is the report you give the user and the notice in step 8, not field content. Nothing on the record should describe the run that produced it.
 
 **Nothing goes in a field unless the notes support it.** No inference, no filling a gap from your own knowledge of the company. A field left empty is the correct output for content the author did not write.
 
@@ -32,13 +38,13 @@ weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions 
 
 0. **Preflight — verify the Airtable connector before doing anything else.** Confirm Airtable's tools are in your toolkit, then make one cheap call (`ping`, or `list_bases`). If the tools are missing or the call fails with an auth error, STOP — run no other step — and tell the user to enable or re-authenticate the Airtable connector (in a chat: + menu → Connectors → toggle it on; on first use of this plugin: accept the authentication prompt). Resume only after they confirm.
 
-   Then check for a mail tool (Microsoft 365 / Outlook), which step 8 uses to reply to the stage-change notification. This one is **optional**: if it is missing, say so once and carry on — a missing mail tool falls back to printing the reply text and must never block the Airtable work.
+   Then check for a mail tool (Microsoft 365 / Outlook), which steps 8 and 9 use to notify Diligence support and reply to the stage-change notification. This one is **optional**: if it is missing, say so once and carry on — a missing mail tool falls back to printing the reply text and must never block the Airtable work.
 
 1. **Get the note.** Use whatever the user provided: an uploaded Word doc or PDF (if the text is already extracted into the conversation, use it; if you have a shell and only the raw file, run `scripts/extract_docx.py <file>` from this plugin), a pasted or forwarded email (strip greetings, signatures and scheduling chatter), or pasted notes as-is. Several sources at once is fine — merge them and keep each author attributable.
 
    Keep the author's own structure. Tighten wording; do not reorganize their note into a template, and do not add analysis they did not write. If no note content was provided, ask for it — never draft a triage note from your own knowledge of the company.
 
-   **Images.** If the source contains figures, charts or pasted slides, list them for the user now and say plainly that you cannot upload them: the Airtable MCP has no attachment-upload tool, and attachments can only be set from a URL Airtable fetches for itself. Ask them to drop the images into the relevant attachment field themselves, and carry this to the hand-off in step 8 — never let an image go silently missing.
+   **Images.** If the source contains figures, charts or pasted slides, list them for the user now and say plainly that you cannot upload them: the Airtable MCP has no attachment-upload tool, and attachments can only be set from a URL Airtable fetches for itself. Ask them to drop the images into the relevant attachment field themselves, and carry this to the hand-off in step 10 — never let an image go silently missing.
 
 2. **Read the decision.** The note usually ends with a recommendation. Classify it:
    - **Meet / advance** → the full proposed mapping, step 4a.
@@ -52,7 +58,9 @@ weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions 
    - **4a — meet / advance.** Decide for yourself which fields fit the content in front of you, starting from the landing-spot hints rather than being bound by them.
    - **4b — pass / soft pass. Write less on purpose** — nobody reads a teardown on a dead company. Only: the stage-change note; the risks, framed as *what would have to change for us to re-engage*, into Key Risks `fldHCnh6cw5aLPtH9`; the full note into NOTES `fldlbxnXwd42pqXSf` as the archive; plus the stage and its date. Skip the full mapping.
 
-   Present it as one table — **Field | Action (append / replace / leave) | Content** — using field names the user will recognise. Append is the default; *replace* needs its own explicit yes. Every append carries a dated attribution header, matching how the base already reads:
+   **Account for the whole note before you show anything.** Walk it section by section and check each one reaches the table. Anything you are not writing appears in the table too, as **leave**, with the reason — "no field fits it" is a legitimate answer; dropping it in silence is not. The sections with no obvious home are exactly the ones that vanish: strengths, the overview of what the company does, funding history.
+
+   Present it as one table — **Field | Action (append / replace / leave) | Content** — using field names the user will recognise. Append is the default; *replace* needs its own explicit yes. The dated attribution header is a **boundary marker, not a byline**. It goes in only when you are appending underneath content that is already there, to separate your text from someone else's:
 
    ```
    <existing content>
@@ -61,7 +69,9 @@ weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions 
    <new content>
    ```
 
-   Ask once for the author and the triage date if they are not obvious from the document or the conversation; default to the person running the workflow and today's date. **Write nothing until the user confirms or edits this table.**
+   **A field that is empty gets no header.** There is nothing above it to separate from, and the same name and date stamped down every field on the record is noise. The signature line at the end of the block already records when it was written.
+
+   Ask once for the author and the triage date if they are not obvious from the document or the conversation; default to the person running the workflow and today's date. Format the content as **Formatting what you write** below sets out — the proposal table shows the real text, so get the shape right before the user reads it, not after. **Write nothing until the user confirms or edits this table.**
 
 5. **Propose the stage change.** Show **old → new** verbatim and get explicit confirmation for *that specific change*, separately from the field table. Warn every time: the write fires Airtable automations — "Pipeline Stage Change" emails the venture fellows, and "Pipeline History - Record Updated" writes a Stage History record. Airtable treats an API write exactly like a manual edit, so the plugin can neither send that email itself nor suppress it.
 
@@ -69,13 +79,25 @@ weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions 
 
    Then the date, written directly as part of the same write — Triage Start `fldAxUNpcVHRTCxnH` for `2.1`, Deep Diligence Start `fldIIBBNAo31aFGVx` for `3.1`, Passed Date `fldseeAXS1MrR4tQ4` for `5.1`/`5.2`, Prioritization Date `fldpCkddwW1dshyLH` only if the user asks. No automation stamps these; you write them.
 
-6. **Compose the stage-change note — once, used twice.** A couple of sentences on why the stage changed. The same text is appended to NOTES `fldlbxnXwd42pqXSf` *and* becomes the body of the reply in step 8. Generate it once so the two cannot drift; if the user edits it at a confirm gate, both uses take the edit.
+6. **Compose the stage-change note — once, used twice.** A couple of sentences on why the stage changed. The same text is appended to NOTES `fldlbxnXwd42pqXSf` *and* becomes the body of the reply in step 9. Generate it once so the two cannot drift; if the user edits it at a confirm gate, both uses take the edit.
 
 7. **Confirm, then write.** With the field table, the stage, the date and the note all confirmed, make ONE `update_records_for_table` call setting everything at once. Report what was written and link the record page.
 
-8. **Reply-all on the Airtable notification.** The stage write triggers "Pipeline Stage Change" (`wflKohvvhrsLTqud3`), whose steps are *wait 15 seconds → send email*. **That** email is what gets the reply — not the intake thread the notes came from. Subject `Pipeline Stage Change: {Company} moved to {New Stage}`, from `{Person} (via Airtable) <noreply+automations@airtable.com>`, to Venture Fellows and cc'ing whoever moved it; the body asks for a reply-all explaining why, to be copied onto the record.
+8. **Tell Diligence support what changed.** Every run that writes sends this, whether or not the stage moved.
 
-   1. **Wait at least 20 seconds before searching.** The automation sleeps 15, so an immediate search always misses.
+   The recipients come off the record itself — the people field naming Diligence support on this Startups record. Locate it in the schema you already pulled in step 4, read it off the record, and expand it to actual people. If the field is empty, or you cannot find it, say so and skip the send. Never improvise a recipient list.
+
+   Keep it to a changelog, not a report:
+
+   - The company, and a link to the record page.
+   - Stage `old → new`, if it moved.
+   - One line per field touched: the field, appended or replaced, and the gist in a few words.
+
+   Show the resolved recipients and the draft, then send only on explicit confirmation. Without a mail tool, print it for the user to send.
+
+9. **Reply-all on the Airtable notification.** The stage write triggers "Pipeline Stage Change" (`wflKohvvhrsLTqud3`), whose steps are *wait 15 seconds → send email*. **That** email is what gets the reply — not the intake thread the notes came from. Subject `Pipeline Stage Change: {Company} moved to {New Stage}`, from `{Person} (via Airtable) <noreply+automations@airtable.com>`, to Venture Fellows and cc'ing whoever moved it; the body asks for a reply-all explaining why, to be copied onto the record.
+
+   1. **Wait at least 20 seconds after the write before searching.** The automation sleeps 15, so an earlier search always misses. Step 8 has usually spent that time already.
    2. Search for a subject containing "Pipeline Stage Change" and the company name.
    3. **Check that the old → new stages in the body match what you just wrote.** If they do not, it is a stale thread from an earlier move — leave it alone and fall through to substep 5 below.
    4. Draft the reply-all using the step 6 sentences. Show the draft and the full recipient list, then send **only on explicit confirmation**. This reaches the whole fellows list, so it gets its own yes, separate from every gate before it.
@@ -83,11 +105,32 @@ weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions 
 
    **No stage change means no notification — skip this step entirely.** And nothing ever goes to the intake thread, where a senior associate forwarded the company and the fellows wrote the note up; that thread is not part of this workflow.
 
-9. **Hand off what you could not do.** The images and which attachment field they belong in, and the reply text if it did not go out.
+10. **Hand off what you could not do.** The images and which attachment field they belong in, and the reply text if it did not go out.
+
+## Formatting what you write
+
+These fields are rich text and render markdown. Use it — a wall of clauses strung together with `·` is unreadable on the record and worse in a meeting.
+
+**Questions for Company `fldlw3iPk5DeVXz63` — grouped, numbered, one question per line.** Group under the subheadings the note uses, typically Scientific / Regulatory / IP & Business / Market / Team, and number within each group, restarting at 1:
+
+```
+**Scientific**
+
+1. Is there real data showing replicated CHO/mAb production from the current system, and evidence for the 16× yield increase? What is the metric?
+2. Is the modular reactor a new technique — what is the technical differentiation?
+
+**Regulatory**
+
+1. What is the GMP status of the Rhode Island installation? Has it produced material intended for an IND or clinical study?
+```
+
+Never run questions together on one line. Someone is working down this list in front of the company, so each numbered item has to be askable as it stands. A question and its immediate follow-up stay in one item; a genuinely separate question gets its own number.
+
+**Every other field — lead, detail, close.** Open with the point in a sentence: the conclusion goes first, not last. Bullet the evidence or the detail underneath it. Close with the takeaway — the so-what, or what would have to change the answer. Keep the author's own ordering inside the bullets, most significant first if that is how they wrote it. Skip the frame when the content is a single item; one bullet does not need an introduction and a conclusion wrapped round it. The longer the field, the more it needs all three.
 
 ## Signing what Claude wrote
 
-Text you composed ends with `_(summarized by Claude <model name>)_`, so a reader can tell it from the author's own words. Use the model actually running this session — do not hard-code a version string.
+Text you composed ends with `_(summarized by Claude <model name>, <YYYY-MM-DD HH:MM>)_`, so a reader can tell it from the author's own words and see when it landed. Use the model actually running this session — do not hard-code a version string — and the real clock time of the run, 24-hour.
 
 - **Sign** field content you condensed from the note, the stage-change note, and the reply body.
 - **Do not sign verbatim source.** The original note archived into NOTES `fldlbxnXwd42pqXSf` is the author's own words; labelling those as Claude's is worse than no signature at all.
@@ -105,5 +148,7 @@ Text you composed ends with `_(summarized by Claude <model name>)_`, so a reader
 - Never claim to have uploaded an attachment. You cannot.
 - If a write fails on field validation, re-check with `get_table_schema`, adjust, and confirm with the user before retrying.
 - Never skip step 0. If the connector drops mid-run, stop, tell the user, and re-run the preflight before continuing.
+- Read a field before you write to it for the first time. A field's name is not its definition, and no workflow metadata — filenames, field lists, run summaries — ever goes on the record.
+- Recipients for the Diligence support notice come off the record. If the field is empty or missing, skip the send and say so.
 - Sign what you composed; never sign the author's own words.
 - When unsure about anything — which company, which field, which stage — ask instead of guessing.
