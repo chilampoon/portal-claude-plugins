@@ -20,17 +20,23 @@ IDs below were pulled from the live base schema. `get_table_schema` on the table
 - Stage dates: Triage Start `fldAxUNpcVHRTCxnH` · Deep Diligence Start `fldIIBBNAo31aFGVx` · Passed Date `fldseeAXS1MrR4tQ4` · Prioritization Date `fldpCkddwW1dshyLH`
 - NOTES: `fldlbxnXwd42pqXSf`, rich text — the catch-all and the archive.
 
-**Common landing spots — hints, not a map.** The table has far more fields than these. Read the schema and choose what fits the note in front of you; these are only where content usually ends up:
+**Common landing spots — settled, but not exhaustive.** Every pairing below has been checked, so content of that kind goes there unless the note itself gives you a reason otherwise. The table has far more fields, and the list says nothing about them — read the schema and choose what fits the rest of the note:
 
-strengths → Secret Sauce `flda5JIPbWF8bzqWh` · what the company does → Value Proposition `fldUTvTnK0AKNPxjr` · weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions for Company `fldlw3iPk5DeVXz63` · tech description → Tech: Summary `fld4cGrEjrBnyNs5f` · team → Team Analysis `fld0RouGgSh7gCi2v` · next steps / obstacles → Company: Next Steps `fld0Bjr8Mg0HmDj8M` · funding history → Past Sources of Funding `fld5HxGmZLsJpZRaf`
+strengths → Strengths (resolve by name from the schema — ID not yet recorded) · what the company does → Value Proposition `fldUTvTnK0AKNPxjr` · weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions for Company `fldlw3iPk5DeVXz63` · tech description → Tech: Summary `fld4cGrEjrBnyNs5f` · team → Team Analysis `fld0RouGgSh7gCi2v` · next steps / obstacles → Company: Next Steps `fld0Bjr8Mg0HmDj8M` · funding history → Past Sources of Funding `fld5HxGmZLsJpZRaf`
 
-**A field's name is not its definition.** Before you propose a field you have not written before, read what is already in it — on this record and on a couple of others. The existing content is what defines the field; the name is a label someone chose years ago. If it is empty and its purpose is not obvious, leave it alone and say why.
+**Secret Sauce `flda5JIPbWF8bzqWh` is reasoned, not filed.** It is the one field you compose rather than place, and it is *not* a second copy of the strengths. It answers a single question: what does this company have that the others do not? Usually that is the strongest of their strengths fused with something specific about the technology — the combination is the point, which is why neither section alone answers it. Two or three sentences, drawn only from what the note establishes, signed. If the note does not support a claim of real differentiation, leave the field empty and say so at the gate; a restated strengths list here is worse than nothing.
+
+**For any field NOT on that list, a field's name is not its definition.** Before you propose one, read what is already in it — on this record and on a couple of others. The existing content is what defines the field; the name is a label someone chose years ago. If it is empty and its purpose is not obvious, leave it alone and say why.
+
+This guard does not apply to the landing spots above. They are already checked, and an empty one is an empty one because nobody has filled it yet — not a signal to stay away. A field like Secret Sauce reads as cryptic precisely because its name does not describe its contents; that is what the list is for.
 
 "Origin" is the standing example: it records **where the deal came from** — who sent us the company or the deck. It is not the origin of your note, and triage content does not belong there.
 
 **Workflow metadata never goes on the record.** The source filename, which fields you wrote, how many sections you mapped — that is the report you give the user and the notice in step 8, not field content. Nothing on the record should describe the run that produced it.
 
-**Nothing goes in a field unless the notes support it.** No inference, no filling a gap from your own knowledge of the company. A field left empty is the correct output for content the author did not write.
+**Nothing goes in a field unless the notes support it.** No importing facts from your own knowledge of the company, and no filling a gap with something plausible. A field left empty is the correct output for content the author did not write.
+
+Distilling what the note *does* say is a different thing, and Secret Sauce asks for exactly that: the judgement is yours, every fact underneath it is theirs. The line is between reading the note closely and going outside it.
 
 **Never write** formula, lookup, rollup, count or lastModified fields.
 
@@ -58,7 +64,11 @@ strengths → Secret Sauce `flda5JIPbWF8bzqWh` · what the company does → Valu
    - **4a — meet / advance.** Decide for yourself which fields fit the content in front of you, starting from the landing-spot hints rather than being bound by them.
    - **4b — pass / soft pass. Write less on purpose** — nobody reads a teardown on a dead company. Only: the stage-change note; the risks, framed as *what would have to change for us to re-engage*, into Key Risks `fldHCnh6cw5aLPtH9`; the full note into NOTES `fldlbxnXwd42pqXSf` as the archive; plus the stage and its date. Skip the full mapping.
 
-   **Account for the whole note before you show anything.** Walk it section by section and check each one reaches the table. Anything you are not writing appears in the table too, as **leave**, with the reason — "no field fits it" is a legitimate answer; dropping it in silence is not. The sections with no obvious home are exactly the ones that vanish: strengths, the overview of what the company does, funding history.
+   **Account for the whole note before you show anything.** Walk it section by section and check each one reaches the table. Anything you are not writing appears in the table too, as **leave**, with the reason — "no field fits it" is a legitimate answer; dropping it in silence is not.
+
+   A section that has a landing spot listed in Configuration may **not** be left because the field is empty or its name is cryptic. That is not a reason, it is the failure this check exists to catch. Strengths is the one that keeps going missing — and filing it is not the same as having answered Secret Sauce, which is a separate judgement about the same material.
+
+   Say in prose, above the table, which sections of the note you are not writing and why. A **leave** row is easy to approve without reading; a sentence saying "I am not filing your strengths" is not.
 
    Present it as one table — **Field | Action (append / replace / leave) | Content** — using field names the user will recognise. Append is the default; *replace* needs its own explicit yes. The dated attribution header is a **boundary marker, not a byline**. It goes in only when you are appending underneath content that is already there, to separate your text from someone else's:
 

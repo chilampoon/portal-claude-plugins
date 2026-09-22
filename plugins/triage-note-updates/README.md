@@ -84,6 +84,13 @@ point, bullets the evidence under it, and closes with the takeaway. The
 appears only where your text is going underneath someone else's, never stamped
 down every field on the record.
 
+**Secret Sauce is reasoned, not copied.** Your Strengths section goes to the
+Strengths field as you wrote it. Secret Sauce is a separate question — what this
+company has that others do not, usually the strongest strengths fused with
+something specific about the technology — so Claude composes it from your note
+and signs it. If the note does not support a real claim of differentiation, it
+stays empty and Claude says so.
+
 **Claude signs what Claude wrote.** Anything it composed — content condensed from
 your note, the stage-change note, the reply — ends with
 `_(summarized by Claude <model>, <date time>)_`. Your own words, including the
