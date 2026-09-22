@@ -1,7 +1,7 @@
 {
   "name": "triage-note-updates",
   "displayName": "Triage Note Updates",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Finish a startup triage in Airtable: read the note from a Word doc, PDF or pasted email, propose where each piece lands on the company's Deal Flow record, move the Pipeline Stage, then tell Diligence support what changed and reply to the stage-change notification — every step after you confirm.",
   "author": {
     "name": "Portal"

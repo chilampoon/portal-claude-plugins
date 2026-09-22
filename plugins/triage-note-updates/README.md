@@ -93,7 +93,7 @@ stays empty and Claude says so.
 
 **Claude signs what Claude wrote.** Anything it composed — content condensed from
 your note, the stage-change note, the reply — ends with
-`_(summarized by Claude <model>, <date time>)_`. Your own words, including the
+`_(summarized by Claude <model>, <date>)_`. Your own words, including the
 full note archived into Notes, are never signed that way.
 
 **It reads a field before it writes to one.** A field's name is not its

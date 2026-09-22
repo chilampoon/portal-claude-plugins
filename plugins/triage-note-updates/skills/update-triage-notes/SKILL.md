@@ -146,7 +146,7 @@ Never run questions together on one line. Someone is working down this list in f
 
 ## Signing what Claude wrote
 
-Text you composed ends with `_(summarized by Claude <model name>, <YYYY-MM-DD HH:MM>)_`, so a reader can tell it from the author's own words and see when it landed. Use the model actually running this session — do not hard-code a version string — and the real clock time of the run, 24-hour.
+Text you composed ends with `_(summarized by Claude <model name>, <YYYY-MM-DD>)_`, so a reader can tell it from the author's own words and see when it landed. Use the model actually running this session — do not hard-code a version string — and the date only, no clock time.
 
 - **Sign** field content you condensed from the note, the stage-change note, and the reply body.
 - **Do not sign verbatim source.** The original note archived into NOTES `fldlbxnXwd42pqXSf` is the author's own words; labelling those as Claude's is worse than no signature at all.
