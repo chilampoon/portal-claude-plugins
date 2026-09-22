@@ -18,21 +18,42 @@ IDs below were pulled from the live base schema. `get_table_schema` on the table
 - Record page, to link once you have written: `https://airtable.com/appAX3sMfPtCKv4nB/pagEE4hR4JW5uv0qc/<recId>?home=pag56exCQcCiTSB6z`
 - PIPELINE_STAGE: `fldX6aVYsZ0CdBaVR`, single select. The options this workflow uses, exact strings — submit them character for character: `0.0 - Outside of Core Geographies` (see step 5) · `1.1 - On Deck` · `1.2 - Monitoring by BD & Venture (Venture has met, awaiting...)` · `2.1 - Triage` · `2.2 - Triaged & Waiting` · `3.1 - Deep Diligence` · `5.1 - Soft Pass` · `5.2 - Passed / Not a Fit`
 - Stage dates: Triage Start `fldAxUNpcVHRTCxnH` · Deep Diligence Start `fldIIBBNAo31aFGVx` · Passed Date `fldseeAXS1MrR4tQ4` · Prioritization Date `fldpCkddwW1dshyLH`
-- NOTES: `fldlbxnXwd42pqXSf`, rich text — the catch-all and the archive.
+- NARRATIVE UPDATES = record comments (`create_record_comment`), no field ID. See below.
+- ORIGIN: `fldlbxnXwd42pqXSf`. The schema calls it "Notes", which is what made it look like a catch-all; the Deal Flow record page shows it as **Origin**, read-only. On every record it holds where the deal came from — the intake email, "founder reached out", "met Ignacio at ASCO". **This workflow never writes to it**: not triage content, not an archive, not a stage-change note, not anything.
 
 **Common landing spots — settled, but not exhaustive.** Every pairing below has been checked, so content of that kind goes there unless the note itself gives you a reason otherwise. The table has far more fields, and the list says nothing about them — read the schema and choose what fits the rest of the note:
 
-strengths → Strengths (resolve by name from the schema — ID not yet recorded) · what the company does → Value Proposition `fldUTvTnK0AKNPxjr` · weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions for Company `fldlw3iPk5DeVXz63` · tech description → Tech: Summary `fld4cGrEjrBnyNs5f` · team → Team Analysis `fld0RouGgSh7gCi2v` · next steps / obstacles → Company: Next Steps `fld0Bjr8Mg0HmDj8M` · funding history → Past Sources of Funding `fld5HxGmZLsJpZRaf`
+strengths → Strengths `fldboP8VPnLxfVRM3` · what the company does → Value Proposition `fldUTvTnK0AKNPxjr` · weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions for Company `fldlw3iPk5DeVXz63` · tech description → Tech: Summary `fld4cGrEjrBnyNs5f` · team → Team Analysis `fld0RouGgSh7gCi2v` · next steps / obstacles → Company: Next Steps `fld0Bjr8Mg0HmDj8M` · funding history → Past Sources of Funding `fld5HxGmZLsJpZRaf`
 
-**Secret Sauce `flda5JIPbWF8bzqWh` is reasoned, not filed.** It is the one field you compose rather than place, and it is *not* a second copy of the strengths. It answers a single question: what does this company have that the others do not? Usually that is the strongest of their strengths fused with something specific about the technology — the combination is the point, which is why neither section alone answers it. Two or three sentences, drawn only from what the note establishes, signed. If the note does not support a claim of real differentiation, leave the field empty and say so at the gate; a restated strengths list here is worse than nothing.
+**Record-page labels are not schema names.** The Deal Flow page relabels fields, so what a colleague calls a field and what `get_table_schema` returns are not always the same string:
+
+- **Origin** = "Notes" `fldlbxnXwd42pqXSf`
+- **Strengths** = "Venture: Investment Rationale" `fldboP8VPnLxfVRM3`
+
+When the user names a field by its page label, map it through this list first. For any field not on it, read the field's content across several records before writing — the schema name may describe something else entirely, as both of these did.
+
+**Secret Sauce `flda5JIPbWF8bzqWh` is reasoned, not filed.** It is the one field you compose rather than place, and it is *not* a second copy of the strengths. It answers a single question: what does this company have that the others do not? Usually that is the strongest of their strengths fused with something specific about the technology — the combination is the point, which is why neither section alone answers it. **Compose it whenever the note has strengths or a description of the technology**, in the two labelled parts the base already uses (see XPAND, Strigosus):
+
+> **Their claim:** what the company says sets it apart.
+> **Assessment:** whether the note supports it.
+
+When the differentiation is unproven, say so in the Assessment — a skeptical assessment is the correct output, an empty field is not. Every fact in both parts comes from the note, and neither part is a copy of Strengths.
+
+**Narrative updates is the record's comment thread, not a field.** It is written with `create_record_comment`, never through `update_records_for_table`, and it never appears in the field payload.
+
+The recommendation is the thing a reader wants first and the one thing no field captures. Put it in the comment: what was decided, what that changes from where the company stood before triage, and briefly whose note it came from and when. Two or three sentences. Name the source the way a person would — `Source: Chi-Lam's pre-triage notes (2026-09-10)` — never the filename.
+
+**A posted comment cannot be taken back.** The connector creates comments but cannot edit or delete them, so there is no fixing a bad one afterwards. Show the exact text you intend to post at the confirm gate, word for word, and post only on an explicit yes.
+
+**First name only** when naming a colleague in prose — "Chi-Lam", not "Chi-Lam Poon" — in the comment and in the emails at steps 8 and 9. Two exceptions: the `**Triage — <Author>, <date>**` header stays a full-name byline, and recipient lists are never abbreviated — always full name plus address.
 
 **For any field NOT on that list, a field's name is not its definition.** Before you propose one, read what is already in it — on this record and on a couple of others. The existing content is what defines the field; the name is a label someone chose years ago. If it is empty and its purpose is not obvious, leave it alone and say why.
 
 This guard does not apply to the landing spots above. They are already checked, and an empty one is an empty one because nobody has filled it yet — not a signal to stay away. A field like Secret Sauce reads as cryptic precisely because its name does not describe its contents; that is what the list is for.
 
-"Origin" is the standing example: it records **where the deal came from** — who sent us the company or the deck. It is not the origin of your note, and triage content does not belong there.
+**Origin** `fldlbxnXwd42pqXSf` is the standing example: it records **where the deal came from** — who sent us the company or the deck. It is not the origin of your note, its schema name "Notes" is not an invitation, and nothing this workflow produces belongs in it.
 
-**Workflow metadata never goes on the record.** The source filename, which fields you wrote, how many sections you mapped — that is the report you give the user and the notice in step 8, not field content. Nothing on the record should describe the run that produced it.
+**Workflow metadata never goes on the record.** The source filename, which fields you wrote, how many sections you mapped — that is the report you give the user and the notice in step 8, not field content. Nothing on the record should describe the run that produced it. Naming the note a decision came from — whose it was and when — is content and belongs in Narrative updates; the filename and the list of fields you wrote are not and do not.
 
 **Nothing goes in a field unless the notes support it.** No importing facts from your own knowledge of the company, and no filling a gap with something plausible. A field left empty is the correct output for content the author did not write.
 
@@ -62,7 +83,7 @@ Distilling what the note *does* say is a different thing, and Secret Sauce asks 
 4. **Build the proposal.** Call `get_table_schema` on `tblkuk4Fpb1pYp4Ux`, then read the current value of every field you intend to touch, so an append is a real append.
 
    - **4a — meet / advance.** Decide for yourself which fields fit the content in front of you, starting from the landing-spot hints rather than being bound by them.
-   - **4b — pass / soft pass. Write less on purpose** — nobody reads a teardown on a dead company. Only: the stage-change note; the risks, framed as *what would have to change for us to re-engage*, into Key Risks `fldHCnh6cw5aLPtH9`; the full note into NOTES `fldlbxnXwd42pqXSf` as the archive; plus the stage and its date. Skip the full mapping.
+   - **4b — pass / soft pass. Write less on purpose** — nobody reads a teardown on a dead company. Only: the stage and its date; the risks, framed as *what would have to change for us to re-engage*, into Key Risks `fldHCnh6cw5aLPtH9`; and the decision as a Narrative updates comment — a pass is still a decision and still gets its comment. **No full-note archive** — there is nowhere on the record for one, and the note stays where the author keeps it. Skip the full mapping.
 
    **Account for the whole note before you show anything.** Walk it section by section and check each one reaches the table. Anything you are not writing appears in the table too, as **leave**, with the reason — "no field fits it" is a legitimate answer; dropping it in silence is not.
 
@@ -81,7 +102,9 @@ Distilling what the note *does* say is a different thing, and Secret Sauce asks 
 
    **A field that is empty gets no header.** There is nothing above it to separate from, and the same name and date stamped down every field on the record is noise. The signature line at the end of the block already records when it was written.
 
-   Ask once for the author and the triage date if they are not obvious from the document or the conversation; default to the person running the workflow and today's date. Format the content as **Formatting what you write** below sets out — the proposal table shows the real text, so get the shape right before the user reads it, not after. **Write nothing until the user confirms or edits this table.**
+   Ask once for the author and the triage date if they are not obvious from the document or the conversation; default to the person running the workflow and today's date. Format the content as **Formatting what you write** below sets out — the proposal table shows the real text, so get the shape right before the user reads it, not after.
+
+   The Narrative updates comment is not a field, so it gets no row. Show it in full underneath the table, labelled as the comment, at this same gate — it is the one thing here that cannot be undone. **Write nothing until the user confirms or edits both the table and the comment.**
 
 5. **Propose the stage change.** Show **old → new** verbatim and get explicit confirmation for *that specific change*, separately from the field table. Warn every time: the write fires Airtable automations — "Pipeline Stage Change" emails the venture fellows, and "Pipeline History - Record Updated" writes a Stage History record. Airtable treats an API write exactly like a manual edit, so the plugin can neither send that email itself nor suppress it.
 
@@ -89,9 +112,11 @@ Distilling what the note *does* say is a different thing, and Secret Sauce asks 
 
    Then the date, written directly as part of the same write — Triage Start `fldAxUNpcVHRTCxnH` for `2.1`, Deep Diligence Start `fldIIBBNAo31aFGVx` for `3.1`, Passed Date `fldseeAXS1MrR4tQ4` for `5.1`/`5.2`, Prioritization Date `fldpCkddwW1dshyLH` only if the user asks. No automation stamps these; you write them.
 
-6. **Compose the stage-change note — once, used twice.** A couple of sentences on why the stage changed. The same text is appended to NOTES `fldlbxnXwd42pqXSf` *and* becomes the body of the reply in step 9. Generate it once so the two cannot drift; if the user edits it at a confirm gate, both uses take the edit.
+6. **Compose the stage-change note.** A couple of sentences on why the stage changed. This is the body of the reply in step 9 and nothing else — it is not written to the record. The record's account of the decision is the Narrative updates comment from step 7; keep the two consistent and do not duplicate one into the other.
 
-7. **Confirm, then write.** With the field table, the stage, the date and the note all confirmed, make ONE `update_records_for_table` call setting everything at once. Report what was written and link the record page.
+7. **Confirm, then write.** With the field table, the stage, the date and the comment all confirmed, make ONE `update_records_for_table` call setting every field at once.
+
+   Then post the Narrative updates comment as a separate `create_record_comment` call, after the field write has succeeded — the comment describes a decision the record should already reflect. Post the approved text unchanged; if the field write failed, do not post. Report what was written and link the record page.
 
 8. **Tell Diligence support what changed.** Every run that writes sends this, whether or not the stage moved.
 
@@ -149,7 +174,7 @@ Never run questions together on one line. Someone is working down this list in f
 Text you composed ends with `_(summarized by Claude <model name>, <YYYY-MM-DD>)_`, so a reader can tell it from the author's own words and see when it landed. Use the model actually running this session — do not hard-code a version string — and the date only, no clock time.
 
 - **Sign** field content you condensed from the note, the stage-change note, and the reply body.
-- **Do not sign verbatim source.** The original note archived into NOTES `fldlbxnXwd42pqXSf` is the author's own words; labelling those as Claude's is worse than no signature at all.
+- **Do not sign verbatim source.** Where you have reproduced the author's own words rather than condensed them, labelling those as Claude's is worse than no signature at all.
 - The signature goes at the end of the block. The `**Triage — <Author>, <YYYY-MM-DD>**` header stays at the top, naming the human.
 
 ## Rules
@@ -164,6 +189,9 @@ Text you composed ends with `_(summarized by Claude <model name>, <YYYY-MM-DD>)_
 - Never claim to have uploaded an attachment. You cannot.
 - If a write fails on field validation, re-check with `get_table_schema`, adjust, and confirm with the user before retrying.
 - Never skip step 0. If the connector drops mid-run, stop, tell the user, and re-run the preflight before continuing.
+- Never write ORIGIN `fldlbxnXwd42pqXSf`, whatever the schema calls it.
+- The Narrative updates comment goes through `create_record_comment` after the field write, on its own explicit yes. It cannot be edited or deleted once posted.
+- Never replace or clear a field on a blanket instruction such as "change anything you need". Each replace or clear needs its own yes, with the current value shown first.
 - Read a field before you write to it for the first time. A field's name is not its definition, and no workflow metadata — filenames, field lists, run summaries — ever goes on the record.
 - Every recipient is an address read out of Airtable or off an existing thread. Never invent an address, and never treat a name as one. If the Diligence support field is empty or missing, or anyone on it will not resolve, skip the send and say so.
 - Sign what you composed; never sign the author's own words.

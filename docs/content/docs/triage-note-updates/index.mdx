@@ -91,8 +91,8 @@ any images from your note, because Claude cannot upload those for you.
   that fits a field gets proposed.
 - **Pass, or soft pass** — deliberately less. The reason for the move, the risks
   written as what would have to change for us to re-engage, your full note
-  archived in **Notes**, and the stage and date. Nobody reads a teardown on a
-  dead company.
+  and the decision posted as a Narrative updates comment, plus the stage and
+  date. Nobody reads a teardown on a dead company.
 - **Ambiguous, or no recommendation** — Claude asks rather than guessing.
 
 ## What lands in Airtable
@@ -128,8 +128,8 @@ _(summarized by Claude Opus 5, 2026-09-17)_
 </Appended>
 
 </Field>
-<Field label="Notes">
-<Appended label="Added by the plugin — and used as the reply">
+<Field label="Narrative updates — posted as a comment">
+<Appended label="Posted by the plugin, after the fields are written">
 
 Soft passing Marrowlight at triage. The science holds up and the patent position is real, but the companion-diagnostic thesis depends on two Phase 3 readouts that are both 2028, which puts them outside our window. Worth revisiting if they sign a pharma partner.
 
@@ -141,8 +141,8 @@ _(summarized by Claude Opus 5, 2026-09-17)_
 </Record>
 
 *Tinted blocks are what the plugin adds; everything else was already on the
-record. The Notes block is also the text of the reply that goes to the fellows. An
-advance would propose more fields than this, not fewer.*
+record. The reply that goes to the fellows says the same thing in its own words.
+An advance would propose more fields than this, not fewer.*
 
 ### Where things usually land
 
@@ -175,9 +175,10 @@ restating the strengths under a second heading.
   <Fact title="The stage move is a separate yes">It is shown as old → new. Claude tells you each time that the write sets off Airtable automations — a Stage History row, and the email to the fellows. Airtable treats the write like a manual edit, so Claude can neither send that email nor stop it. Moving a company to <strong>0.0 - Outside of Core Geographies</strong> is flagged on its own, because it can email outside the team.</Fact>
   <Fact title="The reply needs its own yes">Nothing goes out until you have seen the draft and the full recipient list. It is a reply-all to every venture fellow, so it never rides along on an earlier approval.</Fact>
   <Fact title="Diligence support hears about it">Every run that writes sends them a changelog — the record, the stage move, and a line per field. Recipients are looked up in Airtable down to their actual email addresses, never guessed from a name, and you approve them before it sends.</Fact>
-  <Fact title="It reads a field before writing to it">A field's name is not its definition. <strong>Origin</strong> records where the deal came from, not where your note came from, so Claude checks what is already in a field before proposing it — and never puts filenames or run summaries on the record.</Fact>
+  <Fact title="It reads a field before writing to it">A field's name is not its definition, and the record page relabels things — <strong>Origin</strong> is "Notes" in the schema, <strong>Strengths</strong> is "Venture: Investment Rationale". Claude maps page labels through that list, checks any unlisted field before proposing it, never writes to Origin, and never puts filenames or run summaries on the record.</Fact>
   <Fact title="What it writes has a shape">Questions come back grouped by subheading and numbered one per line, so you can work down them in front of the company. Every other field leads with the point, bullets the evidence, and closes with the takeaway.</Fact>
-  <Fact title="Claude signs what Claude wrote">Anything it composed for you ends with <em>(summarized by Claude)</em> and the model that wrote it. Your own words — including the full note archived into Notes — are never signed that way.</Fact>
+  <Fact title="The decision goes up as a comment">Narrative updates is the record's comment thread, not a field, so it posts separately once the fields are written. Comments cannot be edited or deleted afterwards, so you see the exact wording before it goes anywhere.</Fact>
+  <Fact title="Claude signs what Claude wrote">Anything it composed for you ends with <em>(summarized by Claude)</em> and the model that wrote it. Your own words, wherever it reproduced rather than condensed them, are never signed that way.</Fact>
   <Fact title="Nothing existing is replaced by default">It reads each field first and appends underneath. If it cannot read a field, it stops rather than writing over it.</Fact>
   <Fact title="It files notes, it does not write them">Nothing goes in a field unless your note supports it. Hand it nothing and it asks for your note.</Fact>
   <Fact title="You have to upload the images yourself">Claude has no way to put an attachment into Airtable, so it lists the figures it found and leaves them to you.</Fact>

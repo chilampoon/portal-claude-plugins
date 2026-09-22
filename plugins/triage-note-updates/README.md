@@ -40,8 +40,8 @@ and Claude reads it before planning any write:
   and proposes which fields fit the content actually in the note.
 - **Pass or soft pass** — deliberately less. The reason for the stage change, the
   risks framed as what would have to change for us to re-engage, the full note
-  archived in **Notes**, and the stage and date. Nobody reads a teardown on a
-  dead company.
+  and the decision posted as a Narrative updates comment, plus the stage and
+  date. Nobody reads a teardown on a dead company.
 - **Ambiguous or missing** — Claude asks. It never guesses a stage.
 
 **There is no fixed field map.** Portal's triage docs don't follow one template,
@@ -94,12 +94,22 @@ stays empty and Claude says so.
 **Claude signs what Claude wrote.** Anything it composed — content condensed from
 your note, the stage-change note, the reply — ends with
 `_(summarized by Claude <model>, <date>)_`. Your own words, including the
-full note archived into Notes, are never signed that way.
+parts of your note it reproduced rather than condensed, are never signed that way.
 
 **It reads a field before it writes to one.** A field's name is not its
-definition — "Origin" records where the deal came from, not where your note came
-from — so Claude checks what is actually in a field before proposing it, and puts
-no workflow metadata (filenames, field lists, run summaries) on the record at all.
+definition, and the Deal Flow page relabels things: **Origin** is called "Notes"
+in the schema and records where the deal came from, **Strengths** is called
+"Venture: Investment Rationale". Claude maps page labels through that list, reads
+what is actually in any unlisted field before proposing it, and puts no workflow
+metadata (filenames, field lists, run summaries) on the record at all. Origin is
+never written to.
+
+**Your recommendation is posted as a comment.** Narrative updates is the record's
+comment thread rather than a field, so it goes up through a separate call after
+the fields are written: what was decided, what that changes from where the
+company stood before triage, and briefly whose note it came from — "Source:
+Chi-Lam's pre-triage notes (2026-09-10)". Comments cannot be edited or deleted
+once posted, so Claude shows you the exact text first and posts only on your yes.
 
 ## Limitations
 
