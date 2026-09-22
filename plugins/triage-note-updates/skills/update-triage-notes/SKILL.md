@@ -85,7 +85,13 @@ strengths → Secret Sauce `flda5JIPbWF8bzqWh` · what the company does → Valu
 
 8. **Tell Diligence support what changed.** Every run that writes sends this, whether or not the stage moved.
 
-   The recipients come off the record itself — the people field naming Diligence support on this Startups record. Locate it in the schema you already pulled in step 4, read it off the record, and expand it to actual people. If the field is empty, or you cannot find it, say so and skip the send. Never improvise a recipient list.
+   **Recipients come off the record, resolved all the way to email addresses in Airtable.** A name is not a recipient. Find the Diligence support field on this Startups record in the schema you already pulled at step 4, then resolve it by the field's type:
+
+   - **Collaborator** — the cell value carries each person's address next to their name. Read the address out of the cell payload; the display name alone is not enough. Portal-internal people are usually collaborators, so this is the common case.
+   - **Link to another table** — follow each linked record ID into that table and read its email field. People in this base live in "HubSpot CRM" `tbllMLUVkBlg2lUzI`, address in "Email Address" `fldhEDQv17zK4g23p` — though that table is the synced external contacts, so an internal colleague may not be in it.
+   - **Text, or a name with no address attached** — search the people table above for the name and take the address from the match. One name, one unambiguous match; anything less certain, ask.
+
+   **Never construct an address from a person's name**, and never send to a name you could not resolve. If the field is empty, if you cannot find it, or if even one person is left without an address, name who is unresolved and skip the send rather than mailing the rest.
 
    Keep it to a changelog, not a report:
 
@@ -93,7 +99,7 @@ strengths → Secret Sauce `flda5JIPbWF8bzqWh` · what the company does → Valu
    - Stage `old → new`, if it moved.
    - One line per field touched: the field, appended or replaced, and the gist in a few words.
 
-   Show the resolved recipients and the draft, then send only on explicit confirmation. Without a mail tool, print it for the user to send.
+   Show the recipients as name **and** address, and the draft, then send only on explicit confirmation. Without a mail tool, print the changelog and the resolved addresses for the user to send.
 
 9. **Reply-all on the Airtable notification.** The stage write triggers "Pipeline Stage Change" (`wflKohvvhrsLTqud3`), whose steps are *wait 15 seconds → send email*. **That** email is what gets the reply — not the intake thread the notes came from. Subject `Pipeline Stage Change: {Company} moved to {New Stage}`, from `{Person} (via Airtable) <noreply+automations@airtable.com>`, to Venture Fellows and cc'ing whoever moved it; the body asks for a reply-all explaining why, to be copied onto the record.
 
@@ -149,6 +155,6 @@ Text you composed ends with `_(summarized by Claude <model name>, <YYYY-MM-DD HH
 - If a write fails on field validation, re-check with `get_table_schema`, adjust, and confirm with the user before retrying.
 - Never skip step 0. If the connector drops mid-run, stop, tell the user, and re-run the preflight before continuing.
 - Read a field before you write to it for the first time. A field's name is not its definition, and no workflow metadata — filenames, field lists, run summaries — ever goes on the record.
-- Recipients for the Diligence support notice come off the record. If the field is empty or missing, skip the send and say so.
+- Every recipient is an address read out of Airtable or off an existing thread. Never invent an address, and never treat a name as one. If the Diligence support field is empty or missing, or anyone on it will not resolve, skip the send and say so.
 - Sign what you composed; never sign the author's own words.
 - When unsure about anything — which company, which field, which stage — ask instead of guessing.

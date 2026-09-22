@@ -70,8 +70,10 @@ for you to send and says which it is.
 
 **Diligence support gets a changelog.** Any run that writes emails the people
 named on the record's Diligence support field — company, record link, the stage
-move if there was one, and a line per field touched. Recipients are resolved off
-the record and shown to you; nothing sends until you say so.
+move if there was one, and a line per field touched. Recipients are resolved out
+of Airtable all the way to email addresses, never guessed from a name, and shown
+to you as name and address; nothing sends until you say so. Anyone who will not
+resolve stops the send rather than getting left off it.
 
 **What it writes has a shape.** Questions for Company come back grouped under
 their subheadings — Scientific, Regulatory, IP & Business, Market, Team — and
