@@ -24,16 +24,24 @@ Attach the Word doc or PDF, or paste the email in, and say:
 Several people's notes on the same company at once is fine. Say so, and Claude
 merges them while keeping each person's contribution attributable.
 
-Claude keeps your structure. It tightens the wording; it does not reorganise your
-note into a template, and it does not add analysis you did not write.
+Claude keeps your structure and your words. It changes layout only — bullets,
+numbering, headings — and does not tighten, reorder, rank or reframe anything,
+reorganise your note into a template, or add analysis you did not write.
+Interpretation belongs in your triage; the copy step just places it.
 
 </Step>
 <Step n="02" title="Read the proposal">
 
 There is no fixed field map. Claude reads the table's live schema and proposes
-where each piece of your note belongs, as a table: the field, whether it is
-appending or replacing, and the exact text going in. Appending is the default —
-replacing takes its own separate yes.
+where each piece of your note belongs, as a table: the field, what is already in
+it, whether it is appending or replacing, and the exact text going in. For an
+empty field, appending is the default. For a field that already holds a
+colleague's notes you see theirs beside yours and choose — append, replace or
+leave — and a replace still takes its own separate yes.
+
+Before it shows you anything, Claude checks both directions: every section of
+your note has a destination, and every field on the pre-meeting triage checklist
+is either filled or named as having nothing in your note for it.
 
 Edit the proposal, or approve it. Nothing is written until you do.
 
@@ -105,7 +113,7 @@ shape of a **pass** — the short version.
 <Record title="Marrowlight Bio" table="Startups">
   <Fields>
     <Field label="Pipeline Stage"><Chip tone="muted">2.1 - Triage</Chip> → <Chip tone="mark">5.1 - Soft Pass</Chip><Hint>confirmed on its own, because it emails the team</Hint></Field>
-    <Field label="Passed Date"><Chip tone="mark">2026-09-17</Chip><Hint>only if an automation is not already stamping it</Hint></Field>
+    <Field label="Passed Date"><Chip tone="mark">2026-09-17</Chip><Hint>written in the same call as the stage</Hint></Field>
   </Fields>
 <Field label="Key Risks">
 **Triage — Colleague Name, 2026-08-14**
@@ -116,14 +124,11 @@ shape of a **pass** — the short version.
 
 **Triage — Your Name, 2026-09-17**
 
-Passing at triage on timing, not on the science.
+- The companion-diagnostic thesis rests on two NASH readouts, both in 2028, which is outside our window.
+- Contrast agent CMC is still at bench scale and they have no manufacturing partner lined up.
+- Would re-engage on a signed pharma companion-diagnostic deal, or a CMC partner for the contrast agent.
 
-- The companion-diagnostic thesis rests on two NASH readouts, both 2028 — outside our window.
-- Contrast agent CMC is still bench scale, with no manufacturing partner lined up.
-
-We would re-engage on a signed pharma companion-diagnostic deal, or a CMC partner for the contrast agent.
-
-_(summarized by Claude Opus 5, 2026-09-17)_
+_(copied by Claude Opus 5, 2026-09-17)_
 
 </Appended>
 
@@ -131,11 +136,11 @@ _(summarized by Claude Opus 5, 2026-09-17)_
 <Field label="Narrative updates — posted as a comment">
 <Appended label="Posted by the plugin, after the fields are written">
 
-Soft passing Marrowlight at triage. The science holds up and the patent position is real, but the companion-diagnostic thesis depends on two Phase 3 readouts that are both 2028, which puts them outside our window. Worth revisiting if they sign a pharma partner.
+Recommendation: soft pass. The science holds up and the patent position is real, but the companion-diagnostic thesis depends on two Phase 3 readouts that are both 2028, which puts them outside our window. Worth revisiting if they sign a pharma partner.
 
 Source: your pre-triage notes (2026-09-17) — [Marrowlight Bio triage.docx](#) on SharePoint
 
-_(summarized by Claude Opus 5, 2026-09-17)_
+_(copied by Claude Opus 5, 2026-09-17)_
 
 </Appended>
 
@@ -143,8 +148,9 @@ _(summarized by Claude Opus 5, 2026-09-17)_
 </Record>
 
 *Tinted blocks are what the plugin adds; everything else was already on the
-record. The reply that goes to the fellows says the same thing in its own words.
-An advance would propose more fields than this, not fewer.*
+record. Every sentence in them is a sentence from your note — the comment is your
+recommendation quoted, not summarised. An advance would propose more fields than
+this, not fewer.*
 
 ### Where things usually land
 
@@ -153,12 +159,14 @@ and a section that has a home here does not get quietly skipped. The list is not
 the whole table, though: for anything else in your note, Claude reads the live
 schema and proposes what fits.
 
-**Secret Sauce** is the exception — the one field Claude works out rather than
-files. It asks what this company has that the others do not, usually the
-strongest of the strengths fused with something specific about the technology,
-and it is reasoned from your note alone. If your note does not support a real
-claim of differentiation, Claude leaves it empty and tells you, rather than
-restating the strengths under a second heading.
+**Secret Sauce** is the one field most notes have no section for, because it is
+a judgement — what this company has that the others do not. If your note covers
+it, that text goes in as written. If not, Claude offers a draft before the copy
+step, clearly labelled as a draft and kept out of the proposal table: *Their
+claim* and *Assessment*, every fact from your note. You edit it, file it as your
+own, or decline. Only text you have made yours reaches the field, marked
+*copied by* like any other block, because you are its author and Claude only
+placed it. Declined means empty.
 
 <Legend>
   <LegendItem k="Strengths">**Strengths**</LegendItem>
@@ -178,9 +186,11 @@ restating the strengths under a second heading.
   <Fact title="The reply needs its own yes">Nothing goes out until you have seen the draft and the full recipient list. It is a reply-all to every venture fellow, so it never rides along on an earlier approval.</Fact>
   <Fact title="Diligence support hears about it">Every run that writes sends them a changelog — the record, the stage move, and a line per field. Recipients are looked up in Airtable down to their actual email addresses, never guessed from a name, and you approve them before it sends.</Fact>
   <Fact title="It reads a field before writing to it">A field's name is not its definition, and the record page relabels things — <strong>Origin</strong> is "Notes" in the schema, <strong>Strengths</strong> is "Venture: Investment Rationale". Claude maps page labels through that list, checks any unlisted field before proposing it, never writes to Origin, and never puts filenames or run summaries on the record.</Fact>
-  <Fact title="What it writes has a shape">Questions come back grouped by subheading and numbered one per line, so you can work down them in front of the company. Every other field leads with the point, bullets the evidence, and closes with the takeaway.</Fact>
+  <Fact title="Layout, never wording">Questions come back grouped by subheading and numbered one per line, so you can work down them in front of the company. Every other field keeps your order and your words — if a sentence is on the record, it is a sentence from your note.</Fact>
+  <Fact title="Existing notes are shown beside yours">Where a field already holds a colleague's triage, you see theirs next to what Claude proposes and choose append, replace or leave. Older deal history is never buried without you deciding so.</Fact>
+  <Fact title="Nothing missed, in either direction">Every section of your note reaches a field, and every field on the pre-meeting triage checklist is filled or named as empty. The plugin exists so nothing gets lost on the way in.</Fact>
   <Fact title="The decision goes up as a comment, pointing at the full note">Narrative updates is the record's comment thread, not a field, so it posts separately once the fields are written, and it ends with a route to your complete note so a colleague can read the reasoning. Airtable's API cannot attach a file to a comment, so Claude asks you: paste a SharePoint link, or attach the file to the thread yourself. Comments cannot be edited or deleted afterwards, so you see the exact wording before it goes anywhere.</Fact>
-  <Fact title="Claude signs what Claude wrote">Anything it composed for you ends with <em>(summarized by Claude)</em> and the model that wrote it. Your own words, wherever it reproduced rather than condensed them, are never signed that way.</Fact>
+  <Fact title="Copied by, or drafted by — never summarized by">Every block the plugin places ends with <em>copied by Claude</em>: your words, placed as you approved them. The two emails it actually writes end with <em>drafted by Claude</em>. The verb tells you at a glance which is which.</Fact>
   <Fact title="Nothing existing is replaced by default">It reads each field first and appends underneath. If it cannot read a field, it stops rather than writing over it.</Fact>
   <Fact title="It files notes, it does not write them">Nothing goes in a field unless your note supports it. Hand it nothing and it asks for your note.</Fact>
   <Fact title="You have to upload the images yourself">Claude has no way to put an attachment into Airtable, so it lists the figures it found and leaves them to you.</Fact>

@@ -38,17 +38,35 @@ and Claude reads it before planning any write:
 
 - **Meet or advance** — the full treatment. Claude reads the live table schema
   and proposes which fields fit the content actually in the note.
-- **Pass or soft pass** — deliberately less. The reason for the stage change, the
-  risks framed as what would have to change for us to re-engage, the full note
-  and the decision posted as a Narrative updates comment, plus the stage and
-  date. Nobody reads a teardown on a dead company.
+- **Pass or soft pass** — deliberately less. Your weaknesses or risks section as
+  written into Key Risks, the decision posted as a Narrative updates comment, plus
+  the stage and date. Nobody reads a teardown on a dead company.
 - **Ambiguous or missing** — Claude asks. It never guesses a stage.
 
-**There is no fixed field map.** Portal's triage docs don't follow one template,
-so the plugin doesn't pretend they do. Claude proposes a mapping as a table —
-field, append or replace, and the exact content — and writes nothing until you
-confirm or edit it. Appending is the default, under a dated
-`**Triage — <Author>, <date>**` header; replacing takes its own yes.
+**The copy step does not interpret.** Claude decides *where* your content goes
+and makes sure none of it is lost; it does not change the words. Nothing is
+tightened, reordered, ranked, reframed or summarised on the way into a field —
+layout only. If you want a field to open with the conclusion, write it that way
+in your note. Interpretation belongs in the triage, not in the copy.
+
+**There is no fixed field map, but there is a checklist.** Portal's triage docs
+don't follow one template, so Claude proposes where each piece goes rather than
+following a fixed map. It does, however, check both directions before showing
+you anything: every section of your note reaches a field, and every field on the
+pre-meeting triage checklist is either filled or named as "nothing in the note
+for this". The checklist in `SKILL.md` is a first draft from the current landing
+spots — Strengths, Key Risks, Questions for Company, Tech: Summary, Team
+Analysis, Company: Next Steps, Value Proposition, Past Sources of Funding,
+Secret Sauce, the stage and date, and the comment. Confirm it with the team and
+edit it there.
+
+**Existing content is shown beside what's proposed.** The proposal table has an
+Existing column with what is on the record now, in full, so an earlier
+colleague's triage is read next to yours rather than buried under it. For an
+empty field, appending is the default. For a field that already has content
+there is no default: you choose append, replace or leave for that row, and a
+replace still takes its own yes. Appends go under a dated
+`**Triage — <Author>, <date>**` header.
 
 **Pipeline Stage is writable now**, because moving the stage is what finishing
 triage means. It gets its own confirmation showing the old value and the new one,
@@ -75,26 +93,29 @@ of Airtable all the way to email addresses, never guessed from a name, and shown
 to you as name and address; nothing sends until you say so. Anyone who will not
 resolve stops the send rather than getting left off it.
 
-**What it writes has a shape.** Questions for Company come back grouped under
-their subheadings — Scientific, Regulatory, IP & Business, Market, Team — and
-numbered within each group, one question per line, because someone is going to
-work down that list in front of the company. Every other field leads with the
-point, bullets the evidence under it, and closes with the takeaway. The
-`**Triage — <name>, <date>**` header is a boundary marker, not a byline: it
-appears only where your text is going underneath someone else's, never stamped
-down every field on the record.
+**Layout, not wording.** Questions for Company come back grouped under their
+subheadings — Scientific, Regulatory, IP & Business, Market, Team — and numbered
+within each group, one question per line, because someone is going to work down
+that list in front of the company. Every other field keeps your order and your
+words: prose stays prose, bullets stay bullets. The `**Triage — <name>, <date>**`
+header is a boundary marker, not a byline: it appears only where your text is
+going underneath someone else's, never stamped down every field on the record.
 
-**Secret Sauce is reasoned, not copied.** Your Strengths section goes to the
-Strengths field as you wrote it. Secret Sauce is a separate question — what this
-company has that others do not, usually the strongest strengths fused with
-something specific about the technology — so Claude composes it from your note
-and signs it. If the note does not support a real claim of differentiation, it
-stays empty and Claude says so.
+**Secret Sauce is offered as a draft, before the copy.** If your note has a
+differentiation section, it goes in as written like everything else. If it has
+strengths and a technology description but no Secret Sauce section, Claude offers
+a draft — *Their claim* / *Assessment*, every fact from your note — clearly
+labelled as a draft and separate from the proposal table. You edit it, file it
+as your own, or decline. Only text you have made yours reaches the field, marked
+*copied by Claude* like any other block, because you are its author and the
+plugin only placed it. Declined means empty.
 
-**Claude signs what Claude wrote.** Anything it composed — content condensed from
-your note, the stage-change note, the reply — ends with
-`_(summarized by Claude <model>, <date>)_`. Your own words, including the
-parts of your note it reproduced rather than condensed, are never signed that way.
+**Two markers, and the verb matters.** Every block the plugin places — field
+content and the Narrative updates comment — ends with
+`_(copied by Claude <model>, <date>)_`: your words, placed word for word as you
+approved them. The two things Claude actually writes, the stage-change reply and
+the Diligence support changelog, end with `_(drafted by Claude <model>, <date>)_`.
+Nothing says "summarized", because nothing is.
 
 **It reads a field before it writes to one.** A field's name is not its
 definition, and the Deal Flow page relabels things: **Origin** is called "Notes"

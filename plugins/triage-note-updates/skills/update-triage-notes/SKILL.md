@@ -7,7 +7,7 @@ description: File a startup's triage notes into Portal's Airtable record and fin
 
 Take triage notes that already exist — a Word doc, a PDF, an email, or text pasted into chat — file them onto that company's record in the "Startups" table, and move the record to the stage the triage decision calls for.
 
-Two things shape every run. **Triage notes are written by different people at different times**, so this workflow *adds* to what is on the record; it never replaces another person's notes unless the user says so. And **the decision decides how much gets written** — a pass and an advance are not the same amount of writing, so read the recommendation before planning the write.
+Three things shape every run. **Triage notes are written by different people at different times**, so this workflow *adds* to what is on the record; it never replaces another person's notes unless the user says so. **The decision decides how much gets written** — a pass and an advance are not the same amount of writing, so read the recommendation before planning the write. And **the copy step does not interpret.** Your job here is to decide *where* the author's content goes and to make sure none of it is lost — not to tighten it, rank it, reframe it or summarise it. Interpretation belongs in the triage itself, before this workflow runs; done here, it leaves an opinion on the record that the author never wrote.
 
 ## Configuration
 
@@ -25,6 +25,10 @@ IDs below were pulled from the live base schema. `get_table_schema` on the table
 
 strengths → Strengths `fldboP8VPnLxfVRM3` · what the company does → Value Proposition `fldUTvTnK0AKNPxjr` · weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions for Company `fldlw3iPk5DeVXz63` · tech description → Tech: Summary `fld4cGrEjrBnyNs5f` · team → Team Analysis `fld0RouGgSh7gCi2v` · next steps / obstacles → Company: Next Steps `fld0Bjr8Mg0HmDj8M` · funding history → Past Sources of Funding `fld5HxGmZLsJpZRaf`
 
+**What a pre-meeting triage fills.** The fields a triage is expected to populate, so that the coverage check in step 4 runs from Airtable's side as well as the note's. Each of these is either filled from the note or named at the gate as "nothing in the note for this":
+
+Strengths `fldboP8VPnLxfVRM3` · Key Risks `fldHCnh6cw5aLPtH9` · Questions for Company `fldlw3iPk5DeVXz63` · Tech: Summary `fld4cGrEjrBnyNs5f` · Team Analysis `fld0RouGgSh7gCi2v` · Company: Next Steps `fld0Bjr8Mg0HmDj8M` · Value Proposition `fldUTvTnK0AKNPxjr` · Past Sources of Funding `fld5HxGmZLsJpZRaf` · Secret Sauce `flda5JIPbWF8bzqWh` · PIPELINE_STAGE and its date · the Narrative updates comment
+
 **Record-page labels are not schema names.** The Deal Flow page relabels fields, so what a colleague calls a field and what `get_table_schema` returns are not always the same string:
 
 - **Origin** = "Notes" `fldlbxnXwd42pqXSf`
@@ -32,16 +36,18 @@ strengths → Strengths `fldboP8VPnLxfVRM3` · what the company does → Value P
 
 When the user names a field by its page label, map it through this list first. For any field not on it, read the field's content across several records before writing — the schema name may describe something else entirely, as both of these did.
 
-**Secret Sauce `flda5JIPbWF8bzqWh` is reasoned, not filed.** It is the one field you compose rather than place, and it is *not* a second copy of the strengths. It answers a single question: what does this company have that the others do not? Usually that is the strongest of their strengths fused with something specific about the technology — the combination is the point, which is why neither section alone answers it. **Compose it whenever the note has strengths or a description of the technology**, in the two labelled parts the base already uses (see XPAND, Strigosus):
+**Secret Sauce `flda5JIPbWF8bzqWh` and Value Proposition `fldUTvTnK0AKNPxjr` are filled from the note, like everything else.** If the note has a section on differentiation, or on what the company does, that text goes in as written. Neither field is a place for you to summarise the rest of the note.
+
+Secret Sauce is the one field the team often has not written a section for, because it is a judgement — what does this company have that the others do not, usually the strongest strengths fused with something specific about the technology. When the note has strengths or a technology description but no Secret Sauce section, **offer a draft, before the copy step and clearly labelled as a draft**, in the two parts the base already uses (see XPAND, Strigosus):
 
 > **Their claim:** what the company says sets it apart.
 > **Assessment:** whether the note supports it.
 
-When the differentiation is unproven, say so in the Assessment — a skeptical assessment is the correct output, an empty field is not. Every fact in both parts comes from the note, and neither part is a copy of Strengths.
+Every fact in it comes from the note; when the differentiation is unproven, the Assessment says so. Then the user edits it, or says to file it as theirs, or declines. Only text the user has made their own reaches the field; it carries the same *copied by* line as any other block, because the plugin placed it, and no *drafted by* line, because the user is its author of record. Declined means the field stays empty and the gate says so. Never slip the draft into the proposal table as though it were content from the note.
 
 **Narrative updates is the record's comment thread, not a field.** It is written with `create_record_comment`, never through `update_records_for_table`, and it never appears in the field payload.
 
-The recommendation is the thing a reader wants first and the one thing no field captures. Put it in the comment: what was decided, what that changes from where the company stood before triage, and briefly whose note it came from and when. Two or three sentences, then a last line pointing at the full note — `Source: Chi-Lam's pre-triage notes (2026-09-10) — <SharePoint link>`, or `Source: Chi-Lam's pre-triage notes (2026-09-10), attached in this thread` when the user is uploading it themselves — so anyone reading the record can get to the reasoning behind the decision. Name the source the way a person would, never by filename.
+The recommendation is the thing a reader wants first and the one thing no field captures. The comment is the note's recommendation **as the author wrote it** — not your précis of it, and not your account of what changed. Quote the recommendation section whole; if it runs long, the user chooses the excerpt, not you. Then a last line pointing at the full note — `Source: Chi-Lam's pre-triage notes (2026-09-10) — <SharePoint link>`, or `Source: Chi-Lam's pre-triage notes (2026-09-10), attached in this thread` when the user is uploading it themselves — so anyone reading the record can get to the reasoning behind the decision. Name the source the way a person would, never by filename.
 
 **A posted comment cannot be taken back.** The connector creates comments but cannot edit or delete them, so there is no fixing a bad one afterwards. Show the exact text you intend to post at the confirm gate, word for word, and post only on an explicit yes.
 
@@ -57,7 +63,7 @@ This guard does not apply to the landing spots above. They are already checked, 
 
 **Nothing goes in a field unless the notes support it.** No importing facts from your own knowledge of the company, and no filling a gap with something plausible. A field left empty is the correct output for content the author did not write.
 
-Distilling what the note *does* say is a different thing, and Secret Sauce asks for exactly that: the judgement is yours, every fact underneath it is theirs. The line is between reading the note closely and going outside it.
+Distilling what the note *does* say happens in one place only: the Secret Sauce draft you offer before the copy step, which the user then owns or declines. Nothing distilled, tightened or reframed reaches the record on your say-so.
 
 **Never write** formula, lookup, rollup, count or lastModified fields.
 
@@ -69,7 +75,7 @@ Distilling what the note *does* say is a different thing, and Secret Sauce asks 
 
 1. **Get the note.** Use whatever the user provided: an uploaded Word doc or PDF (if the text is already extracted into the conversation, use it; if you have a shell and only the raw file, run `scripts/extract_docx.py <file>` from this plugin), a pasted or forwarded email (strip greetings, signatures and scheduling chatter), or pasted notes as-is. Several sources at once is fine — merge them and keep each author attributable.
 
-   Keep the author's own structure. Tighten wording; do not reorganize their note into a template, and do not add analysis they did not write. If no note content was provided, ask for it — never draft a triage note from your own knowledge of the company.
+   Keep the author's own structure **and their own words**. Do not tighten, reorder, rank, merge or rephrase; do not reorganize the note into a template; do not add analysis they did not write. What changes between the note and the record is layout — see **Layout, not wording** below — and nothing else. If no note content was provided, ask for it — never draft a triage note from your own knowledge of the company.
 
    **Where the full note lives.** Colleagues reading the record later want the whole note, not the summary. You cannot put the file on the record yourself — the Airtable connector has no file-upload tool and the comment API takes text only — so ask the user, once, which they prefer:
 
@@ -89,16 +95,16 @@ Distilling what the note *does* say is a different thing, and Secret Sauce asks 
 
 4. **Build the proposal.** Call `get_table_schema` on `tblkuk4Fpb1pYp4Ux`, then read the current value of every field you intend to touch, so an append is a real append.
 
-   - **4a — meet / advance.** Decide for yourself which fields fit the content in front of you, starting from the landing-spot hints rather than being bound by them.
-   - **4b — pass / soft pass. Write less on purpose** — nobody reads a teardown on a dead company. Only: the stage and its date; the risks, framed as *what would have to change for us to re-engage*, into Key Risks `fldHCnh6cw5aLPtH9`; and the decision as a Narrative updates comment — a pass is still a decision and still gets its comment. **No full-note archive** — there is nowhere on the record for one, and the note stays where the author keeps it. Skip the full mapping.
+   - **4a — meet / advance.** Decide which field each part of the note belongs in, starting from the landing spots rather than being bound by them, and place the author's text there as written.
+   - **4b — pass / soft pass. Write less on purpose** — nobody reads a teardown on a dead company. Only: the stage and its date; the note's weaknesses or risks section, as written, into Key Risks `fldHCnh6cw5aLPtH9`; and the decision as a Narrative updates comment — a pass is still a decision and still gets its comment. **No full-note archive** — there is nowhere on the record for one, and the note stays where the author keeps it. Skip the full mapping.
 
-   **Account for the whole note before you show anything.** Walk it section by section and check each one reaches the table. Anything you are not writing appears in the table too, as **leave**, with the reason — "no field fits it" is a legitimate answer; dropping it in silence is not.
+   **Account for the whole note, and the whole checklist, before you show anything.** Two passes. Note → fields: walk the note section by section and check each one reaches the table; anything you are not writing appears in the table too, as **leave**, with the reason — "no field fits it" is a legitimate answer, dropping it in silence is not. Checklist → note: for every field in **What a pre-meeting triage fills**, either the table has content for it or the gate says "nothing in the note for this" by name. Nothing missed in either direction is the whole point of the plugin.
 
-   A section that has a landing spot listed in Configuration may **not** be left because the field is empty or its name is cryptic. That is not a reason, it is the failure this check exists to catch. Strengths is the one that keeps going missing — and filing it is not the same as having answered Secret Sauce, which is a separate judgement about the same material.
+   A section that has a landing spot listed in Configuration may **not** be left because the field is empty or its name is cryptic. That is not a reason, it is the failure this check exists to catch. Strengths is the one that keeps going missing.
 
    Say in prose, above the table, which sections of the note you are not writing and why. A **leave** row is easy to approve without reading; a sentence saying "I am not filing your strengths" is not.
 
-   Present it as one table — **Field | Action (append / replace / leave) | Content** — using field names the user will recognise. Append is the default; *replace* needs its own explicit yes. The dated attribution header is a **boundary marker, not a byline**. It goes in only when you are appending underneath content that is already there, to separate your text from someone else's:
+   Present it as one table — **Field | Existing | Action (append / replace / leave) | Content** — using field names the user will recognise. **Existing** holds what is on the record now, in full, so the user reads the old beside the new; that is how an earlier colleague's triage stays visible instead of being buried. For an empty field, append is the default and the table confirm covers it. **For a field that already has content there is no default**: the user chooses append, replace or leave for that row, and a *replace* still needs its own explicit yes on top. The dated attribution header is a **boundary marker, not a byline**. It goes in only when you are appending underneath content that is already there, to separate your text from someone else's:
 
    ```
    <existing content>
@@ -107,9 +113,9 @@ Distilling what the note *does* say is a different thing, and Secret Sauce asks 
    <new content>
    ```
 
-   **A field that is empty gets no header.** There is nothing above it to separate from, and the same name and date stamped down every field on the record is noise. The signature line at the end of the block already records when it was written.
+   **A field that is empty gets no header.** There is nothing above it to separate from, and the same name and date stamped down every field on the record is noise. The *copied by* line at the end of the block already records when it was placed.
 
-   Ask once for the author and the triage date if they are not obvious from the document or the conversation; default to the person running the workflow and today's date. Format the content as **Formatting what you write** below sets out — the proposal table shows the real text, so get the shape right before the user reads it, not after.
+   Ask once for the author and the triage date if they are not obvious from the document or the conversation; default to the person running the workflow and today's date. Lay the content out as **Layout, not wording** below sets out — the proposal table shows the real text, so get the layout right before the user reads it, not after.
 
    The Narrative updates comment is not a field, so it gets no row. Show it in full underneath the table, labelled as the comment, at this same gate — it is the one thing here that cannot be undone. **Write nothing until the user confirms or edits both the table and the comment.**
 
@@ -119,7 +125,7 @@ Distilling what the note *does* say is a different thing, and Secret Sauce asks 
 
    Then the date, written directly as part of the same write — Triage Start `fldAxUNpcVHRTCxnH` for `2.1`, Deep Diligence Start `fldIIBBNAo31aFGVx` for `3.1`, Passed Date `fldseeAXS1MrR4tQ4` for `5.1`/`5.2`, Prioritization Date `fldpCkddwW1dshyLH` only if the user asks. No automation stamps these; you write them.
 
-6. **Compose the stage-change note.** A couple of sentences on why the stage changed. This is the body of the reply in step 9 and nothing else — it is not written to the record. The record's account of the decision is the Narrative updates comment from step 7; keep the two consistent and do not duplicate one into the other.
+6. **Compose the stage-change note.** A couple of sentences on why the stage changed, in the author's words wherever the note supplies them. This is the body of the reply in step 9 and nothing else — it is not written to the record. The record's account of the decision is the Narrative updates comment from step 7; keep the two consistent and do not duplicate one into the other.
 
 7. **Confirm, then write.** With the field table, the stage, the date and the comment all confirmed, make ONE `update_records_for_table` call setting every field at once.
 
@@ -155,9 +161,11 @@ Distilling what the note *does* say is a different thing, and Secret Sauce asks 
 
 10. **Hand off what you could not do.** The images and which attachment field they belong in, the reply text if it did not go out, and, if they chose to upload the note themselves, the reminder to attach it to the Narrative updates thread now, since the comment already says it is there.
 
-## Formatting what you write
+## Layout, not wording
 
-These fields are rich text and render markdown. Use it — a wall of clauses strung together with `·` is unreadable on the record and worse in a meeting.
+These fields are rich text and render markdown. Use it for layout — bullets, numbering, headings — and for nothing else. A wall of clauses strung together with `·` is unreadable on the record and worse in a meeting, but the fix is line breaks, not rewriting.
+
+**Allowed:** turning the author's list into bullets or numbers; putting their subheadings in bold on their own lines; splitting one section across two fields when the note's own headings map to two fields; removing greetings and signatures from an email. **Not allowed:** tightening, rephrasing, reordering, ranking, merging two of their points into one, splitting one point into two, adding an opening or closing sentence, dropping a qualifier. If a sentence on the record is not a sentence in the note, something has gone wrong.
 
 **Questions for Company `fldlw3iPk5DeVXz63` — grouped, numbered, one question per line.** Group under the subheadings the note uses, typically Scientific / Regulatory / IP & Business / Market / Team, and number within each group, restarting at 1:
 
@@ -174,20 +182,24 @@ These fields are rich text and render markdown. Use it — a wall of clauses str
 
 Never run questions together on one line. Someone is working down this list in front of the company, so each numbered item has to be askable as it stands. A question and its immediate follow-up stay in one item; a genuinely separate question gets its own number.
 
-**Every other field — lead, detail, close.** Open with the point in a sentence: the conclusion goes first, not last. Bullet the evidence or the detail underneath it. Close with the takeaway — the so-what, or what would have to change the answer. Keep the author's own ordering inside the bullets, most significant first if that is how they wrote it. Skip the frame when the content is a single item; one bullet does not need an introduction and a conclusion wrapped round it. The longer the field, the more it needs all three.
+**Every other field — the author's order, the author's words.** If they wrote prose, it stays prose; if they wrote bullets, it stays bullets in the same order. Do not lead with a summary sentence or close with a takeaway — those would be yours, not theirs. If the user wants a field to open with the conclusion, they write it that way in the note and you preserve it.
 
-## Signing what Claude wrote
+## Marking what Claude placed
 
-Text you composed ends with `_(summarized by Claude <model name>, <YYYY-MM-DD>)_`, so a reader can tell it from the author's own words and see when it landed. Use the model actually running this session — do not hard-code a version string — and the date only, no clock time.
+Two markers, and the verb is the whole point — a reader should be able to tell at a glance whether the plugin *placed* someone's words or *wrote* its own. Never say "summarized": nothing here is summarised any more.
 
-- **Sign** field content you condensed from the note, the stage-change note, and the reply body.
-- **Do not sign verbatim source.** Where you have reproduced the author's own words rather than condensed them, labelling those as Claude's is worse than no signature at all.
-- The signature goes at the end of the block. The `**Triage — <Author>, <YYYY-MM-DD>**` header stays at the top, naming the human.
+- `_(copied by Claude <model name>, <YYYY-MM-DD>)_` ends every field block you write and the Narrative updates comment. It means: placed on the record by the plugin, word for word as the user approved it at the gate. It does not claim authorship — the words are the author's, and the `**Triage — <Author>, <YYYY-MM-DD>**` header at the top names them. An adopted Secret Sauce draft carries it too, since the plugin placed it.
+- `_(drafted by Claude <model name>, <YYYY-MM-DD>)_` ends the two things you actually compose: the stage-change reply body and the Diligence support changelog.
+
+Use the model actually running this session — do not hard-code a version string — and the date only, no clock time. The marker is the last line of the block.
 
 ## Rules
 
 - Append, never overwrite, unless the user explicitly approved a *replace* on that field. If you cannot read a field's current value, stop and say so rather than writing over it.
 - Nothing is written before the user confirms the proposal table.
+- The copy step is verbatim. Never tighten, reorder, rank, merge, reframe or summarise the author's text on its way into a field. Layout only.
+- A field that already has content is shown existing-beside-proposed and gets its own append / replace / leave decision. There is no default on a non-empty field.
+- A draft you offered is filed only after the user edits it or explicitly says to file it as their own. Declined means empty.
 - Never write PIPELINE_STAGE without its own explicit old → new confirmation, and never guess a stage from an absent or ambiguous recommendation — ask.
 - One record per run. Never batch-update several startups from one note.
 - Never invent triage content, and never fill a field from your own knowledge of the company. If the note is thin, file it thin.
@@ -201,5 +213,5 @@ Text you composed ends with `_(summarized by Claude <model name>, <YYYY-MM-DD>)_
 - Never replace or clear a field on a blanket instruction such as "change anything you need". Each replace or clear needs its own yes, with the current value shown first.
 - Read a field before you write to it for the first time. A field's name is not its definition, and no workflow metadata — filenames, field lists, run summaries — ever goes on the record.
 - Every recipient is an address read out of Airtable or off an existing thread. Never invent an address, and never treat a name as one. If the Diligence support field is empty or missing, or anyone on it will not resolve, skip the send and say so.
-- Sign what you composed; never sign the author's own words.
+- Mark what you place as *copied by* and what you compose as *drafted by*. Never write "summarized by" — the plugin does not summarise.
 - When unsure about anything — which company, which field, which stage — ask instead of guessing.
