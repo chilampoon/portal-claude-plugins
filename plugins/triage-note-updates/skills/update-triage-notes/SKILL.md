@@ -41,7 +41,7 @@ When the differentiation is unproven, say so in the Assessment — a skeptical a
 
 **Narrative updates is the record's comment thread, not a field.** It is written with `create_record_comment`, never through `update_records_for_table`, and it never appears in the field payload.
 
-The recommendation is the thing a reader wants first and the one thing no field captures. Put it in the comment: what was decided, what that changes from where the company stood before triage, and briefly whose note it came from and when. Two or three sentences. Name the source the way a person would — `Source: Chi-Lam's pre-triage notes (2026-09-10)` — never the filename.
+The recommendation is the thing a reader wants first and the one thing no field captures. Put it in the comment: what was decided, what that changes from where the company stood before triage, and briefly whose note it came from and when. Two or three sentences, then a last line pointing at the full note — `Source: Chi-Lam's pre-triage notes (2026-09-10) — <SharePoint link>`, or `Source: Chi-Lam's pre-triage notes (2026-09-10), attached in this thread` when the user is uploading it themselves — so anyone reading the record can get to the reasoning behind the decision. Name the source the way a person would, never by filename.
 
 **A posted comment cannot be taken back.** The connector creates comments but cannot edit or delete them, so there is no fixing a bad one afterwards. Show the exact text you intend to post at the confirm gate, word for word, and post only on an explicit yes.
 
@@ -65,11 +65,18 @@ Distilling what the note *does* say is a different thing, and Secret Sauce asks 
 
 0. **Preflight — verify the Airtable connector before doing anything else.** Confirm Airtable's tools are in your toolkit, then make one cheap call (`ping`, or `list_bases`). If the tools are missing or the call fails with an auth error, STOP — run no other step — and tell the user to enable or re-authenticate the Airtable connector (in a chat: + menu → Connectors → toggle it on; on first use of this plugin: accept the authentication prompt). Resume only after they confirm.
 
-   Then check for a mail tool (Microsoft 365 / Outlook), which steps 8 and 9 use to notify Diligence support and reply to the stage-change notification. This one is **optional**: if it is missing, say so once and carry on — a missing mail tool falls back to printing the reply text and must never block the Airtable work.
+   Then check for the Microsoft 365 connector (Outlook), which steps 8 and 9 use to notify Diligence support and reply to the stage-change notification. This one is **optional**: if it is missing, say so once and carry on — a missing mail tool falls back to printing the reply text and must never block the Airtable work.
 
 1. **Get the note.** Use whatever the user provided: an uploaded Word doc or PDF (if the text is already extracted into the conversation, use it; if you have a shell and only the raw file, run `scripts/extract_docx.py <file>` from this plugin), a pasted or forwarded email (strip greetings, signatures and scheduling chatter), or pasted notes as-is. Several sources at once is fine — merge them and keep each author attributable.
 
    Keep the author's own structure. Tighten wording; do not reorganize their note into a template, and do not add analysis they did not write. If no note content was provided, ask for it — never draft a triage note from your own knowledge of the company.
+
+   **Where the full note lives.** Colleagues reading the record later want the whole note, not the summary. You cannot put the file on the record yourself — the Airtable connector has no file-upload tool and the comment API takes text only — so ask the user, once, which they prefer:
+
+   - **A SharePoint link.** They paste it; it goes on the last line of the Narrative updates comment.
+   - **Upload it themselves.** They attach the file to the Narrative updates thread in Airtable, which the UI allows and the API does not. The comment then says the full notes are attached in this thread, and the hand-off reminds them to do it.
+
+   Do not go looking for the file in OneDrive or SharePoint on their behalf, and do not proceed with neither — a decision comment with no route to the reasoning behind it is only half a record.
 
    **Images.** If the source contains figures, charts or pasted slides, list them for the user now and say plainly that you cannot upload them: the Airtable MCP has no attachment-upload tool, and attachments can only be set from a URL Airtable fetches for itself. Ask them to drop the images into the relevant attachment field themselves, and carry this to the hand-off in step 10 — never let an image go silently missing.
 
@@ -146,7 +153,7 @@ Distilling what the note *does* say is a different thing, and Secret Sauce asks 
 
    **No stage change means no notification — skip this step entirely.** And nothing ever goes to the intake thread, where a senior associate forwarded the company and the fellows wrote the note up; that thread is not part of this workflow.
 
-10. **Hand off what you could not do.** The images and which attachment field they belong in, and the reply text if it did not go out.
+10. **Hand off what you could not do.** The images and which attachment field they belong in, the reply text if it did not go out, and, if they chose to upload the note themselves, the reminder to attach it to the Narrative updates thread now, since the comment already says it is there.
 
 ## Formatting what you write
 

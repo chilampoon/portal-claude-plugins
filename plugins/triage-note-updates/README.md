@@ -108,7 +108,11 @@ never written to.
 comment thread rather than a field, so it goes up through a separate call after
 the fields are written: what was decided, what that changes from where the
 company stood before triage, and briefly whose note it came from — "Source:
-Chi-Lam's pre-triage notes (2026-09-10)". Comments cannot be edited or deleted
+Chi-Lam's pre-triage notes (2026-09-10)" — ending with a route to the full note,
+so anyone reading the record can get to the reasoning behind the decision. Claude
+asks you which you prefer: paste a SharePoint link, which goes on the comment's
+last line, or attach the file to the Narrative updates thread yourself, in which
+case the comment says it is attached there. Comments cannot be edited or deleted
 once posted, so Claude shows you the exact text first and posts only on your yes.
 
 ## Limitations
@@ -119,9 +123,15 @@ for itself, and we have nowhere to host one. So Claude flags every figure, chart
 or pasted slide it finds in your note and asks you to drop them into the
 attachment field yourself.
 
-**The mail connector is optional.** The plugin bundles Microsoft 365 for the
-reply, but nothing in the Airtable half depends on it. Skip it and Claude prints
-the reply for you to send by hand.
+**Claude cannot attach the full note.** Airtable's comment API takes text only,
+and the official Airtable MCP has no file-upload tool at all, so the Word doc
+cannot be put on the record through this plugin. That is why it asks you for a
+SharePoint link or to attach the file to the thread yourself — the Airtable UI
+allows what the API does not.
+
+**The Microsoft 365 connector is optional.** The plugin bundles it for the two
+emails, but nothing in the Airtable half depends on it. Skip it and Claude prints
+the emails for you to send by hand.
 
 ## Using it
 
