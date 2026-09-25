@@ -1,0 +1,17 @@
+{
+  "name": "startup-form-init",
+  "displayName": "Startup Form Init",
+  "version": "0.1.0",
+  "description": "Enter a new startup into the Venture base from its pitch deck and the email thread it arrived on: check it is not already there, draft every field of the new-startup form with a source beside each value, create any missing founders in HubSpot and parent org in Airtable after you confirm, then hand you a pre-filled form link — you attach the deck and click Submit.",
+  "author": {
+    "name": "Portal"
+  },
+  "keywords": [
+    "dealflow",
+    "airtable",
+    "hubspot",
+    "venture",
+    "intake",
+    "pitch deck"
+  ]
+}

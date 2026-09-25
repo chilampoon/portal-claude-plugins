@@ -13,6 +13,11 @@
       "name": "triage-note-updates",
       "source": "./plugins/triage-note-updates",
       "description": "File startup triage notes from a Word doc, PDF or email into the company's Deal Flow record, move the pipeline stage, and tell the team what changed."
+    },
+    {
+      "name": "startup-form-init",
+      "source": "./plugins/startup-form-init",
+      "description": "Enter a new startup into the Venture base from its deck and email thread: duplicate check, every form field drafted with a source, missing founders created in HubSpot, then a pre-filled form link for you to submit."
     }
   ]
 }

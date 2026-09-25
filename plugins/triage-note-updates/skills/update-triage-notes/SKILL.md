@@ -91,7 +91,7 @@ Distilling what the note *does* say happens in one place only: the Secret Sauce 
    - **Pass / soft pass** → the reduced write, step 4b.
    - **Uncertain, ambiguous or absent** → **ask the user.** Never guess a stage, and never infer a decision from how harsh the risks section sounds.
 
-3. **Find the record.** Search "Name" `fld3itRTH4JpDjbMz` and keep the record ID. The table holds thousands of companies and near-duplicates exist, so show the user which record you matched — name plus current PIPELINE_STAGE — and confirm before writing. If several plausibly match, list them and ask. If nothing matches, stop and ask; **never create a startup record** here, new companies go through the "Enter a new startup into Airtable" form.
+3. **Find the record.** Search "Name" `fld3itRTH4JpDjbMz` and keep the record ID. The table holds thousands of companies and near-duplicates exist, so show the user which record you matched — name plus current PIPELINE_STAGE — and confirm before writing. If several plausibly match, list them and ask. If nothing matches, stop and ask; **never create a startup record** here — new companies go in through the **startup-form-init** plugin (its `enter-new-startup` skill), which pre-fills the "Enter a new startup into Airtable" form for the user to submit.
 
 4. **Build the proposal.** Call `get_table_schema` on `tblkuk4Fpb1pYp4Ux`, then read the current value of every field you intend to touch, so an append is a real append.
 
