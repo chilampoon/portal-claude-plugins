@@ -1,0 +1,152 @@
+---
+title: Startup form init
+description: Hand Claude a pitch deck and the email thread it came in on. It checks the company is not already in Airtable, drafts every field of the new-startup form with a source beside each value, creates any missing founders in HubSpot once you say so, and hands you a pre-filled form link. You attach the deck and click Submit.
+---
+
+<Flow label="Deck and thread in, a proposal you approve, a pre-filled form you submit">
+  <FlowStep n="01" title="Deck and email thread" note="The deck is always needed; the thread usually is" />
+  <FlowStep n="02" title="Claude drafts every field, with a source" note="One table. You answer the stage questions and approve" emphasis />
+  <FlowStep n="03" title="You attach the deck and submit" note="A pre-filled link. Claude checks what landed afterwards" />
+</Flow>
+
+## Adding a company
+
+A new startup arrives as a deck and a thread. This gets it into the Venture base
+without anyone re-typing the deck into the form — and without Claude ever
+creating the record itself, because every new record emails the whole venture
+team with the deck attached, and only you can attach the deck.
+
+<Steps>
+<Step n="01" title="Hand Claude the deck and the thread">
+
+Attach the deck as a PDF, attach or paste the email thread, and say:
+
+<Say>Add Marrowlight Bio to Airtable.</Say>
+
+If there is no thread — you met the founder at an event — paste what you know
+instead. Claude also asks once whether there is anything else you want in the
+"How did this deal come to Portal" field, and the first time it runs, who is
+filling out the form.
+
+</Step>
+<Step n="02" title="Claude checks it is not already there">
+
+Before drafting anything, Claude searches the Startups table three ways: by
+name with suffixes like Inc, Bio and Therapeutics stripped, by the website's
+domain, and by each founder's name. You see every candidate with its pipeline
+stage and the date it was added. A match stops the run with a link to the
+existing record — and a pointer to the triage plugin, if what you actually want
+is to update it.
+
+</Step>
+<Step n="03" title="Read the proposal">
+
+One table, every row of the form, each value tagged with where it came from —
+`Deck p.4`, `Email`, `Web: url` or `Inferred`. Rows Claude is leaving blank are
+in the table too, with the reason. The "How did this deal come to Portal" text
+is shown in full, because it is the record's Origin and it is the one thing
+Claude composes.
+
+| # | Field | Proposed | Source | Needs you |
+| --- | --- | --- | --- | --- |
+| 1 | Startup Name | Marrowlight Bio | Deck p.1 | |
+| 3 | How did this deal come to Portal | *shown in full below the table* | Email + you | read it |
+| 4 | Deal source | VC network | Email | confirm |
+| 4.1 | Investor who introduced | Redpine Ventures | Email | |
+| 6 | Pipeline stage | 1.1 - On Deck | Inferred | **explicit yes** |
+| 7 | Description | Non-invasive imaging for early liver fibrosis | Deck p.2 | |
+| 9 | Website | marrowlightbio.com | Web | |
+| 10 | Geography | Chicago | Web: LinkedIn | picks the email list |
+| 11 | Management Team | Dana Whitfield | Email | **not in HubSpot yet** |
+| 13 | Parent Org | Northwestern University | Deck p.9 | |
+| 14 | Tech Type | Diagnostic | Deck p.3 | |
+| 22 | Membership Pipeline Stage | *blank* | — | **you decide** |
+| 24 | Fundraising Round | Seed | Deck p.11 | |
+
+Under the table: the two stage questions, which always need an explicit
+answer because they trigger email; the list of founders and organisations that
+do not exist yet; and exactly which emails will fire when the record is created,
+and to whom. Nothing is written anywhere until you confirm.
+
+</Step>
+<Step n="04" title="Approve what needs creating">
+
+The form's Team and Scientific Founder fields link to the HubSpot CRM table,
+which is synced *from* HubSpot — so a founder who is not there has to be created
+in HubSpot first. Claude does that through the HubSpot connector on its own
+separate yes, matching the properties the Portal contact form sets, then waits
+for the sync to bring the contact into Airtable. A missing parent org goes
+through the new-organisation form, again on its own yes. A missing investor firm
+stops the run: creating investors is out of scope for now.
+
+</Step>
+<Step n="05" title="Open the link, attach the deck, submit">
+
+Claude hands you a pre-filled form link and three reminders: attach the deck to
+field 8, check the two stage fields took, and fill in by hand anything on its
+list of fields that could not be prefilled. You take a last look and click
+Submit. That click is the only thing that creates the record.
+
+</Step>
+<Step n="06" title="Tell Claude it is submitted">
+
+Claude finds the record created today under that name, reads back every field
+it proposed, and reports anything that did not land — a select that dropped, a
+link that did not take, something you changed by hand. Then it links the record
+page.
+
+</Step>
+</Steps>
+
+## What lands in Airtable
+
+The new company's record in the Startups table, exactly as the form created it.
+The Origin text is the one composed field, and it says so.
+
+<Record title="Marrowlight Bio" table="Startups">
+  <Fields>
+    <Field label="Pipeline Stage"><Chip tone="mark">1.1 - On Deck</Chip><Hint>your explicit yes at the gate</Hint></Field>
+    <Field label="Geography"><Chip tone="mark">Chicago</Chip><Hint>also chose the regional email list</Hint></Field>
+    <Field label="Management Team"><Chip tone="mark">Dana Whitfield</Chip><Hint>created in HubSpot first, then synced</Hint></Field>
+    <Field label="Deck(s)"><Chip>Marrowlight Bio — seed deck.pdf</Chip><Hint>attached by you, in the form</Hint></Field>
+  </Fields>
+<Field label="How did this deal come to Portal">
+<Appended label="Drafted by the plugin — the one composed field">
+
+Introduced by Dana Whitfield at Redpine Ventures, who is leading their seed and asked whether Portal would look at the Chicago angle. Non-invasive imaging for early liver fibrosis, spun out of Northwestern, raising a $3M seed. We are looking because the companion-diagnostic thesis fits two NASH programs already in the pipeline.
+
+_(drafted by Claude Opus 5, 2026-09-25)_
+
+</Appended>
+
+</Field>
+</Record>
+
+*The tinted block is the only text Claude wrote. Every other value was copied
+from the deck, the thread or a cited web page, and you approved the whole table
+before the link was built.*
+
+## What fires when the record is created
+
+Claude shows this at the gate, filled in for the values you approved. None of it
+depends on how the record is created — every automation listens for *record
+created*, not for a form submission — so what matters is what is in the record
+at that moment.
+
+<Facts>
+  <Fact title="New Company Form">Emails the core venture list and the fellows, plus a regional list chosen from Geography, CCing anyone in "Cc others" and you as submitter, with the deck attached. This is why the deck must be on the record at creation, and why you submit.</Fact>
+  <Fact title="Cold Outreach Response">Stage 0.0 (outside core geographies) plus "Send BD Outreach?" = Yes emails the company. Claude defaults to No, and Yes needs its own yes.</Fact>
+  <Fact title="Assigned notification email">Setting a Diligence Lead on an On Deck company emails them.</Fact>
+  <Fact title="Investor tracker">If the introducing investor's diligence stage is set, an automation turns those fields into an investor note and clears them from the startup.</Fact>
+</Facts>
+
+## Good to know
+
+<Facts>
+  <Fact title="Claude never creates the record">Not through the API, not by submitting the form, not to test. Every new Startups record emails the whole team within five seconds. The submit is always your click.</Fact>
+  <Fact title="Every value has a source">Each field is tagged with the deck page, the email, or the web page it came from. Nothing comes from Claude's own memory of the company, and a founder's email has to appear in the thread, the deck or a verifiable source — Claude never invents an address.</Fact>
+  <Fact title="Duplicate check comes first">Name with suffixes stripped, website domain, founder names. A match stops the run before anything is drafted.</Fact>
+  <Fact title="The stage questions always need an answer">Pipeline Stage and Membership Pipeline Stage are proposed but never assumed, because they decide which emails go out.</Fact>
+  <Fact title="Missing people go into HubSpot, not the form">The Team fields link to a table synced from HubSpot, so Claude creates the contact there, on its own yes, and waits for the sync.</Fact>
+  <Fact title="It cannot attach the deck">Same limit as the triage plugin: the Airtable connector has no file upload. You attach it in the form — which is the whole reason the human submits.</Fact>
+</Facts>
