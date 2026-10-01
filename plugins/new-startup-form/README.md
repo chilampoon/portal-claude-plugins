@@ -1,23 +1,25 @@
-# Startup Form Init — Claude plugin
+# New Startup Form — Claude plugin
 
 Enters a new startup into the Venture base from its pitch deck and the email
-thread it arrived on. Claude checks the company is not already there, drafts
-every field of the "Enter a new startup into Airtable" form with a source beside
-each value, creates whatever the form's link fields need that does not exist yet
-— founders in HubSpot, a parent org in Airtable — and hands the user a
-**pre-filled form link**. The user attaches the deck and clicks Submit. Then
-Claude finds the new record and checks every field landed.
+thread it arrived on. With the Microsoft 365 connector on, Claude finds both in
+Outlook itself and asks for files only when that fails. It asks its questions as
+it goes — one step, one answer, next step — checks the company is not already
+there, drafts every field of the "Enter a new startup into Airtable" form with a
+source beside each value, creates whatever the form's link fields need that does
+not exist yet — founders in HubSpot, a parent org in Airtable — and hands the
+user a **pre-filled form link**. The user types the description, attaches the
+deck and clicks Submit. Then Claude finds the new record and checks every field
+landed.
 
-It replaces a Chrome-extension workflow where Claude clicked through the form.
-This version uses the Airtable and HubSpot connectors, with no browser
-automation.
+Nothing here drives a browser. The Chrome extension is disabled for Portal
+accounts, so the plugin works through the Airtable, HubSpot and Microsoft 365
+connectors only.
 
 > **Not yet run end to end.** The workflow has been built against the live form
 > schema and Airtable's documented prefill rules, but never driven through a real
 > submission — deliberately, since every new Startups record emails the whole
-> venture team. The first live run should watch the four items under
-> **Unverified** below, and should stop before Submit if the pre-filled form looks
-> wrong.
+> venture team. The first live run should watch the items under **Unverified**
+> below, and should stop before Submit if the pre-filled form looks wrong.
 
 **The human submits — this is the design, not a limitation to engineer around.**
 The "New Company Form" automation fires on *record created*, waits five seconds,
@@ -34,21 +36,36 @@ place.
 ## What's inside
 
 ```
-startup-form-init/
+new-startup-form/
 ├── .claude-plugin/plugin.json          # plugin metadata shown in the catalog
 ├── skills/enter-new-startup/
 │   └── SKILL.md                        # the workflow — triggers on "add this startup to Airtable"
 ├── scripts/build_prefill_url.py        # stdlib-only: {field: value} JSON → pre-filled form URL
-├── .mcp.json                           # bundles the Airtable + HubSpot connectors
+├── .mcp.json                           # bundles the Airtable, HubSpot and Microsoft 365 connectors
 └── README.md
 ```
 
 ## How a run goes
 
-**Duplicate check first.** Before drafting anything, Claude searches Startups
-by name with suffixes stripped, by website domain and by founder name, and shows
-candidates with their stage and created date. A match stops the run with a link
-to the existing record.
+**Outlook first, files second.** Given the company name, Claude searches the
+user's mailbox for the thread, reads it, pulls the deck from it, and shows what
+it found — subject, people, dates, the deck's filename — for the user to confirm.
+If the connector is off, nothing turns up, or the deck is only a link, Claude
+asks for the files instead. Outlook is read-only here: Claude searches and reads,
+and never sends, moves or changes a message.
+
+**It asks as it goes.** Nothing is pre-loaded into a prompt. Each step ends with
+a question or a confirmation and Claude waits for the answer. The questions the
+form needs from a person — who is filling it out, deal source, the introducing
+investor, pipeline stage, membership stage, anything to add about how the deal
+arrived, anyone to Cc — come in one short numbered message before any drafting,
+each with the default Claude would propose, so "yes to all but 4" is a complete
+reply.
+
+**Duplicate check before drafting.** Claude searches Startups by name with
+suffixes stripped, by website domain and by founder name, and shows candidates
+with their stage and created date. A match stops the run with a link to the
+existing record.
 
 **Every value has a source.** Each field is drafted from the deck, the thread or
 a web search and tagged `Deck p.4`, `Email`, `Web: <url>` or `Inferred`. Nothing
@@ -58,10 +75,21 @@ invents an address.
 
 **One proposal table, then confirm.** Every row of the form, including the ones
 left blank and why, with field 3 — the record's Origin — shown in full. Under it:
-the two stage questions, which always need an explicit answer because they
-trigger email; the list of founders and orgs that do not exist yet; and the
-emails that will fire on creation and to whom, worked out from the Geography and
-the CC list. Nothing is written anywhere until the user confirms.
+the list of founders and orgs that do not exist yet, and the emails that will
+fire on creation and to whom, worked out from the Geography and the CC list.
+Nothing is written anywhere until the user says go.
+
+**Origin is the route, not the rationale.** Field 3 says how the deal reached
+Portal, as fact taken from the thread: who sent or introduced the company, to
+whom, when, through which channel. One or two sentences, no pasted headers or
+signatures, and nothing about why we are looking — the venture team writes that
+later, elsewhere on the record. The triage plugin treats the same field as
+read-only for the same reason. The text ends with
+`_(drafted by Claude <model>, <date>)_`, the convention for anything Claude
+composes; nothing else on the form is composed.
+
+**Description is left to the user.** Field 7 is never drafted or prefilled. The
+form requires it, so the user types it in before Submit.
 
 **Missing people go into HubSpot, not the web form.** The form's Team and
 Scientific Founder fields link to the "HubSpot CRM" table, which is synced *from*
@@ -76,15 +104,9 @@ out of scope for this version.
 values into a pre-filled URL — linked records by record ID, multi-selects
 comma-joined, everything percent-encoded, with warnings when a list value
 contains a comma or the link nears Airtable's 8,000-character cap. The user
-attaches the deck, checks the two stage fields took, and submits. Claude then
-finds the record created today under that name, reads back every field, and
-reports anything that did not land.
-
-**Field 3 is drafted, and says so.** How the deal came in, why we are looking,
-plus whatever context the user adds, with sender lines and signatures stripped.
-It ends with `_(drafted by Claude <model>, <date>)_`, the same convention the
-triage plugin uses for text Claude composes. Nothing else on the form is
-composed, so nothing else is marked.
+types the description, attaches the deck, checks the two stage fields took, and
+submits. Claude then finds the record created today under that name, reads back
+every field, and reports anything that did not land.
 
 ## Unverified — check on the first live run
 
@@ -109,27 +131,35 @@ comma-separated, collaborators match by username, and interface forms
    single-select value such as the parent-org type "VC, PE, family office" — the
    script warns on both; the first live run tells us whether Airtable matches
    them.
+5. **Outlook attachments.** Whether the Microsoft 365 connector hands back the
+   deck PDF itself or only the attachment's name. The skill reads it when it can
+   and asks for the file when it cannot.
 
 ## Limitations
 
 - **Claude cannot attach the deck.** Same root cause as the triage plugin: no
   attachment-upload tool in the Airtable connector. The user attaches it in the
   form; that is the whole reason the human submits.
+- **The description is not drafted.** By design: field 7 is the user's.
 - **Investor orgs are not created.** If the introducing VC (field 4.1) is not in
   the Organizations table, Claude stops and asks.
+- **Microsoft 365 is optional.** Without it, the user attaches the deck and
+  pastes or attaches the thread, as before.
 - **The HubSpot connector is required only when a founder is missing.** Without
   it Claude still drafts and hands over the link, with the founder fields listed
   as "fill by hand".
 
 ## Using it
 
-Each person authenticates Airtable — and HubSpot, when a contact needs creating
-— with their own account on first use, so Claude only sees what they can see and
-writes as them. Then they just say:
+Each person authenticates Airtable — HubSpot when a contact needs creating, and
+Microsoft 365 if they want Claude to find the thread and deck — with their own
+account on first use, so Claude only sees what they can see and writes as them.
+Then they just say:
 
-> Add this startup to Airtable.
+> Add Marrowlight Bio to Airtable.
 
-...with the deck attached and the email thread pasted in or attached.
+Claude finds the thread and deck or asks for them, asks its questions, and comes
+back with the proposal.
 
 ## Distributing
 

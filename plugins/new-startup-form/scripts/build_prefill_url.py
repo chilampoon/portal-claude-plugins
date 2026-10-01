@@ -11,11 +11,12 @@ this form has been confirmed to take:
 
     {
       "Name": "Marrowlight Bio",
-      "Description": "Non-invasive liver fibrosis imaging",
       "Geography": ["Chicago"],
       "Team": ["recAAAAAAAAAAAAAA", "recBBBBBBBBBBBBBB"],
-      "Notes": "Came in through Dana at Redpine.\\n\\nWhy we are looking: ..."
+      "Notes": "Introduced by Dana Whitfield at Redpine Ventures, who emailed the deck on 2026-09-20."
     }
+
+Description (field 7) is deliberately absent: the user types it in the form.
 
 A JSON array becomes a comma-separated list, which is how Airtable prefills
 multiple-select and linked-record fields (linked records by record ID, never by

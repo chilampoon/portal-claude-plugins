@@ -1,0 +1,174 @@
+---
+title: New startup form
+description: Name the company. Claude finds the deck and the email thread in Outlook, or asks you for them, asks the few questions the form needs, checks the company is not already in Airtable, drafts every field with a source beside each value, and hands you a pre-filled form link. You type the description, attach the deck and click Submit.
+---
+
+<Flow label="Thread and deck found or handed over, questions and a proposal you approve, a pre-filled form you finish and submit">
+  <FlowStep n="01" title="Thread and deck" note="Found in Outlook, or handed over by you" />
+  <FlowStep n="02" title="Claude asks, then drafts every field" note="You answer its questions and approve the table" emphasis />
+  <FlowStep n="03" title="You finish the form and submit" note="Description, deck, Submit. Claude checks what landed" />
+</Flow>
+
+## Adding a company
+
+A new startup arrives as a deck and a thread. This gets it into the Venture base
+without anyone re-typing the deck into the form — and without Claude ever
+creating the record itself, because every new record emails the whole venture
+team with the deck attached, and only you can attach the deck. Claude asks as
+it goes: each step ends with a question or a confirmation, and nothing moves
+until you answer.
+
+<Steps>
+<Step n="01" title="Name the company">
+
+<Say>Add Marrowlight Bio to Airtable.</Say>
+
+With Microsoft 365 connected, Claude searches your Outlook for the thread, reads
+it, pulls the deck from it, and shows you what it found: the subject, who was on
+it, the dates, the deck's filename. You confirm it is the right one. If it cannot
+find them, or the deck is only a link, it asks you to attach the deck and paste
+or attach the thread. No thread, because you met the founder at an event? Paste
+what you know instead.
+
+</Step>
+<Step n="02" title="Claude checks it is not already there">
+
+Before drafting anything, Claude searches the Startups table three ways: by
+name with suffixes like Inc, Bio and Therapeutics stripped, by the website's
+domain, and by each founder's name. A match stops the run with a link to the
+existing record and a pointer to the triage plugin, if what you actually want is
+to update it. A near-match is shown and you say whether it is the same company.
+
+</Step>
+<Step n="03" title="Answer its questions">
+
+One short numbered message, before any drafting, with the default Claude would
+propose beside each question so that "yes to all but 4" is a complete reply:
+
+- who is filling out the form, the first time in a session;
+- the deal source, and when it came through a VC, which investor and their
+  diligence stage;
+- the pipeline stage, which always needs an explicit answer because it decides
+  which emails go out, with its follow-ups (a Diligence Lead for On Deck, the
+  outreach email for companies outside the core geographies);
+- the membership pipeline stage, which is yours to decide;
+- anything to add about *how the deal reached Portal* that the thread does not
+  show;
+- anyone to Cc on the referral email.
+
+Nothing is drafted until you reply.
+
+</Step>
+<Step n="04" title="Read the proposal">
+
+One table, every row of the form, each value tagged with where it came from:
+`Deck p.4`, `Email`, `Web: url` or `Inferred`. Rows Claude is leaving blank are
+in the table too, with the reason. The "How did this deal come to Portal" text
+is shown in full, because it is the record's Origin and the one thing Claude
+composes: how the deal reached Portal, as fact from the thread, and nothing
+about why we are looking.
+
+| # | Field | Proposed | Source | Needs you |
+| --- | --- | --- | --- | --- |
+| 1 | Startup Name | Marrowlight Bio | Deck p.1 | |
+| 3 | How did this deal come to Portal | *shown in full below the table* | Email + you | read it |
+| 4 | Deal source | VC network | Email | your answer in step 3 |
+| 4.1 | Investor who introduced | Redpine Ventures | Email | |
+| 6 | Pipeline stage | 1.1 - On Deck | your answer in step 3 | |
+| 7 | Description | *left for you* | | type it in the form |
+| 9 | Website | marrowlightbio.com | Web | |
+| 10 | Geography | Chicago | Web: LinkedIn | picks the email list |
+| 11 | Management Team | Dana Whitfield | Email | **not in HubSpot yet** |
+| 13 | Parent Org | Northwestern University | Deck p.9 | |
+| 14 | Tech Type | Diagnostic | Deck p.3 | |
+| 22 | Membership Pipeline Stage | *blank* | your answer in step 3 | |
+| 24 | Fundraising Round | Seed | Deck p.11 | |
+
+Under the table: the list of founders and organisations that do not exist yet,
+and exactly which emails will fire when the record is created, and to whom.
+Nothing is written anywhere until you say go.
+
+</Step>
+<Step n="05" title="Approve what needs creating">
+
+The form's Team and Scientific Founder fields link to the HubSpot CRM table,
+which is synced *from* HubSpot, so a founder who is not there has to be created
+in HubSpot first. Claude does that through the HubSpot connector on its own
+separate yes, matching the properties the Portal contact form sets, then waits
+for the sync to bring the contact into Airtable. A missing parent org goes
+through the new-organisation form, again on its own yes. A missing investor firm
+stops the run: creating investors is out of scope for now.
+
+</Step>
+<Step n="06" title="Open the link, finish the form, submit">
+
+Claude hands you a pre-filled form link and four reminders: type the
+Description, attach the deck, check the two stage fields took, and fill in by
+hand anything on its list of fields that could not be prefilled. You take a last
+look and click Submit. That click is the only thing that creates the record.
+
+</Step>
+<Step n="07" title="Tell Claude it is submitted">
+
+Claude finds the record created today under that name, reads back every field
+it proposed, and reports anything that did not land: a select that dropped, a
+link that did not take, something you changed by hand. Then it links the record
+page.
+
+</Step>
+</Steps>
+
+## What lands in Airtable
+
+The new company's record in the Startups table, exactly as the form created it.
+The Origin text is the one composed field, and it says so.
+
+<Record title="Marrowlight Bio" table="Startups">
+  <Fields>
+    <Field label="Pipeline Stage"><Chip tone="mark">1.1 - On Deck</Chip><Hint>your answer in step 3</Hint></Field>
+    <Field label="Geography"><Chip tone="mark">Chicago</Chip><Hint>also chose the regional email list</Hint></Field>
+    <Field label="Management Team"><Chip tone="mark">Dana Whitfield</Chip><Hint>created in HubSpot first, then synced</Hint></Field>
+    <Field label="Description"><Chip>Non-invasive imaging for early liver fibrosis</Chip><Hint>typed by you, in the form</Hint></Field>
+    <Field label="Deck(s)"><Chip>Marrowlight Bio — seed deck.pdf</Chip><Hint>attached by you, in the form</Hint></Field>
+  </Fields>
+<Field label="How did this deal come to Portal">
+<Appended label="Drafted by the plugin — the route, nothing more">
+
+Introduced by Dana Whitfield at Redpine Ventures, who emailed the deck to the venture team on 20 September 2026 after their seed call with the founders.
+
+_(drafted by Claude Opus 5, 2026-10-01)_
+
+</Appended>
+
+</Field>
+</Record>
+
+*The tinted block is the only text Claude wrote, and it says how the deal
+reached Portal, nothing about why we are looking. Every other value was copied
+from the deck, the thread or a cited web page, except the Description, which you
+typed, and you approved the whole table before the link was built.*
+
+## What fires when the record is created
+
+Claude shows this at the gate, filled in for the values you approved. None of it
+depends on how the record is created — every automation listens for *record
+created*, not for a form submission — so what matters is what is in the record
+at that moment.
+
+<Facts>
+  <Fact title="New Company Form">Emails the core venture list and the fellows, plus a regional list chosen from Geography, CCing anyone in "Cc others" and you as submitter, with the deck attached. This is why the deck must be on the record at creation, and why you submit.</Fact>
+  <Fact title="Cold Outreach Response">Stage 0.0 (outside core geographies) plus "Send BD Outreach?" = Yes emails the company. Claude defaults to No, and Yes needs its own yes.</Fact>
+  <Fact title="Assigned notification email">Setting a Diligence Lead on an On Deck company emails them.</Fact>
+  <Fact title="Investor tracker">If the introducing investor's diligence stage is set, an automation turns those fields into an investor note and clears them from the startup.</Fact>
+</Facts>
+
+## Good to know
+
+<Facts>
+  <Fact title="Claude never creates the record">Not through the API, not by submitting the form, not through a browser. Every new Startups record emails the whole team within five seconds. The submit is always your click.</Fact>
+  <Fact title="Outlook first, files second">With Microsoft 365 connected, Claude finds the thread and the deck itself and only reads; it never sends or moves mail. Without it, you hand them over.</Fact>
+  <Fact title="It asks, then waits">Each step ends with a question or a confirmation. Nothing is drafted before your answers, and nothing is written before your yes.</Fact>
+  <Fact title="Origin is the route, not the rationale">Who sent the company, to whom, when, through which channel, taken from the thread. Why we are looking is the venture team's to add later, and the triage plugin never touches this field either.</Fact>
+  <Fact title="The description is yours">Claude leaves field 7 blank; you type it in the form before Submit.</Fact>
+  <Fact title="It cannot attach the deck">Same limit as the triage plugin: the Airtable connector has no file upload. You attach it in the form, which is the whole reason the human submits.</Fact>
+</Facts>

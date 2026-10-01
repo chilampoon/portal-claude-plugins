@@ -8,3 +8,6 @@ docs/.source/
 docs/out/
 docs/*.tsbuildinfo
 docs/next-env.d.ts
+
+# Python
+__pycache__/
