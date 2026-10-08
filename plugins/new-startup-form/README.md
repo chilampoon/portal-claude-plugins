@@ -6,14 +6,16 @@ Outlook itself and asks for files only when that fails. It asks its questions as
 it goes — one step, one answer, next step — checks the company is not already
 there, drafts every field of the "Enter a new startup into Airtable" form with a
 source beside each value, creates whatever the form's link fields need that does
-not exist yet — founders in HubSpot, a parent org in Airtable — and hands the
-user a **pre-filled form link**. The user types the description, attaches the
+not exist yet — a parent org in Airtable, and a pre-filled Portal contact form
+for any founder missing from HubSpot — and hands the user a **pre-filled form
+link**. The user types the description, attaches the
 deck and clicks Submit. Then Claude finds the new record and checks every field
 landed.
 
 Nothing here drives a browser. The Chrome extension is disabled for Portal
-accounts, so the plugin works through the Airtable, HubSpot and Microsoft 365
-connectors only.
+accounts, so the plugin works through the Airtable and Microsoft 365 connectors
+plus pre-filled links the user submits. HubSpot needs no connector at all: the
+Portal contact-input form is reached the same way the startup form is, by link.
 
 > **Not yet run end to end.** The workflow has been built against the live form
 > schema and Airtable's documented prefill rules, but never driven through a real
@@ -40,8 +42,8 @@ new-startup-form/
 ├── .claude-plugin/plugin.json          # plugin metadata shown in the catalog
 ├── skills/enter-new-startup/
 │   └── SKILL.md                        # the workflow — triggers on "add this startup to Airtable"
-├── scripts/build_prefill_url.py        # stdlib-only: {field: value} JSON → pre-filled form URL
-├── .mcp.json                           # bundles the Airtable, HubSpot and Microsoft 365 connectors
+├── scripts/build_prefill_url.py        # stdlib-only: {field: value} JSON → pre-filled URL (Airtable form, or --hubspot)
+├── .mcp.json                           # bundles the Airtable and Microsoft 365 connectors
 └── README.md
 ```
 
@@ -91,14 +93,20 @@ composes; nothing else on the form is composed.
 **Description is left to the user.** Field 7 is never drafted or prefilled. The
 form requires it, so the user types it in before Submit.
 
-**Missing people go into HubSpot, not the web form.** The form's Team and
-Scientific Founder fields link to the "HubSpot CRM" table, which is synced *from*
-HubSpot, so a founder who is not there has to be created in HubSpot and then
-synced. Claude creates the contact through the HubSpot connector, on its own
-yes, matching the properties the Portal contact-input form sets, then polls
-Airtable for up to five minutes until the sync lands. A missing parent org goes
-through the "New orgnization entry" form. A missing investor org stops the run —
-out of scope for this version.
+**Missing people go in through the Portal contact form, by link.** The startup
+form's Team and Scientific Founder fields link to the "HubSpot CRM" table, which
+is synced *from* HubSpot, so a founder who is not there has to exist in HubSpot
+first. Claude builds a pre-filled link to the Portal contact-input form
+(`hs.portalinnovations.com/portal-contact-input-form`) for each one — name,
+email, company, job title, type = Startup, nearest Portal region, and the Portal
+contact — shows the values beside the link, and the user submits. That form is
+the canonical path, so Org Type and Portal Contact land the way Airtable's sync
+expects without Claude having to replicate anything. No HubSpot connector, no
+account check. A founder with no sourced email gets no link, because the form
+requires one and Claude never invents an address. After the user submits, Claude
+polls Airtable for up to five minutes until the sync lands. A missing parent org
+goes through the "New orgnization entry" form. A missing investor org stops the
+run — out of scope for this version.
 
 **The link, then the click.** `scripts/build_prefill_url.py` turns the approved
 values into a pre-filled URL — linked records by record ID, multi-selects
@@ -120,13 +128,13 @@ comma-separated, collaborators match by username, and interface forms
 2. **Collaborator format** for field 2 — the user's Airtable display name, per
    the docs. If it does not take, try their email; if neither, they pick
    themselves in the form (it is a required field, so it cannot be missed).
-3. **HubSpot property names.** Which properties the hs-sites
-   "portal-contact-input-form" sets, and their internal names, could not be read
-   without HubSpot access. The skill has Claude inspect a recently form-created
-   contact before its first create. Airtable's sync relies on Org Type =
-   "Startup" and Portal Contact (text), so those two matter most. Also confirm
-   the HubSpot → Airtable sync has no filter that an API-created contact would
-   miss.
+3. **The contact form's prefill.** Its eight fields and their internal names
+   were read from HubSpot's live form definition on 2026-10-08, and HubSpot
+   documents query-string prefill for exactly this. What has not been exercised:
+   whether the `contact_connection` dropdown accepts the person Claude proposes,
+   and how long the HubSpot → Airtable sync takes for a form-submitted contact.
+   Note the dropdown is a fixed list of six Portal names; someone not on it
+   cannot be the Portal Contact through this form.
 4. **Rich text with line breaks** in field 3 (`%0A`), and a comma inside a
    single-select value such as the parent-org type "VC, PE, family office" — the
    script warns on both; the first live run tells us whether Airtable matches
@@ -145,15 +153,14 @@ comma-separated, collaborators match by username, and interface forms
   the Organizations table, Claude stops and asks.
 - **Microsoft 365 is optional.** Without it, the user attaches the deck and
   pastes or attaches the thread, as before.
-- **The HubSpot connector is required only when a founder is missing.** Without
-  it Claude still drafts and hands over the link, with the founder fields listed
-  as "fill by hand".
+- **A founder without a sourced email cannot be created.** The contact form
+  requires one, and Claude never invents an address. That founder is listed as
+  "fill by hand" and the startup form's Team field goes in without them.
 
 ## Using it
 
-Each person authenticates Airtable — HubSpot when a contact needs creating, and
-Microsoft 365 if they want Claude to find the thread and deck — with their own
-account on first use, so Claude only sees what they can see and writes as them.
+Each person authenticates Airtable — and Microsoft 365 if they want Claude to
+find the thread and deck — with their own account on first use, so Claude only sees what they can see and writes as them.
 Then they just say:
 
 > Add Marrowlight Bio to Airtable.

@@ -4,10 +4,6 @@
       "type": "http",
       "url": "https://mcp.airtable.com/mcp"
     },
-    "hubspot": {
-      "type": "http",
-      "url": "https://mcp.hubspot.com"
-    },
     "microsoft365": {
       "type": "http",
       "url": "https://microsoft365.mcp.claude.com/mcp"

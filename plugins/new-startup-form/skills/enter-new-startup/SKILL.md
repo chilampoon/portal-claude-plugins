@@ -5,11 +5,11 @@ description: Enter a new startup into Portal's Airtable "Venture" base from its 
 
 # Enter a new startup
 
-Take a pitch deck and the thread it came in on, draft every field of the "Enter a new startup into Airtable" form with a source beside each value, create whatever the form's link fields need that does not exist yet — founders in HubSpot, a parent org in Airtable — and hand the user a **pre-filled form link**. The user types the description, attaches the deck, takes a last look, and clicks Submit. Then confirm what landed.
+Take a pitch deck and the thread it came in on, draft every field of the "Enter a new startup into Airtable" form with a source beside each value, create whatever the form's link fields need that does not exist yet — a parent org in Airtable, and for a missing founder a second pre-filled link to the Portal contact form on HubSpot, which the user submits — and hand the user a **pre-filled form link**. The user types the description, attaches the deck, takes a last look, and clicks Submit. Then confirm what landed.
 
 Three constraints shape everything here.
 
-**The human submits.** Every new Startups record fires "New Company Form", which waits five seconds and then emails the whole venture team with the deck attached from field 8. The deck has to be on the record at the moment it is created, and the Airtable connector cannot upload attachments — so the only path is the user attaching the deck in the form and pressing Submit themselves. Never `create_records_for_table` on Startups. Never `submit_form` on this form. Not to test, not to save a step, not when asked to "just do it". And never through a browser: the Chrome extension is disabled for Portal accounts, so this workflow runs on connectors only and never suggests clicking through the form for the user.
+**The human submits.** Every new Startups record fires "New Company Form", which waits five seconds and then emails the whole venture team with the deck attached from field 8. The deck has to be on the record at the moment it is created, and the Airtable connector cannot upload attachments — so the only path is the user attaching the deck in the form and pressing Submit themselves. Never `create_records_for_table` on Startups. Never `submit_form` on this form. Not to test, not to save a step, not when asked to "just do it". And never through a browser: the Chrome extension is disabled for Portal accounts, so this workflow runs on connectors and pre-filled links only, and never suggests clicking through a form for the user.
 
 **Ask as you go.** This is a conversation, not a prompt the user edits. Each step ends with a question or a confirmation; wait for the answer, then take the next step. Collect what you need to know from the user in step 3, in one short numbered message, before you draft anything. Never pre-fill an answer the user has not given.
 
@@ -28,6 +28,17 @@ Three constraints shape everything here.
 - PEOPLE: "HubSpot CRM" `tbllMLUVkBlg2lUzI`, synced *from* HubSpot. Name `fldGovuogiSuT6qxa` · Email Address `fldhEDQv17zK4g23p` · Org Type `fld7cKi9C7OKA9c3U` · Organization `fldym29JU69WBB3er` · Portal Contact (text) `fldU7gCsdMFzYgHc1` · Created `fldgYoLMfPcYrNmaC`
 - INVESTORS: "Organizations from Hubspot CRM" `tbl5bYS4WIAr3BFWK`, VC selection view `viw2uiqBRhcjHucXY`
 - PARENT_ORGS: "CRM: Non-startups organizations" `tblXxhrDzbKwt9WyZ`. New-org form "New orgnization entry" `pagpLJQCohSwNQ1gu` — Name `fldkarUxP0P9feLZv`, Type `fldhQgdiXs4y9xffc` (University / Biopharma (non-startup) / Non-profit / Real Estate / VC, PE, family office / Vendor)
+- CONTACT_FORM: the Portal contact-input form on HubSpot — `https://hs.portalinnovations.com/portal-contact-input-form` (portal `23230704`, form `c210f0e0-ae42-455a-a28b-f1a8ff7cb8bc`). A founder who is not yet in PEOPLE goes into HubSpot through this form, by pre-filled link, and reaches Airtable by the sync. No connector is involved. Its fields, by internal name, pulled from the live form definition on 2026-10-08 — every one prefills from the URL as `?name=value&…`, and none is dependent:
+
+| Internal name | Label | Required | Value |
+|---|---|---|---|
+| `firstname`, `lastname` | First Name, Last Name | yes | From the thread or deck. |
+| `email` | Email | yes | **Only an address you can source.** No email means no link — the form requires one, and inventing it is the one thing this plugin never does. List that founder under *fill by hand*. |
+| `company` | Company/Organization | yes | The startup's name, as in field 1. |
+| `jobtitle` | Job Title | yes | From the deck or thread — CEO, CSO, co-founder. |
+| `contact_or_company_type` | Contact or Company Type | yes | **`Startup`.** This is the Org Type the Airtable sync keys on ("HubSpot CRM - Startup Linking"). Other options exist (Biopharma, University, Venture Capital/Private Equity, Family Office, Angel Investor, Real Estate, Non-profit, Vendor, Other) but a founder here is always Startup. |
+| `nearest_portal_region` | Nearest Portal Region | yes | Map from Geography (field 10): Atlanta · Boston · Chicago · Houston · Providence · Salt Lake City · New Jersey for a Portal city; International for Ex-US; Midwest · East Coast · South · West Coast for a non-target US city. |
+| `contact_connection` | Contact connection | no | The Portal person who owns the relationship — this becomes Portal Contact in Airtable ("Portal Contact Connection"). A fixed list: Gianina Varea · Karol Sokolowski · Michael Faulman · Michael Schultz · Nancy Tyrrell · Ignacio Gajer. If the user is on it, propose them; if not, ask who it should be, and leave it blank if they say nobody. |
 
 ### Form fields
 
@@ -84,7 +95,7 @@ Show this at the gate, filled in for the values proposed. None of it depends on 
 
 Each numbered step ends with a question or a confirmation. Wait for the user's reply before starting the next one. If a reply raises a follow-up (On Deck → who is the Diligence Lead?), ask that next, then move on.
 
-0. **Preflight.** Run Airtable `ping`. If it fails or the tools are missing, STOP — run no other step — and tell the user to enable or re-authenticate the Airtable connector (in a chat: + menu → Connectors → toggle it on; on first use of this plugin: accept the authentication prompt). Then note, in one line each, whether two optional connectors are present: **Microsoft 365** (Outlook), which step 1 uses to find the thread and the deck — without it, the user hands them over; and **HubSpot** (`manage_crm_objects`, `search_crm_objects`, `search_properties`), only *required* if a founder turns out to be missing from PEOPLE, so a missing HubSpot connector is a warning now, not a stop. Outlook is read-only in this workflow: search and read, never send, move or change a message.
+0. **Preflight.** Run Airtable `ping`. If it fails or the tools are missing, STOP — run no other step — and tell the user to enable or re-authenticate the Airtable connector (in a chat: + menu → Connectors → toggle it on; on first use of this plugin: accept the authentication prompt). Then note, in one line, whether the optional **Microsoft 365** (Outlook) connector is present — step 1 uses it to find the thread and the deck, and without it the user hands them over. Nothing else is needed: a founder missing from PEOPLE goes in through CONTACT_FORM by pre-filled link, which takes no connector and no account. Outlook is read-only in this workflow: search and read, never send, move or change a message.
 
 1. **Find the inputs.** The deck, as a PDF, is always needed. The thread usually is. If the user has not named the company, ask for the name and anything they know about how it arrived (who sent it, roughly when).
 
@@ -111,10 +122,10 @@ Each numbered step ends with a question or a confirmation. Wait for the user's r
 
 5. **Resolve link fields.** For 4.1, 11, 12 and 13, call `search_candidate_linked_records` with the form's pageId, the field ID, and the other planned values passed in `fields`, so visibility conditions evaluate correctly. For people, match by email first (PEOPLE `fldhEDQv17zK4g23p`), then by name. Duplicates: list them all, default to the earliest-created (`fldgYoLMfPcYrNmaC`), and say so at the gate. Collect everything that does not exist yet — founders, a parent org, an investor org — into a "missing" list. Link fields prefill by **record ID**, so keep the IDs.
 
-6. **Proposal gate.** One table — **# · Field · Proposed value · Source · Needs you** — every row of the form, including the ones you are leaving blank and why; Description's row reads *left for you to type in the form*. Field 3 shown in full. Underneath: the "missing" list from step 5 with what you propose to create, and the **emails that will fire, and to whom**, worked out from the Geography, field 5 and the submitter. Conditional fields appear only when their condition is met by the proposed values. **Write nothing — not in HubSpot, not in Airtable — until the user confirms.** They may edit any row; re-show the table if they do. Ask: **"Shall I go ahead with this?"**
+6. **Proposal gate.** One table — **# · Field · Proposed value · Source · Needs you** — every row of the form, including the ones you are leaving blank and why; Description's row reads *left for you to type in the form*. Field 3 shown in full. Underneath: the "missing" list from step 5 with what you propose to create, and the **emails that will fire, and to whom**, worked out from the Geography, field 5 and the submitter. Conditional fields appear only when their condition is met by the proposed values. **Write nothing — not in Airtable, and no contact-form link handed over — until the user confirms.** They may edit any row; re-show the table if they do. Ask: **"Shall I go ahead with this?"**
 
-7. **Create what is missing**, each kind on its own separate yes:
-   - **Founders** not in PEOPLE: create the contact **in HubSpot** with `manage_crm_objects`, never through the web form. Before the first create in a session, look at a contact the "portal-contact-input-form" created recently — the management-team contacts on the newest Startups records are good examples — with `get_crm_objects` and `search_properties`, and set the same properties. Airtable relies on Org Type = "Startup" (the "HubSpot CRM - Startup Linking" automation) and on Portal Contact (text) (the "Portal Contact Connection" automation), so those must be set the way the form sets them. Then poll `search_candidate_linked_records` for the contact roughly every 30 seconds for up to 5 minutes until the sync brings it into PEOPLE. If you cannot wait in this environment, tell the user to say "check again". If it never appears, say so and stop — do not guess a record.
+7. **Create what is missing.** A parent org or an investor org needs its own yes first, because those are writes Claude makes. A founder does not: a link writes nothing, so the user's submit *is* the yes.
+   - **Founders** not in PEOPLE: say it plainly and hand over the form in the same message — *"Dana Whitfield is not in HubSpot, so I have pre-filled the Portal contact form for her. Check the values, submit it, and tell me when it is done."* — one pre-filled link to CONTACT_FORM per founder, which **the user opens and submits**. Never the HubSpot API, never a browser. Build it with `scripts/build_prefill_url.py --hubspot` from this plugin, or by hand: `?firstname=…&lastname=…&email=…&company=…&jobtitle=…&contact_or_company_type=Startup&nearest_portal_region=…&contact_connection=…`, percent-encoded, every select value matching the option string exactly. Show the values going into each link beside the link, including who you put in `contact_connection` and why. A founder with no sourced email gets no link — the form requires one — and is listed under *fill by hand* instead. Once the user says a contact is submitted, poll `search_candidate_linked_records` for it roughly every 30 seconds for up to 5 minutes until the sync brings it into PEOPLE. If you cannot wait in this environment, tell the user to say "check again". If it never appears, say so and stop — do not guess a record.
    - **Parent org** not in PARENT_ORGS: `submit_form` on `pagpLJQCohSwNQ1gu` with Name `fldkarUxP0P9feLZv` and Type `fldhQgdiXs4y9xffc`, then re-run step 5 for field 13.
    - **Investor org** (4.1) not in INVESTORS: **stop and ask.** Creating investors is out of scope for this version.
 
@@ -125,7 +136,7 @@ Each numbered step ends with a question or a confirmation. Wait for the user's r
 ## Rules
 
 - Ask one step at a time and wait. Never hand the user a prompt to edit, and never assume an answer they have not given.
-- Nothing is written — HubSpot, Airtable, anywhere — before the confirmation that covers it. The submit is always the user's click.
+- Nothing is written — Airtable, HubSpot, anywhere — before the confirmation that covers it. Every submit, the Airtable form's and the contact form's, is the user's click.
 - Never `create_records_for_table` on STARTUPS and never `submit_form` on `pagpvNaXGr4eSOJF4`, including to test. Every new Startups record emails the whole team within five seconds.
 - Never drive a browser and never suggest the Chrome extension; it is disabled for Portal accounts. Connectors only.
 - Outlook is read-only here: search and read mail, never send, reply, move or modify.
@@ -136,7 +147,7 @@ Each numbered step ends with a question or a confirmation. Wait for the user's r
 - Pipeline Stage (6) and Membership Pipeline Stage (22) each need an explicit answer. "Send BD Outreach?" = Yes and Diligence Lead (6.1) each need their own yes, because each sends mail.
 - Field 3 — and 4.3 when it is used — ends with `_(drafted by Claude <model name>, <YYYY-MM-DD>)_`, the same convention as the triage plugin: the model actually running this session, the date only. Nothing else on the form is composed, so nothing else is marked.
 - No facts from your own memory of the company. Every value comes from the deck, the thread or a cited web source, or it is left blank with the reason in the table.
-- Never invent an email address, and never create a HubSpot contact whose email you cannot source.
+- Never invent an email address, and never build a contact-form link for a founder whose email you cannot source.
 - Duplicates in PEOPLE: default to the earliest-created and say so; never create a second contact for someone who already exists.
 - One startup per run.
 - When unsure about anything — which thread, which company, which contact, which stage — ask instead of guessing.

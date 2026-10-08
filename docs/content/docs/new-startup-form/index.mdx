@@ -92,10 +92,13 @@ Nothing is written anywhere until you say go.
 <Step n="05" title="Approve what needs creating">
 
 The form's Team and Scientific Founder fields link to the HubSpot CRM table,
-which is synced *from* HubSpot, so a founder who is not there has to be created
-in HubSpot first. Claude does that through the HubSpot connector on its own
-separate yes, matching the properties the Portal contact form sets, then waits
-for the sync to bring the contact into Airtable. A missing parent org goes
+which is synced *from* HubSpot, so a founder who is not there has to exist in
+HubSpot first. Claude hands you a pre-filled link to the Portal contact form —
+name, email, company, job title, type Startup, nearest Portal region, Portal
+contact — with the values shown beside it. You open it and click Submit; no
+HubSpot sign-in, no connector. Then Claude waits for the sync to bring the
+contact into Airtable. A founder whose email appears nowhere gets no link,
+because the form requires one and Claude never invents an address. A missing parent org goes
 through the new-organisation form, again on its own yes. A missing investor firm
 stops the run: creating investors is out of scope for now.
 
@@ -127,7 +130,7 @@ The Origin text is the one composed field, and it says so.
   <Fields>
     <Field label="Pipeline Stage"><Chip tone="mark">1.1 - On Deck</Chip><Hint>your answer in step 3</Hint></Field>
     <Field label="Geography"><Chip tone="mark">Chicago</Chip><Hint>also chose the regional email list</Hint></Field>
-    <Field label="Management Team"><Chip tone="mark">Dana Whitfield</Chip><Hint>created in HubSpot first, then synced</Hint></Field>
+    <Field label="Management Team"><Chip tone="mark">Dana Whitfield</Chip><Hint>you submitted the pre-filled contact form; then it synced</Hint></Field>
     <Field label="Description"><Chip>Non-invasive imaging for early liver fibrosis</Chip><Hint>typed by you, in the form</Hint></Field>
     <Field label="Deck(s)"><Chip>Marrowlight Bio — seed deck.pdf</Chip><Hint>attached by you, in the form</Hint></Field>
   </Fields>
@@ -169,6 +172,7 @@ at that moment.
   <Fact title="Outlook first, files second">With Microsoft 365 connected, Claude finds the thread and the deck itself and only reads; it never sends or moves mail. Without it, you hand them over.</Fact>
   <Fact title="It asks, then waits">Each step ends with a question or a confirmation. Nothing is drafted before your answers, and nothing is written before your yes.</Fact>
   <Fact title="Origin is the route, not the rationale">Who sent the company, to whom, when, through which channel, taken from the thread. Why we are looking is the venture team's to add later, and the triage plugin never touches this field either.</Fact>
+  <Fact title="Missing founders are a second link, not a connector">The Portal contact form on HubSpot takes a pre-filled URL the same way the startup form does. Claude builds it, you submit it, the sync does the rest.</Fact>
   <Fact title="The description is yours">Claude leaves field 7 blank; you type it in the form before Submit.</Fact>
   <Fact title="It cannot attach the deck">Same limit as the triage plugin: the Airtable connector has no file upload. You attach it in the form, which is the whole reason the human submits.</Fact>
 </Facts>

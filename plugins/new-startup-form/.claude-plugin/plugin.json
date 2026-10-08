@@ -1,8 +1,8 @@
 {
   "name": "new-startup-form",
   "displayName": "New Startup Form",
-  "version": "0.2.0",
-  "description": "Enter a new startup into the Venture base from its pitch deck and the email thread it arrived on. Finds both in Outlook when the Microsoft 365 connector is on, asks you its questions as it goes, checks the company is not already there, drafts every form field with a source beside each value, creates any missing founders in HubSpot after you confirm, then hands you a pre-filled form link. You add the description, attach the deck and click Submit.",
+  "version": "0.3.0",
+  "description": "Enter a new startup into the Venture base from its pitch deck and the email thread it arrived on. Finds both in Outlook when the Microsoft 365 connector is on, asks you its questions as it goes, checks the company is not already there, drafts every form field with a source beside each value, hands you a pre-filled Portal contact form for any founder missing from HubSpot, then a pre-filled startup form. You add the description, attach the deck and click Submit.",
   "author": {
     "name": "Portal"
   },

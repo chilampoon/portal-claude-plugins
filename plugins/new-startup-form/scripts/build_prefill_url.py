@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
-"""Build a pre-filled link for the "Enter a new startup into Airtable" form.
+"""Build a pre-filled link for one of the two forms this plugin hands the user.
+
+Default — the Airtable "Enter a new startup into Airtable" form:
 
     python3 build_prefill_url.py values.json
     python3 build_prefill_url.py - < values.json
-
-values.json maps a form field to the value to prefill. The key is whatever the
-form accepts as a field identifier — Airtable documents the schema field name,
-the form label, and the field ID as all valid; see the README for which one
-this form has been confirmed to take:
 
     {
       "Name": "Marrowlight Bio",
@@ -18,13 +15,38 @@ this form has been confirmed to take:
 
 Description (field 7) is deliberately absent: the user types it in the form.
 
-A JSON array becomes a comma-separated list, which is how Airtable prefills
-multiple-select and linked-record fields (linked records by record ID, never by
-name). A JSON null skips the field. Everything is percent-encoded as UTF-8, so
-line breaks in long text survive. The URL is printed to stdout; warnings go to
-stderr, so the URL can be piped on its own.
+The key is whatever the form accepts as a field identifier — Airtable documents
+the schema field name, the form label, and the field ID as all valid; see the
+README for which one this form has been confirmed to take. A JSON array becomes
+a comma-separated list, which is how Airtable prefills multiple-select and
+linked-record fields (linked records by record ID, never by name).
 
-Standard library only. Nothing here talks to Airtable.
+With --hubspot — the Portal contact-input form on HubSpot, for a founder who is
+not yet in the HubSpot CRM table:
+
+    python3 build_prefill_url.py --hubspot founder.json
+
+    {
+      "firstname": "Dana",
+      "lastname": "Whitfield",
+      "email": "dana@marrowlightbio.com",
+      "company": "Marrowlight Bio",
+      "jobtitle": "CEO",
+      "contact_or_company_type": "Startup",
+      "nearest_portal_region": "Chicago",
+      "contact_connection": "Ignacio Gajer"
+    }
+
+Keys are HubSpot internal property names, passed as plain ?name=value query
+parameters (no prefill_ prefix). A JSON array becomes a semicolon-separated list,
+which is how HubSpot prefills multiple-checkbox fields. Select values must match
+the form's option strings exactly.
+
+In both modes a JSON null skips the field and everything is percent-encoded as
+UTF-8, so line breaks in long text survive. The URL is printed to stdout;
+warnings go to stderr, so the URL can be piped on its own.
+
+Standard library only. Nothing here talks to Airtable or HubSpot.
 """
 
 import argparse
@@ -32,27 +54,35 @@ import json
 import sys
 from urllib.parse import quote
 
-BASE_ID = "appAX3sMfPtCKv4nB"
-PAGE_ID = "pagpvNaXGr4eSOJF4"
+AIRTABLE_BASE_ID = "appAX3sMfPtCKv4nB"
+AIRTABLE_PAGE_ID = "pagpvNaXGr4eSOJF4"
+HUBSPOT_CONTACT_FORM = "https://hs.portalinnovations.com/portal-contact-input-form"
 
 # Airtable: "Prefilled form links have a maximum length of 8,000 characters."
+# HubSpot documents no limit; the same ceiling is a sensible one to warn at.
 HARD_LIMIT = 8000
 # Leave headroom — some mail clients and chat tools truncate long links, and
 # the user may still add hide_ parameters by hand.
 SAFE_LIMIT = 7000
+
+TARGETS = {
+    "airtable": {"prefix": "prefill_", "list_sep": ","},
+    "hubspot": {"prefix": "", "list_sep": ";"},
+}
 
 
 def warn(message):
     print(f"warning: {message}", file=sys.stderr)
 
 
-def encode_value(name, value):
+def encode_value(name, value, list_sep):
     """Return the encoded value for one field, or None to skip it."""
     if value is None:
         return None
     if isinstance(value, bool):
-        # A Yes/No single select wants "Yes"/"No"; a checkbox wants "true".
-        # Neither is obvious from a bare boolean, so refuse and make the caller say which.
+        # Airtable: a Yes/No single select wants "Yes"/"No", a checkbox "true".
+        # HubSpot: a single checkbox wants "true"/"false". Neither is obvious from
+        # a bare boolean, so refuse and make the caller say which.
         raise ValueError(f'{name}: use the option text ("Yes"/"No") or "true", not a JSON boolean')
     if isinstance(value, dict):
         raise ValueError(f"{name}: nested objects are not a form value")
@@ -62,43 +92,45 @@ def encode_value(name, value):
         parts = []
         for item in value:
             item = "" if item is None else str(item)
-            if "," in item:
+            if list_sep in item:
                 warn(
-                    f'{name}: list item "{item}" contains a comma. Airtable reads the comma as the '
-                    "separator between choices, so this value will split into two. Pick a choice "
-                    "without a comma, or leave the field for the user to fill by hand."
+                    f'{name}: list item "{item}" contains "{list_sep}", which the form reads as the '
+                    "separator between choices, so this value will split in two. Pick a choice "
+                    "without it, or leave the field for the user to fill by hand."
                 )
             parts.append(quote(item, safe=""))
-        # Commas between items stay literal: they are the separator Airtable documents.
-        return ",".join(parts)
+        # Separators between items stay literal: they are what the form documents.
+        return list_sep.join(parts)
     text = str(value)
-    if "," in text:
+    if list_sep in text:
         warn(
-            f"{name}: value contains a comma, encoded as %2C. That is fine for text and long-text "
-            "fields. If this is a single select or a link field, open the link and check the "
-            "option actually matched."
+            f'{name}: value contains "{list_sep}", encoded as %{ord(list_sep):02X}. That is fine for '
+            "text fields. If this is a select or link field, open the link and check the option "
+            "actually matched."
         )
     return quote(text, safe="")
 
 
-def build_url(values, base_id=BASE_ID, page_id=PAGE_ID):
+def build_url(values, base_url, target):
+    spec = TARGETS[target]
     params = []
     for name, value in values.items():
-        encoded = encode_value(name, value)
+        encoded = encode_value(name, value, spec["list_sep"])
         if encoded is None:
             continue
-        params.append(f"prefill_{quote(str(name), safe='')}={encoded}")
-    url = f"https://airtable.com/{base_id}/{page_id}/form"
-    if params:
-        url += "?" + "&".join(params)
-    return url
+        params.append(f"{spec['prefix']}{quote(str(name), safe='')}={encoded}")
+    return base_url + ("?" + "&".join(params) if params else "")
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("values", help="path to a JSON object of field → value, or - for stdin")
-    parser.add_argument("--base", default=BASE_ID, help=f"base ID (default {BASE_ID})")
-    parser.add_argument("--page", default=PAGE_ID, help=f"form page ID (default {PAGE_ID})")
+    parser.add_argument("--hubspot", action="store_true",
+                        help="build a link to the Portal contact-input form on HubSpot instead of the Airtable form")
+    parser.add_argument("--base", default=AIRTABLE_BASE_ID, help=f"Airtable base ID (default {AIRTABLE_BASE_ID})")
+    parser.add_argument("--page", default=AIRTABLE_PAGE_ID, help=f"Airtable form page ID (default {AIRTABLE_PAGE_ID})")
+    parser.add_argument("--form-url", default=HUBSPOT_CONTACT_FORM,
+                        help=f"HubSpot form page URL, with --hubspot (default {HUBSPOT_CONTACT_FORM})")
     args = parser.parse_args(argv)
 
     raw = sys.stdin.read() if args.values == "-" else open(args.values, encoding="utf-8").read()
@@ -111,8 +143,13 @@ def main(argv=None):
         print("error: input must be a JSON object of field → value", file=sys.stderr)
         return 2
 
+    if args.hubspot:
+        target, base_url = "hubspot", args.form_url
+    else:
+        target, base_url = "airtable", f"https://airtable.com/{args.base}/{args.page}/form"
+
     try:
-        url = build_url(values, args.base, args.page)
+        url = build_url(values, base_url, target)
     except ValueError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
@@ -121,14 +158,14 @@ def main(argv=None):
     status = 0
     if length > HARD_LIMIT:
         warn(
-            f"URL is {length} characters, over Airtable's {HARD_LIMIT}-character maximum. "
-            "It will not prefill. Shorten the long-text fields (field 3 is the usual culprit) "
-            "or leave one for the user to paste in."
+            f"URL is {length} characters, over the {HARD_LIMIT}-character maximum Airtable documents "
+            "(HubSpot documents none, but a link this long is unlikely to survive a mail client). "
+            "Shorten the long-text fields (field 3 is the usual culprit) or leave one for the user to paste in."
         )
         status = 1
     elif length > SAFE_LIMIT:
         warn(
-            f"URL is {length} characters, within Airtable's {HARD_LIMIT} maximum but past the "
+            f"URL is {length} characters, within the {HARD_LIMIT} maximum but past the "
             f"{SAFE_LIMIT} safe length. Some mail and chat clients truncate links this long."
         )
 
