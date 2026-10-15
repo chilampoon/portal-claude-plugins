@@ -7,6 +7,7 @@ import { Appended, Chip, Field, Fields, Hint, Legend, LegendItem, Record } from 
 import { Say } from "@/components/say";
 import { Screenshot } from "@/components/screenshot";
 import { Step, Steps } from "@/components/steps";
+import { PluginVersions } from "@/components/versions";
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -22,6 +23,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Hint,
     Legend,
     LegendItem,
+    PluginVersions,
     Record,
     Say,
     Screenshot,

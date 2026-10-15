@@ -88,7 +88,9 @@ nothing goes out until you say so.
 <Step n="06" title="Take what comes back">
 
 A link to the updated record, whichever emails you had Claude send, and a list of
-any images from your note, because Claude cannot upload those for you.
+any images from your note, because Claude cannot upload those for you. If your
+note named papers, the Tech Refs block it filed and any PDFs it still needs you to
+save to SharePoint, each with its folder and filename.
 
 </Step>
 </Steps>
@@ -176,7 +178,65 @@ placed it. Declined means empty.
   <LegendItem k="The team">**Team Analysis**</LegendItem>
   <LegendItem k="Next steps">**Company: Next Steps**</LegendItem>
   <LegendItem k="Funding history">**Past Sources of Funding**</LegendItem>
+  <LegendItem k="Papers">**Tech Refs** — through a second skill, below</LegendItem>
 </Legend>
+
+## The papers behind the technology
+
+A note that cites the founder's preprint or the lab's paper keeps that sentence
+where you wrote it. The paper itself is filed separately, in **Tech Refs**, by
+the plugin's second skill, which the triage run hands off to after its own write.
+You can also call it on its own:
+
+<Say>Add these two papers to Tech Refs for Marrowlight Bio.</Say>
+
+Claude takes only the papers your note, the deck, the thread or your list
+actually names, opens each one's DOI, PubMed, bioRxiv or publisher page to get
+the first author, year, journal and exact title, and asks about any it cannot
+identify. Then it looks for the PDF in the company's SharePoint folder, under
+"2 - Literature", and writes the block in the team's format:
+
+<Record title="Marrowlight Bio" table="Startups">
+<Field label="Tech Refs">
+**Okafor Lab**
+
+[Okafor 2023 Nat Comm](#) - Contrast-enhanced detection of hepatic fibrosis in a murine NASH model
+
+1. Original method paper; the agent here is the one the company licensed.
+
+<Appended>
+
+**Triage — Your Name, 2026-09-17**
+
+**Founder's own work**
+
+[Okafor 2026 bioRxiv](#) - Tissue-specific contrast kinetics predict companion-diagnostic response
+
+1. First human data, n=12 — this is the dataset the pharma conversations rest on.
+2. Not yet peer reviewed.
+
+_(copied by Claude Opus 5, 2026-09-17)_
+
+</Appended>
+
+</Field>
+</Record>
+
+Only the words before the dash are linked, and the link is the one SharePoint
+returned — Claude never builds one by hand. Papers are grouped under a bold
+heading each: the lab, the founder's own work, foundational science, competing
+methods. What you wrote about a paper is copied underneath it verbatim. Where you
+wrote nothing, Claude may offer one to three short notes from the abstract,
+clearly labelled as drafts; they are filed only once you adopt or edit them.
+
+For a paper that is not in SharePoint yet, Claude gives you the filename and the
+folder to save it under — `Okafor 2026 bioRxiv - Tissue-specific contrast
+kinetics predict companion-diagnostic response`, in the company's "2 - Literature"
+folder — with the open-access PDF link when there is one, and searches again once
+you say it is saved. The Microsoft 365 connector can search SharePoint and read
+it, not upload to it, so Claude never claims to have saved a file. If you would
+rather not save one, its title goes in unlinked, or links to the DOI page with a
+label saying the link is temporary.
 
 ## Good to know
 
@@ -193,6 +253,7 @@ placed it. Declined means empty.
   <Fact title="Copied by, or drafted by — never summarized by">Every block the plugin places ends with <em>copied by Claude</em>: your words, placed as you approved them. The two emails it actually writes end with <em>drafted by Claude</em>. The verb tells you at a glance which is which.</Fact>
   <Fact title="Nothing existing is replaced by default">It reads each field first and appends underneath. If it cannot read a field, it stops rather than writing over it.</Fact>
   <Fact title="It files notes, it does not write them">Nothing goes in a field unless your note supports it. Hand it nothing and it asks for your note.</Fact>
-  <Fact title="You have to upload the images yourself">Claude has no way to put an attachment into Airtable, so it lists the figures it found and leaves them to you.</Fact>
+  <Fact title="You have to upload the images yourself">Claude has no way to put an attachment into Airtable, so it lists the figures it found and leaves them to you, naming <strong>Tech: Figures</strong> as the field for figures about the technology.</Fact>
+  <Fact title="Papers are filed in the house format, linked to SharePoint">Only papers your sources name, every author, year and title read from the paper's own page, the words before the dash linked to the copy in the company's "2 - Literature" folder, your remarks copied underneath. Tech Refs is appended to like any other field, and a replace takes its own yes.</Fact>
   <Fact title="It never creates a startup record">Add the company through the new-startup form first.</Fact>
 </Facts>

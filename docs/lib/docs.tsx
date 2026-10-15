@@ -6,6 +6,7 @@ import type { MDXComponents } from "mdx/types";
 // fumadocs-mdx compiles every imported .mdx file and exports the component,
 // its table of contents and its frontmatter (see mdx.d.ts for the types).
 import * as gettingStarted from "@/content/docs/index.mdx";
+import * as updatingPlugins from "@/content/docs/updating-plugins/index.mdx";
 import * as investorMeetingSummary from "@/content/docs/investor-meeting-summary/index.mdx";
 import * as triageNoteUpdates from "@/content/docs/triage-note-updates/index.mdx";
 import * as newStartupForm from "@/content/docs/new-startup-form/index.mdx";
@@ -47,6 +48,7 @@ function docPage(path: string, mod: MdxModule, eyebrow: string): DocPage {
 
 export const docsPages: DocPage[] = [
   docPage("", gettingStarted, "Portal Innovations · Claude plugins"),
+  docPage("updating-plugins", updatingPlugins, "Portal Innovations · Claude plugins"),
   docPage("investor-meeting-summary", investorMeetingSummary, "Portal · Claude plugin"),
   docPage("triage-note-updates", triageNoteUpdates, "Portal · Claude plugin"),
   docPage("new-startup-form", newStartupForm, "Portal · Claude plugin")
@@ -64,10 +66,11 @@ export const docsPageTree: Root = {
   name: "Portal Claude plugins",
   children: [
     { type: "page", name: docsPages[0].title, url: "/docs" },
+    { type: "page", name: docsPages[1].title, url: "/docs/updating-plugins" },
     { type: "separator", name: separator("Plugins") },
-    { type: "page", name: docsPages[1].title, url: "/docs/investor-meeting-summary" },
-    { type: "page", name: docsPages[2].title, url: "/docs/triage-note-updates" },
-    { type: "page", name: docsPages[3].title, url: "/docs/new-startup-form" }
+    { type: "page", name: docsPages[2].title, url: "/docs/investor-meeting-summary" },
+    { type: "page", name: docsPages[3].title, url: "/docs/triage-note-updates" },
+    { type: "page", name: docsPages[4].title, url: "/docs/new-startup-form" }
   ]
 };
 

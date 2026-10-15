@@ -6,6 +6,12 @@ works out where each piece of it belongs on the company's Deal Flow record in
 the Venture base, moves the Pipeline Stage to match the decision, and replies to
 the notification Airtable sends the fellows — all of it after they have said yes.
 
+A second skill files the papers behind the technology. Whenever a note names a
+publication, or someone asks for references to be added, Claude resolves each
+paper against its own page, finds the saved copy in the company's SharePoint
+folder, and writes it into Tech Refs in the house format — grouped, linked, with
+the author's remarks underneath.
+
 > **Not yet run end to end.** The workflow has been reasoned through against a
 > real triage doc, but never executed against a live record, and the email path in
 > particular is completely unexercised. On the first real run, check two things:
@@ -26,6 +32,8 @@ triage-note-updates/
 ├── .claude-plugin/plugin.json          # plugin metadata shown in the catalog
 ├── skills/update-triage-notes/
 │   └── SKILL.md                        # the workflow — triggers on "here are my triage notes on [company]"
+├── skills/file-tech-refs/
+│   └── SKILL.md                        # references into Tech Refs — triggers on "add these papers to Tech Refs for [company]", and from the triage skill
 ├── scripts/extract_docx.py             # stdlib-only .docx/.pdf text extraction, for when Claude has a shell
 ├── .mcp.json                           # bundles Airtable, plus Microsoft 365 for the reply
 └── README.md
@@ -110,6 +118,33 @@ as your own, or decline. Only text you have made yours reaches the field, marked
 *copied by Claude* like any other block, because you are its author and the
 plugin only placed it. Declined means empty.
 
+**The papers behind the technology go to Tech Refs, through a second skill.**
+A triage note that cites the founder's preprint or the lab's paper keeps that
+sentence where the author wrote it, usually Strengths. The paper itself is filed
+in **Tech Refs** by `file-tech-refs`, which the triage skill runs after its own
+write, and which you can also call on its own — "add these papers to Tech Refs
+for Silver Labs", "file the references from the deck". It takes only the papers
+the source names, opens each one's DOI, PubMed, bioRxiv or publisher page to get
+the first author, year, journal and exact title, and never guesses any of them.
+
+Each reference follows the team's format: a title of the form
+`Schultz 2020 Nat Comm - Age and life expectancy clocks based on machine learning
+analysis of mouse frailty`, with **only the words before the dash** linked to the
+PDF in the company's SharePoint "2 - Literature" folder. Papers are grouped under
+bold headings — the lab, the founder's own work, foundational science, competing
+methods — and the author's remarks on a paper are copied verbatim underneath it.
+Where the note says nothing about a paper, Claude may offer one to three short
+notes from the abstract, labelled as drafts; they are filed only once you adopt or
+edit them. The block is shown at its own gate beside the current Tech Refs, and
+appended under a dated header like any other field.
+
+Claude finds the files with the Microsoft 365 connector's SharePoint search; it
+never builds a SharePoint link by hand. For a paper that is not in the folder yet,
+it gives you the exact filename and destination folder, plus the open-access PDF
+link where there is one, and searches again once you say it is saved. If you
+would rather not save it, the title goes in unlinked, or links to the DOI page
+with a label saying it is temporary.
+
 **Two markers, and the verb matters.** Every block the plugin places — field
 content and the Narrative updates comment — ends with
 `_(copied by Claude <model>, <date>)_`: your words, placed word for word as you
@@ -150,9 +185,17 @@ cannot be put on the record through this plugin. That is why it asks you for a
 SharePoint link or to attach the file to the thread yourself — the Airtable UI
 allows what the API does not.
 
-**The Microsoft 365 connector is optional.** The plugin bundles it for the two
-emails, but nothing in the Airtable half depends on it. Skip it and Claude prints
-the emails for you to send by hand.
+**Claude cannot save a file to SharePoint.** The Microsoft 365 connector seen so
+far can search SharePoint and read what is there, not upload to it. So
+`file-tech-refs` tells you the filename and folder to save each missing paper
+under, waits for you to say it is done, and only then links it. It never claims a
+file was saved unless an upload tool actually succeeded, and it never constructs
+a SharePoint URL — only links the connector returned go on the record.
+
+**The Microsoft 365 connector is optional for the triage itself.** The plugin
+bundles it for the two emails and for SharePoint, but nothing in the Airtable half
+depends on it. Skip it and Claude prints the emails for you to send by hand, and
+leaves reference titles unlinked until you paste a link.
 
 ## Using it
 
@@ -162,7 +205,10 @@ can see, and writes and sends as them. Then they just say:
 
 > Here are my triage notes on Veil Therapeutics — add them to Airtable.
 
-...with the Word doc attached, or the email pasted in.
+...with the Word doc attached, or the email pasted in. Or, for the references
+alone:
+
+> Add these two papers to Tech Refs for Veil Therapeutics.
 
 ## Distributing
 

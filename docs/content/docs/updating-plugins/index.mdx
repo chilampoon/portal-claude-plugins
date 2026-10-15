@@ -1,0 +1,105 @@
+---
+title: Updating plugins
+description: The plugins live in one GitHub repository, and your Claude account syncs from it. This page says how to tell which version you have, how to pull a newer one when it has not arrived on its own, and what a release looks like from the maintainer's side.
+---
+
+<Flow label="A change pushed to GitHub, your marketplace syncs, your next chat runs the new version">
+  <FlowStep n="01" title="A plugin changes on GitHub" note="Its version number goes up with it" />
+  <FlowStep n="02" title="Your marketplace syncs" note="On its own with Sync automatically, or when you click Check for updates" emphasis />
+  <FlowStep n="03" title="Your next chat runs the new version" note="Nothing to accept, nothing to reinstall" />
+</Flow>
+
+## How updates reach you
+
+Two things decide whether that happens by itself:
+
+- **Sync automatically** is on for the marketplace. The setup steps leave it
+  on. It is the switch in the Add marketplace dialog that reads *Keep plugins
+  up to date when the repository changes on GitHub*.
+- The plugin's **version number** changed with the release. Installed copies
+  are keyed on that number, so a push that leaves it alone is not treated as an
+  update. Whoever maintains the repository would bump it every time.
+
+## Latest versions
+
+Read from the repository each time this site is built, so this list is what is
+on GitHub right now.
+
+<PluginVersions />
+
+## Check what you have
+
+<Steps>
+<Step n="01" title="Open the plugin's page">
+
+In Claude, open **Customize → Plugins**, go to the **Yours** tab and click the
+plugin. The line under its name says where it came from and which version you
+have, for example *from portal-claude-plugins · 0.8.0 · 1 skill · updated 2
+days ago*.
+
+<Screenshot src="/screenshots/plugin-version.png" alt="A plugin's page under Customize → Plugins, with the version number and the 'updated' time in the line under its name." />
+
+</Step>
+<Step n="02" title="Compare it with the list above">
+
+Same number: you are up to date, and there is nothing to do. A lower number
+means the sync has not run yet. Pull it yourself, below.
+
+</Step>
+</Steps>
+
+## Pull an update yourself
+
+<Steps>
+<Step n="01" title="Check for updates on the marketplace">
+
+Open **Customize → Plugins** and find the **portal-claude-plugins**
+marketplace. Open its menu and choose **Check for updates**. Claude fetches the
+repository again and moves every plugin you installed from it to the current
+version.
+
+<Screenshot src="/screenshots/check-for-updates.png" alt="The portal-claude-plugins marketplace with its menu open on Check for updates." />
+
+</Step>
+<Step n="02" title="Make sure Sync automatically is on">
+
+While you are there, check the **Sync automatically** switch. With it on, the
+next release should arrive without this page.
+
+<Screenshot src="/screenshots/sync-automatically.png" width={520} alt="The marketplace's settings with Sync automatically switched on." />
+
+</Step>
+<Step n="03" title="Start a new chat">
+
+Open a new chat before you use the plugin. A chat that was already open may
+keep running the version it started with.
+
+</Step>
+</Steps>
+
+If the number on the plugin's page still lags after that, remove the
+marketplace and add it again, exactly as in
+[Getting started](/docs#set-up-once). Expect to install the plugins again
+afterwards: removing a marketplace takes its plugins with it.
+
+## If you use Claude Code
+
+The same marketplace works in Claude Code, where an update is a command rather
+than a sync. Refresh the marketplace, then update the plugin:
+
+```
+claude plugin marketplace update portal-plugins
+claude plugin update triage-note-updates@portal-plugins
+```
+
+The second line prints the version it moved to, or *already at the latest
+version* when the number on GitHub has not changed. The new version loads at
+your next launch, or straight away with `/reload-plugins`.
+
+To stop doing that by hand, type `/plugin`, open the **Marketplaces** tab,
+select **portal-plugins** and choose **Enable auto-update**. It is off by
+default for marketplaces added from GitHub. With it on, Claude Code checks the
+repository shortly after your first message in each session and tells you when
+a plugin changed.
+
+<Screenshot src="/screenshots/claude-code-plugin-update.png" alt="The /plugin dialog in Claude Code on the Marketplaces tab, with portal-plugins selected and Enable auto-update in its menu." />

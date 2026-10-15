@@ -23,11 +23,13 @@ IDs below were pulled from the live base schema. `get_table_schema` on the table
 
 **Common landing spots — settled, but not exhaustive.** Every pairing below has been checked, so content of that kind goes there unless the note itself gives you a reason otherwise. The table has far more fields, and the list says nothing about them — read the schema and choose what fits the rest of the note:
 
-strengths → Strengths `fldboP8VPnLxfVRM3` · what the company does → Value Proposition `fldUTvTnK0AKNPxjr` · weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions for Company `fldlw3iPk5DeVXz63` · tech description → Tech: Summary `fld4cGrEjrBnyNs5f` · team → Team Analysis `fld0RouGgSh7gCi2v` · next steps / obstacles → Company: Next Steps `fld0Bjr8Mg0HmDj8M` · funding history → Past Sources of Funding `fld5HxGmZLsJpZRaf`
+strengths → Strengths `fldboP8VPnLxfVRM3` · what the company does → Value Proposition `fldUTvTnK0AKNPxjr` · weaknesses / risks → Key Risks `fldHCnh6cw5aLPtH9` · questions → Questions for Company `fldlw3iPk5DeVXz63` · tech description → Tech: Summary `fld4cGrEjrBnyNs5f` · team → Team Analysis `fld0RouGgSh7gCi2v` · next steps / obstacles → Company: Next Steps `fld0Bjr8Mg0HmDj8M` · funding history → Past Sources of Funding `fld5HxGmZLsJpZRaf` · papers / preprints / publications → Tech Refs `fldOK6kGR6kb5XymL`, through the **file-tech-refs** skill in this plugin
 
 **What a pre-meeting triage fills.** The fields a triage is expected to populate, so that the coverage check in step 4 runs from Airtable's side as well as the note's. Each of these is either filled from the note or named at the gate as "nothing in the note for this":
 
-Strengths `fldboP8VPnLxfVRM3` · Key Risks `fldHCnh6cw5aLPtH9` · Questions for Company `fldlw3iPk5DeVXz63` · Tech: Summary `fld4cGrEjrBnyNs5f` · Team Analysis `fld0RouGgSh7gCi2v` · Company: Next Steps `fld0Bjr8Mg0HmDj8M` · Value Proposition `fldUTvTnK0AKNPxjr` · Past Sources of Funding `fld5HxGmZLsJpZRaf` · Secret Sauce `flda5JIPbWF8bzqWh` · PIPELINE_STAGE and its date · the Narrative updates comment
+Strengths `fldboP8VPnLxfVRM3` · Key Risks `fldHCnh6cw5aLPtH9` · Questions for Company `fldlw3iPk5DeVXz63` · Tech: Summary `fld4cGrEjrBnyNs5f` · Team Analysis `fld0RouGgSh7gCi2v` · Company: Next Steps `fld0Bjr8Mg0HmDj8M` · Value Proposition `fldUTvTnK0AKNPxjr` · Past Sources of Funding `fld5HxGmZLsJpZRaf` · Secret Sauce `flda5JIPbWF8bzqWh` · Tech Refs `fldOK6kGR6kb5XymL`, through file-tech-refs · PIPELINE_STAGE and its date · the Narrative updates comment
+
+**Papers go to two places, and that is not duplication.** When the note names a publication — the founder's preprint, the lab's paper, the method the technology rests on — the sentence naming it stays where the author wrote it, usually Strengths, word for word. The reference itself is filed separately in Tech Refs `fldOK6kGR6kb5XymL`, in the house format, by the **file-tech-refs** skill: resolved against the paper's own page, linked to the copy in the company's SharePoint folder, with the author's remarks on it copied underneath. This skill never writes Tech Refs itself. It lists the papers at the gate and runs file-tech-refs after its own write, in step 7. A triage that names papers and files none of them is the failure the Silver Labs run showed, and the coverage check in step 4 exists to catch it.
 
 **Record-page labels are not schema names.** The Deal Flow page relabels fields, so what a colleague calls a field and what `get_table_schema` returns are not always the same string:
 
@@ -84,7 +86,7 @@ Distilling what the note *does* say happens in one place only: the Secret Sauce 
 
    Do not go looking for the file in OneDrive or SharePoint on their behalf, and do not proceed with neither — a decision comment with no route to the reasoning behind it is only half a record.
 
-   **Images.** If the source contains figures, charts or pasted slides, list them for the user now and say plainly that you cannot upload them: the Airtable MCP has no attachment-upload tool, and attachments can only be set from a URL Airtable fetches for itself. Ask them to drop the images into the relevant attachment field themselves, and carry this to the hand-off in step 10 — never let an image go silently missing.
+   **Images.** If the source contains figures, charts or pasted slides, list them for the user now and say plainly that you cannot upload them: the Airtable MCP has no attachment-upload tool, and attachments can only be set from a URL Airtable fetches for itself. Ask them to drop the images into the relevant attachment field themselves — figures about the technology belong in Tech: Figures `fld6n2ULEkF52Vi3Q` — and carry this to the hand-off in step 10. Never let an image go silently missing.
 
 2. **Read the decision.** The note usually ends with a recommendation. Classify it:
    - **Meet / advance** → the full proposed mapping, step 4a.
@@ -95,8 +97,8 @@ Distilling what the note *does* say happens in one place only: the Secret Sauce 
 
 4. **Build the proposal.** Call `get_table_schema` on `tblkuk4Fpb1pYp4Ux`, then read the current value of every field you intend to touch, so an append is a real append.
 
-   - **4a — meet / advance.** Decide which field each part of the note belongs in, starting from the landing spots rather than being bound by them, and place the author's text there as written.
-   - **4b — pass / soft pass. Write less on purpose** — nobody reads a teardown on a dead company. Only: the stage and its date; the note's weaknesses or risks section, as written, into Key Risks `fldHCnh6cw5aLPtH9`; and the decision as a Narrative updates comment — a pass is still a decision and still gets its comment. **No full-note archive** — there is nowhere on the record for one, and the note stays where the author keeps it. Skip the full mapping.
+   - **4a — meet / advance.** Decide which field each part of the note belongs in, starting from the landing spots rather than being bound by them, and place the author's text there as written. Publications the note names get a Tech Refs row of their own, Action **via file-tech-refs, after this write**, listing each paper as the note calls it; its Content column stays empty, because the block is built and confirmed at that skill's own gate.
+   - **4b — pass / soft pass. Write less on purpose** — nobody reads a teardown on a dead company. Only: the stage and its date; the note's weaknesses or risks section, as written, into Key Risks `fldHCnh6cw5aLPtH9`; and the decision as a Narrative updates comment — a pass is still a decision and still gets its comment. **No full-note archive** — there is nowhere on the record for one, and the note stays where the author keeps it. Skip the full mapping. Tech Refs stays unfiled too: name it at the gate as *not filed on a pass*, and run file-tech-refs only if the user asks.
 
    **Account for the whole note, and the whole checklist, before you show anything.** Two passes. Note → fields: walk the note section by section and check each one reaches the table; anything you are not writing appears in the table too, as **leave**, with the reason — "no field fits it" is a legitimate answer, dropping it in silence is not. Checklist → note: for every field in **What a pre-meeting triage fills**, either the table has content for it or the gate says "nothing in the note for this" by name. Nothing missed in either direction is the whole point of the plugin.
 
@@ -131,6 +133,8 @@ Distilling what the note *does* say happens in one place only: the Secret Sauce 
 
    Then post the Narrative updates comment as a separate `create_record_comment` call, after the field write has succeeded — the comment describes a decision the record should already reflect. Post the approved text unchanged; if the field write failed, do not post. Report what was written and link the record page.
 
+   Then, if the proposal table had a Tech Refs row, run **file-tech-refs** now for the papers it listed, before step 8. It has its own gate and its own write, so nothing here is repeated; its line goes in the step 8 changelog; and the time it takes covers the wait step 9 needs.
+
 8. **Tell Diligence support what changed.** Every run that writes sends this, whether or not the stage moved.
 
    **Recipients come off the record, resolved all the way to email addresses in Airtable.** A name is not a recipient. Find the Diligence support field on this Startups record in the schema you already pulled at step 4, then resolve it by the field's type:
@@ -145,7 +149,7 @@ Distilling what the note *does* say happens in one place only: the Secret Sauce 
 
    - The company, and a link to the record page.
    - Stage `old → new`, if it moved.
-   - One line per field touched: the field, appended or replaced, and the gist in a few words.
+   - One line per field touched: the field, appended or replaced, and the gist in a few words. Tech Refs included, when file-tech-refs wrote it.
 
    Show the recipients as name **and** address, and the draft, then send only on explicit confirmation. Without a mail tool, print the changelog and the resolved addresses for the user to send.
 
@@ -159,7 +163,7 @@ Distilling what the note *does* say happens in one place only: the Secret Sauce 
 
    **No stage change means no notification — skip this step entirely.** And nothing ever goes to the intake thread, where a senior associate forwarded the company and the fellows wrote the note up; that thread is not part of this workflow.
 
-10. **Hand off what you could not do.** The images and which attachment field they belong in, the reply text if it did not go out, and, if they chose to upload the note themselves, the reminder to attach it to the Narrative updates thread now, since the comment already says it is there.
+10. **Hand off what you could not do.** The images and which attachment field they belong in — Tech: Figures `fld6n2ULEkF52Vi3Q` for figures about the technology — the files file-tech-refs asked the user to save to SharePoint, the reply text if it did not go out, and, if they chose to upload the note themselves, the reminder to attach it to the Narrative updates thread now, since the comment already says it is there.
 
 ## Layout, not wording
 
@@ -206,6 +210,7 @@ Use the model actually running this session — do not hard-code a version strin
 - Never create a startup record. If the company is not in the base, stop and tell the user to add it through the new-startup form first.
 - The reply-all goes out only on its own explicit confirmation — it reaches the whole fellows list. Reply to the Airtable notification, never to the intake thread, and never report an email as sent unless the send actually succeeded.
 - Never claim to have uploaded an attachment. You cannot.
+- Publications the note names are filed in Tech Refs `fldOK6kGR6kb5XymL` through file-tech-refs, after this skill's own write. Never write Tech Refs directly from here, and never skip the papers because the sentence naming them already went to Strengths.
 - If a write fails on field validation, re-check with `get_table_schema`, adjust, and confirm with the user before retrying.
 - Never skip step 0. If the connector drops mid-run, stop, tell the user, and re-run the preflight before continuing.
 - Never write ORIGIN `fldlbxnXwd42pqXSf`, whatever the schema calls it.
