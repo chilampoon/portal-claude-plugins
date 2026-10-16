@@ -10,6 +10,7 @@ import * as updatingPlugins from "@/content/docs/updating-plugins/index.mdx";
 import * as investorMeetingSummary from "@/content/docs/investor-meeting-summary/index.mdx";
 import * as triageNoteUpdates from "@/content/docs/triage-note-updates/index.mdx";
 import * as newStartupForm from "@/content/docs/new-startup-form/index.mdx";
+import * as investorGroupOverview from "@/content/docs/investor-group-overview/index.mdx";
 
 type MdxModule = {
   default: ComponentType<{ components?: MDXComponents }>;
@@ -51,7 +52,8 @@ export const docsPages: DocPage[] = [
   docPage("updating-plugins", updatingPlugins, "Portal Innovations · Claude plugins"),
   docPage("investor-meeting-summary", investorMeetingSummary, "Portal · Claude plugin"),
   docPage("triage-note-updates", triageNoteUpdates, "Portal · Claude plugin"),
-  docPage("new-startup-form", newStartupForm, "Portal · Claude plugin")
+  docPage("new-startup-form", newStartupForm, "Portal · Claude plugin"),
+  docPage("investor-group-overview", investorGroupOverview, "Portal · Claude plugin")
 ];
 
 function separator(name: string): ReactNode {
@@ -70,7 +72,8 @@ export const docsPageTree: Root = {
     { type: "separator", name: separator("Plugins") },
     { type: "page", name: docsPages[2].title, url: "/docs/investor-meeting-summary" },
     { type: "page", name: docsPages[3].title, url: "/docs/triage-note-updates" },
-    { type: "page", name: docsPages[4].title, url: "/docs/new-startup-form" }
+    { type: "page", name: docsPages[4].title, url: "/docs/new-startup-form" },
+    { type: "page", name: docsPages[5].title, url: "/docs/investor-group-overview" }
   ]
 };
 
