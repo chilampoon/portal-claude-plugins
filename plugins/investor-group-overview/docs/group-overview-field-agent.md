@@ -3,9 +3,10 @@
 Group Overview (`fldzKsGxC32svNmYK`) on "Organizations from Hubspot CRM" is an
 **Airtable field agent**: an AI field that rewrites itself whenever one of its
 inputs changes, with no one asking. Its inputs are helper fields that turn the
-firm's meeting notes, stats and shared companies into text. The
-`log-investor-meeting` skill reads the overview for context when drafting a
-note and checks that it refreshed after a note is filed.
+firm's meeting notes, stats and shared companies into text. This plugin's `brief-investor` and
+`audit-group-overviews` skills read it; **investor-meeting-summary**'s
+`log-investor-meeting` reads it for context when drafting a note and checks
+that it refreshed after a note is filed.
 
 The agent is configured **by hand in the Airtable UI**, by whoever maintains
 the base. The Airtable connector can create an AI field but cannot edit its
@@ -14,7 +15,8 @@ through the API. Converting the existing empty field in place keeps its ID.
 
 **Status: not yet converted.** The helper fields exist (see Appendix A), the
 agent has not been set up, the pilot has not run, and `GROUP_OVERVIEW_LIVE` in
-`skills/log-investor-meeting/SKILL.md` is still `false`.
+`plugins/investor-meeting-summary/skills/log-investor-meeting/SKILL.md` is
+still `false`.
 
 ## Before you start
 
@@ -192,10 +194,11 @@ handles them ("No Portal meeting notes yet.") if they are ever run.
 ## 8. Switch the plugin on
 
 Switch `GROUP_OVERVIEW_LIVE` to `true` in
-`skills/log-investor-meeting/SKILL.md`, bump the patch version in
-`.claude-plugin/plugin.json`, and re-upload. From then on the skill reads the
+`plugins/investor-meeting-summary/skills/log-investor-meeting/SKILL.md`, bump
+that plugin's patch version, and push. From then on that skill reads the
 overview before drafting a note and checks that it refreshed after the
-submission.
+submission. Then remove the "not yet live" notes from this plugin's README and
+the docs site page.
 
 ## Appendix A: helper fields
 

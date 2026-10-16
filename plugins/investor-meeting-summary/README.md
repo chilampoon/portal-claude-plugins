@@ -24,72 +24,21 @@ transcript. Otter renders proper nouns unreliably, and this base holds WuXi
 Biologics, WuXi AppTec and WuXi STA as three separate records whose CDAs do not
 cover each other.
 
-## How the Group Overview field agent fits in
+## How the Group Overview fits in
 
 Each investor record carries **Group Overview** (`fldzKsGxC32svNmYK`), a short
-summary of who the firm is, how it invests, where we stand, which of our
-companies it has seen and what is open. It is written by an **Airtable field
-agent**, not by this plugin: helper fields turn the firm's notes, stats and
-shared companies into text, the agent reads them and rewrites the overview
-whenever a note is logged. Meeting notes outrank the stats, and newer notes
-outrank older ones. No web research.
+summary written by an Airtable field agent from the firm's notes. That feature,
+its setup sheet, the helper fields and the read-only skills around it live in
+the **investor-group-overview** plugin (`../investor-group-overview/`). This
+plugin touches it in two flag-gated places: step 4 reads the overview before
+drafting, only to spot what changed for "Since last time", and step 6 checks
+after the submission that the overview refreshed. Nothing is ever copied from
+it into a note, and nothing here writes it. Until the agent is converted,
+`GROUP_OVERVIEW_LIVE` in `SKILL.md` stays `false` and the skill behaves exactly
+as in 2.0.0.
 
-The loop, once the agent is live:
-
-1. A teammate logs a meeting through this plugin (or the form directly).
-2. The note lands in "Investor Viewer Updater"; the helper rollups on the firm
-   record change; the agent re-runs and rewrites Group Overview.
-3. Next time, the skill reads the overview before drafting, but only to spot
-   what changed for "Since last time". Nothing is copied from it into the
-   note, so a mistake in the overview cannot loop back into the notes.
-4. After the submission the skill checks that the overview's closing line
-   ("Based on N Portal notes through YYYY-MM-DD.") carries today's date, and
-   says so if it does not.
-
-**Group Overview is read-only for the team.** A field agent never overwrites a
-cell a person edited, so one hand edit silently freezes that investor's
-overview. Corrections go in as a new note.
-
-Setting the agent up is a by-hand job in the Airtable UI:
-[`docs/group-overview-field-agent.md`](docs/group-overview-field-agent.md)
-has the steps, the prompt, the pilot checklist and the switch-on step. Until
-that is done, `GROUP_OVERVIEW_LIVE` in `SKILL.md` stays `false` and the skill
-behaves exactly as in 2.0.0.
-
-### Configuration: helper fields (live IDs, 2026-10-15)
-
-Base "Venture" `appAX3sMfPtCKv4nB`. The agent's inputs; the skill never
-reads or writes them.
-
-| Field | Table | ID | Type |
-| --- | --- | --- | --- |
-| Overview input | Investor Viewer Updater | `fldxGxioudTxEvZ9q` | formula |
-| Overview note date | Investor Viewer Updater | `fld2Lm78Ae4AQEUNF` | formula |
-| Notes for overview | Organizations | `fldkMMvyyiBFJ9glD` | rollup |
-| Overview note count | Organizations | `fldmtCayz9xI8Q9CR` | rollup |
-| Newest note (raw) | Organizations | `fldjB8T9ttKIV4VgC` | rollup |
-| Newest note date | Organizations | `fldIDWMUq53JKX4Rn` | formula |
-| Stats modified | Organizations | `fldnHlQcpompozXS8` | formula |
-| Investor stats (text) | Organizations | `fldRWCg1ST2nttz6Q` | formula |
-| Our companies with them | Organizations | `fldsT1ke8p6JXNnm0` | formula |
-| Portal contacts (text) | Organizations | `fld4WoLgxQlbzlAD2` | formula |
-
-Two build leftovers named `zz delete me - …` (`fldtT5CxQbu8YnK1R`,
-`fldKfeGFG2zgXvcDM`) are unused and wait for a by-hand delete.
-
-### Rules
-
-- Never write Group Overview (`fldzKsGxC32svNmYK`), even to fix a stale one.
-- Never create, edit or delete records in Investor Viewer Updater directly.
-  Notes reach it only through the notes form, as today.
-- Never create, convert or reconfigure an AI field through the API.
-- No helper field uses NOW() or TODAY(). They recalculate constantly and would
-  re-run the agent and spend credits.
-- Create or change helper fields only after the maintainer approves the list.
-  Any change re-runs the agent on every cell once it is live, and a rollup
-  change is a delete-and-recreate by hand.
-- When unsure about anything (which firm, which field, what a note means),
-  ask.
+Two rules carry over: never write Group Overview, even to fix a stale one, and
+never create, convert or reconfigure an AI field through the API.
 
 ## What's inside
 
@@ -98,7 +47,6 @@ investor-meeting-summary/
 ├── .claude-plugin/plugin.json        # plugin metadata shown in the catalog
 ├── skills/log-investor-meeting/
 │   └── SKILL.md                      # the workflow — triggers on "I just met with [firm]..."
-├── docs/group-overview-field-agent.md # by-hand setup of the Group Overview field agent
 ├── .mcp.json                         # bundles the Otter.ai + Airtable connectors
 └── README.md
 ```
@@ -176,29 +124,22 @@ workspace.
 
 ## Changes
 
-- **2.1.0** (2026-10-15). Group Overview becomes an Airtable field agent fed
-  by helper fields; this release adds the helper fields in the base, the setup
-  sheet in `docs/`, and two flag-gated steps in `log-investor-meeting`: read
-  the overview for context before drafting (step 4) and check that it
-  refreshed after the submission (step 6, before the promised-sends offer).
-  `GROUP_OVERVIEW_LIVE` ships as `false`, so nothing changes for users until
-  the agent is converted and piloted. New rules: never write Group Overview,
-  never touch an AI field through the API.
+- **2.1.1** (2026-10-15). The Group Overview setup sheet, field reference and
+  rules move to the new **investor-group-overview** plugin; this README keeps a
+  cross-reference. No behaviour change.
+- **2.1.0** (2026-10-15). Two flag-gated steps in `log-investor-meeting` for
+  the Group Overview field agent: read the overview for context before drafting
+  (step 4) and check that it refreshed after the submission (step 6, before the
+  promised-sends offer). `GROUP_OVERVIEW_LIVE` ships as `false`, so nothing
+  changes for users until the agent is converted and piloted. New rules: never
+  write Group Overview, never touch an AI field through the API.
 - **2.0.0.** Files through the form, widened the note, hardened firm matching.
 
 ## Not yet run end to end
 
-The helper fields are live and checked on SOSV, DCVC Bio and MBX Capital, but
-the agent itself has not been set up, so Group Overview is still empty
-everywhere and `GROUP_OVERVIEW_LIVE` is `false`. The first live run should
-watch:
-
-1. Whether the agent's output renders as bold-labelled bullets in the
-   rich-text cell, or as raw asterisks (then switch the prompt to plain lines).
-2. The closing line "Based on N Portal notes through YYYY-MM-DD." matching
-   Overview note count and Newest note date on the record.
-3. Personal details staying out: SOSV's notes mention a contact's
-   neighbourhood, DCVC Bio's a contact's family.
-4. Credits per run, and whether a hand-edited cell stops refreshing.
-5. Step 6 of the skill, the refresh check, which has never run against a
-   live agent.
+The Group Overview agent has not been set up, so `GROUP_OVERVIEW_LIVE` is
+`false` and steps 4 and 6 have never run against a live overview. When the
+pilot in the investor-group-overview plugin passes, flip the flag, bump the
+patch version, and watch the first real submission: the refresh check should
+find today's date in the overview's closing line within a few minutes, and
+should say so plainly if it does not.

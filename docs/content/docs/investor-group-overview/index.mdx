@@ -1,0 +1,97 @@
+---
+title: Investor group overview
+description: Every VC record carries a short summary of the firm, written by an Airtable agent from Portal's notes and refreshed whenever a note is logged. Read it before a meeting, or ask Claude to brief you.
+---
+
+<Flow label="A note is logged, the agent rewrites the overview, you read it or ask Claude for a brief">
+  <FlowStep n="01" title="A note is logged" note="Through the meeting plugin or the form" />
+  <FlowStep n="02" title="The agent rewrites the overview" note="Inside Airtable, a couple of minutes later" emphasis />
+  <FlowStep n="03" title="You read it" note="On the record, or 'brief me on SOSV'" />
+</Flow>
+
+## What it is
+
+Every VC record in the Venture base has a **Group Overview**: who the firm is,
+how it invests, where we stand, which of our companies it has seen, what is
+open and what to watch out for, in six bullets and under 180 words. An Airtable
+agent writes it from Portal's own meeting notes, the firm's stats and the
+companies we have shared with it. No web research. Meeting notes outrank the
+stats, and newer notes outrank older ones, so when a check size changes the
+overview says the new figure and, if it matters, what it changed from.
+
+It rewrites itself a couple of minutes after any note is logged on the firm, so
+it is never older than the last thing anyone filed.
+
+<Screenshot src="/screenshots/group-overview-record.png" alt="An investor's record page in Airtable with the Group Overview field at the top: six bold-labelled bullets and a closing line giving the note count and date, above the list of meeting notes." />
+
+<Record title="Redpine Ventures" table="Organizations from Hubspot CRM">
+<Field label="Group Overview">
+- **Who they are:** Seed and Series A life-science fund; Fund III closing in Q1. Dana Whitfield (Partner) is the relationship.
+- **How they invest:** First checks moving up from about $1M–$2M to $3M–$5M out of Fund III. Seed and A only, no B. Leads about half the time. ADC platforms after two exits; invests nationally, non-coastal is fine.
+- **Where we stand:** Last meeting 2026-08-26 with Ignacio. Warm; coffee once Dana is back in Chicago in the spring.
+- **Our companies with them:** Non-con sent: the cardiovascular device company, at Dana's request.
+- **Open threads:** Ignacio to send the non-confidential summary. Dana to send two oncology startups once cleared with the founders, and to make a co-investor intro.
+- **Watch-outs:** Does not follow into Series B.
+
+Based on 3 Portal notes through 2026-08-26.
+</Field>
+</Record>
+
+<Legend>
+  <LegendItem k="Six bullets">Always in this order, and a bullet is left out when there is nothing to say under it.</LegendItem>
+  <LegendItem k="Closing line">How many notes it was written from and the date of the newest. If that date is older than the last note you know of, the agent has not caught up yet.</LegendItem>
+</Legend>
+
+## Ask Claude for a brief
+
+Before a call, say the firm's name.
+
+<Say>Brief me on Redpine Ventures before my call.</Say>
+
+Claude finds the record, confirming it when names are close, and gives you:
+
+- **One line on whether the overview is current**, by checking its closing line
+  against the notes on the record. If it is behind, or frozen by a hand edit, or
+  empty, Claude says so rather than pretending.
+- **The overview as written.**
+- **The three newest notes**, one line each, with any status change they carried.
+- The stats, the companies we have shared and the Portal contacts, if you ask.
+
+It reads and never writes. If the overview is wrong, the fix is a new note, not
+an edit.
+
+## Three things to know
+
+- **It is not yours to edit.** The agent never overwrites a cell a person has
+  typed in, so one hand edit silently freezes that firm's overview for good. To
+  correct it, log a note with the right information, through
+  [Investor meeting summary](/docs/investor-meeting-summary) or the "New meeting
+  or firm updates" form, and the overview rewrites itself.
+- **It feeds the meeting note, not the other way round.** When Claude drafts a
+  meeting note it reads the overview only to spot what changed since last time.
+  Nothing from it is copied into the note, so a mistake in the overview cannot
+  loop back into the record.
+- **Personal details stay out.** Family, health and where someone lives never
+  appear in it, even when a note mentions them. Professional background does.
+
+*Switching on in October 2026. Until then the field is empty, and "brief me on"
+briefs from the notes instead.*
+
+## If you look after the base
+
+<Say>Audit the group overviews.</Say>
+
+Claude checks every VC with at least one real note and reports which overviews
+are current, behind, missing their closing line, or empty, with the likely cause
+and what to do in Airtable. It reports only; the fixes are a re-run of the agent
+on a cell or a view. The setup of the agent itself, the prompt and the pilot
+checklist are in the plugin's `docs/group-overview-field-agent.md`.
+
+## Good to know
+
+<Facts>
+  <Fact title="Nothing is written by Claude">Both skills read. The only thing that writes Group Overview is the Airtable agent.</Fact>
+  <Fact title="Only Portal's own data">Notes, stats and shared companies from the base. The agent's web search is off.</Fact>
+  <Fact title="Newer wins">When two notes disagree, the later one sets the overview, and an older figure is mentioned only if the change itself matters.</Fact>
+  <Fact title="When unsure, it asks">Similar firm names, and Claude shows the candidates rather than guessing.</Fact>
+</Facts>
