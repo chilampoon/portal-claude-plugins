@@ -36,7 +36,7 @@ a view, or by clearing a hand-edited cell.
 
 4. **Say what to do, by class.** In Airtable, by hand:
    - Empty: the agent has not run on these cells. Run it on the cell, or on "All cells in the view" for a view of VC/PE firms with Overview note count > 0. If the workspace is out of AI credits, nothing runs until it is topped up.
-   - No closing line: open the cell; if a person edited it, clear it and re-run the agent on that cell. If the text is an error message, re-run; if it fails again, the input may exceed the model's cap (the largest is Long Game VC, about 3,000 words).
+   - No closing line: open the cell; if a person edited it, clear it and re-run the agent on that cell. If the text is an error message, re-run; if it fails again, the input may exceed the model's cap (the largest input in the base is about 3,000 words).
    - Stale: usually lag. Re-check after five minutes; if still stale, re-run the agent on that cell.
    Offer to re-run the audit after the user has done any of these.
 

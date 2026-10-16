@@ -26,8 +26,8 @@ Corrections go in as a new note, through **investor-meeting-summary** or the
 context when drafting a note and checks it refreshed after the submission, once
 its `GROUP_OVERVIEW_LIVE` flag is on.
 
-> **Not yet live.** The helper fields exist and were checked on SOSV, DCVC Bio
-> and MBX Capital on 2026-10-15, but the agent has not been converted, so every
+> **Not yet live.** The helper fields exist and were checked on the three pilot
+> firms named in the setup sheet on 2026-10-15, but the agent has not been converted, so every
 > Group Overview is still empty. Until it is, `brief-investor` says so and
 > briefs from the notes instead, and `audit-group-overviews` reports everything
 > as empty. See **Unverified** below for what the pilot should watch.
@@ -37,7 +37,7 @@ its `GROUP_OVERVIEW_LIVE` flag is on.
 ```
 investor-group-overview/
 ├── .claude-plugin/plugin.json             # plugin metadata shown in the catalog
-├── skills/brief-investor/SKILL.md         # "brief me on SOSV before my call"
+├── skills/brief-investor/SKILL.md         # "brief me on Redpine before my call"
 ├── skills/audit-group-overviews/SKILL.md  # maintainer: which overviews are stale, empty or frozen
 ├── docs/group-overview-field-agent.md     # by-hand setup of the agent: steps, prompt, pilot, field reference
 ├── .mcp.json                              # bundles the Airtable connector
@@ -46,7 +46,7 @@ investor-group-overview/
 
 ## How a run goes
 
-**Brief.** "Brief me on SOSV before my call." Claude finds the firm record,
+**Brief.** "Brief me on Redpine Ventures before my call." Claude finds the firm record,
 confirming it when names are close, and reads its Group Overview. It checks the
 overview's closing line ("Based on N Portal notes through YYYY-MM-DD.") against
 the record's Overview note count and Newest note date, and says in one line
@@ -92,8 +92,8 @@ Two build leftovers named `zz delete me - …` (`fldtT5CxQbu8YnK1R`,
    paragraph for plain labelled lines.
 2. The closing line matching Overview note count and Newest note date on the
    record; `brief-investor` and `audit-group-overviews` both depend on it.
-3. Personal details staying out. SOSV's notes mention a contact's
-   neighbourhood; DCVC Bio's a contact's family.
+3. Personal details staying out. Among the pilot firms, one's notes mention a
+   contact's neighbourhood and another's a contact's family.
 4. Credits per run, and whether a hand-edited cell stops refreshing as the
    Airtable docs say.
 5. The refresh check in `investor-meeting-summary`, which has never run

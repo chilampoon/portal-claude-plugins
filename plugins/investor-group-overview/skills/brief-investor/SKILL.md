@@ -1,6 +1,6 @@
 ---
 name: brief-investor
-description: Brief a Portal team member on a VC firm before a meeting or email, from the firm's Group Overview in the Airtable Venture base plus its newest notes. Use this whenever someone asks to be briefed or prepped on an investor, what we know about a firm, where we stand with them, or to pull up a firm's overview — e.g. "brief me on SOSV before my call", "where do we stand with DCVC Bio", "prep me for Redpine tomorrow", "what's the latest on MBX Capital". Read-only: it never writes to Airtable.
+description: Brief a Portal team member on a VC firm before a meeting or email, from the firm's Group Overview in the Airtable Venture base plus its newest notes. Use this whenever someone asks to be briefed or prepped on an investor, what we know about a firm, where we stand with them, or to pull up a firm's overview — e.g. "brief me on Redpine Ventures before my call", "where do we stand with Harbor Point", "prep me for Kestrel Bio tomorrow", "what's the latest on Lakeshore". Read-only: it never writes to Airtable.
 ---
 
 # Brief me on an investor
