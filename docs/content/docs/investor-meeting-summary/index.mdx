@@ -36,7 +36,8 @@ confirm it anyway.
 <Step n="03" title="Say yes">
 
 Reply **yes**. Claude submits the CRM form, and the note appears on the firm's
-record under your name and today's date.
+record under your name and today's date. Once the firm's Group Overview is
+live (below), Claude also waits for it to refresh and tells you if it did not.
 
 </Step>
 </Steps>
@@ -108,6 +109,46 @@ are sharing with them, passes and negatives, their process, co-investors they
 named, people and personal, follow-ups, next contact. The three "companies"
 headings stay separate on purpose: they are three different obligations.
 
+## The firm's Group Overview
+
+Every VC record carries a **Group Overview**: a short, always-current summary
+of the firm, written by an Airtable agent from Portal's own notes, the firm's
+stats and the companies we have shared with it. Read it before you walk into
+the meeting. It rewrites itself a couple of minutes after any note is logged,
+newest note winning where notes disagree, so it is never older than the last
+thing anyone filed.
+
+<Screenshot src="/screenshots/group-overview-record.png" alt="An investor's record page in Airtable with the Group Overview field at the top: six bold-labelled bullets and a closing line giving the note count and date, above the list of meeting notes." />
+
+<Record title="Redpine Ventures" table="Organizations from Hubspot CRM">
+<Field label="Group Overview">
+- **Who they are:** Seed and Series A life-science fund; Fund III closing in Q1. Dana Whitfield (Partner) is the relationship.
+- **How they invest:** First checks moving up from about $1M–$2M to $3M–$5M out of Fund III. Seed and A only, no B. Leads about half the time. ADC platforms after two exits; invests nationally, non-coastal is fine.
+- **Where we stand:** Last meeting 2026-08-26 with Ignacio. Warm; coffee once Dana is back in Chicago in the spring.
+- **Our companies with them:** Non-con sent: the cardiovascular device company, at Dana's request.
+- **Open threads:** Ignacio to send the non-confidential summary. Dana to send two oncology startups once cleared with the founders, and to make a co-investor intro.
+- **Watch-outs:** Does not follow into Series B.
+
+Based on 3 Portal notes through 2026-08-26.
+</Field>
+</Record>
+
+Three things to know about it:
+
+- **It is not yours to edit.** The agent never overwrites a cell a person has
+  typed in, so one hand edit silently freezes that firm's overview for good.
+  To correct it, log a note with the right information, through this plugin or
+  the "New meeting or firm updates" form, and the overview rewrites itself.
+- **It feeds the note, not the other way round.** Before drafting, Claude reads
+  the overview only to spot what changed since the last note, for the "Since
+  last time" heading. Nothing from it is copied into your note, so a mistake in
+  the overview cannot loop back into the record.
+- **Personal details stay out.** Family, health and where someone lives never
+  appear in it, even when a note mentions them. Professional background does.
+
+*Switching on in October 2026. Until then the field is empty and the plugin
+behaves exactly as described above.*
+
 ## Good to know
 
 <Facts>
@@ -116,4 +157,5 @@ headings stay separate on purpose: they are three different obligations.
   <Fact title="The note is about the investor, not us">Portal's own fundraising talk is left out, except what they committed to us and what we promised them.</Fact>
   <Fact title="It goes through the CRM form on purpose">Submitting the form is what tags you as Portal Contact on everyone you met.</Fact>
   <Fact title="When unsure, it asks">Similar firm names or no transcript that day, and it stops rather than guesses.</Fact>
+  <Fact title="Group Overview is read-only">Claude never writes it, and neither should you. A new note is how it changes.</Fact>
 </Facts>
