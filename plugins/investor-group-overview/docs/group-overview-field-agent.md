@@ -72,7 +72,13 @@ special handling.
    is not a concern, but the higher tier reads 22 notes more faithfully.
 5. **Internet search: off.**
 6. **Run automatically: on.** This is what makes the overview refresh when a
-   note is logged.
+   note is logged. If the editor offers conditions for the automatic run
+   (label unverified), set them to Org Type (from HubSpot CRM) contains
+   "Venture Capital/Private Equity" and Overview note count > 0: the first
+   scope, about 365 firms, so no other record spends a credit. Any change to
+   one of the nine inputs re-runs the cell, including a linked company's
+   Pipeline Stage changing in Startups (since 2026-10-28). Autorun covers
+   future changes; the first fill is still the view run in section 7.
 7. Paste the custom instructions from section 3. Insert each `{…}` as a field
    token, not as typed text.
 8. Mark **Investor stats (text)**, **Our companies with them** and **Notes**
