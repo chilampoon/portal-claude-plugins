@@ -148,7 +148,7 @@ Code:
 - **0.2.0** (2026-10-28). Companies input v2: six Portal-stage lookups and a
   reworked "Our companies with them", so the agent can tell co-investments
   from deals the firm did alone, date each company from the notes, and say who
-  brought a deal. Prompt updated to match; word limit 220. Skills read the
+  brought a deal. Prompt updated to match; word limit 250. Skills read the
   agent cell's `value` and `isStale`.
 - **0.1.0** (2026-10-15). First release: the setup sheet, the field reference,
   `brief-investor` and `audit-group-overviews`. Split out of

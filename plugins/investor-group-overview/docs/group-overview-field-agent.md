@@ -106,7 +106,7 @@ Portal notes ({Overview note count}, newest {Newest note date}):
 Portal contacts on this relationship (names may repeat): {Portal contacts (text)}
 Older free-text notes on the firm (undated, lowest weight): {Notes}
 
-Write under 220 words as a bulleted list (the companies bullet carries the detail; keep the others tight): one bullet per item below, in this order, and leave out any item you have nothing for. Begin each bullet with its label in bold, for example "- **Who they are:** ...". Use no other formatting: no headings, no nested bullets, no bold elsewhere.
+Write under 250 words as a bulleted list (the companies bullet carries the detail; keep the others tight): one bullet per item below, in this order, and leave out any item you have nothing for. Begin each bullet with its label in bold, for example "- **Who they are:** ...". Use no other formatting: no headings, no nested bullets, no bold elsewhere.
 - Who they are:
 - How they invest: stage, check size, lead or follow, sectors, geography.
 - Where we stand: date of the last real contact, who at Portal, how warm, any agreed cadence.
@@ -296,7 +296,7 @@ Not verified, because they happen in the UI or need the agent running:
   stage link, "Our companies with them" pairs names with those stages, and the
   prompt now dates each company from the notes, splits Co-invested / Invested
   without Portal / Active / Earlier / Passed, and reads deal direction from the
-  notes. Word limit raised to 220 so the companies bullet has room. The agent
+  notes. Word limit raised to 250 so the companies bullet has room. The agent
   reads the same field token, so no token change in the UI; paste the new
   prompt and re-run the cells already generated.
 - **2026-10-15.** First version.
