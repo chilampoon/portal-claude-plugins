@@ -82,8 +82,12 @@ special handling.
 7. Paste the custom instructions from section 3. Insert each `{…}` as a field
    token, not as typed text.
 8. Mark **Investor stats (text)**, **Our companies with them** and **Notes**
-   as optional, so the agent still runs when they are empty. The other tokens
-   are always filled for an investor in scope.
+   as optional (**Make optional** on each token), so the agent still runs when
+   they are empty. The other tokens are always filled for an investor in scope.
+   If a token is left required and empty on a record, the cell shows an
+   error the API reports as `emptyDependency` and the agent will not run on
+   it; most firms have an empty Notes field, so this stops most of the view.
+   Seen on 2026-10-28 on two pilot firms; fixed by marking Notes optional.
 9. Before saving, note the **credits per run** shown in the preview:
    `________` credits. Multiply by about 385 for the first full run, and keep
    the number for the pilot.
