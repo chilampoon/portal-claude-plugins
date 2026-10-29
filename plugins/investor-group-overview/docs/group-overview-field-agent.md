@@ -163,9 +163,10 @@ Set the field's description to:
 
 ## 6. Pilot on five records
 
-Run the agent on these cells only (one cell at a time, or a filtered view with
-"Run on all cells in the view"), and read each result against its pass
-condition before going wider.
+Run the agent on these cells only, and read each result against its pass
+condition before going wider. To run one cell: click **Run agent** inside the
+Group Overview cell; if the cell already has text, click into it and use the
+two-arrow icon. Labels from Airtable's help page "Using Airtable AI in fields".
 
 | Investor | Record | Passes if |
 | --- | --- | --- |
@@ -193,9 +194,16 @@ delete-and-recreate, so do it before the full run, not after).
 ## 7. Full first run
 
 Make a view of "Organizations from Hubspot CRM" filtered to
-Org Type (from HubSpot CRM) = "Venture Capital/Private Equity" and
-Overview note count > 0 (about 385 records), and run the agent on
-"All cells in the view". Spot-check ten results against their notes.
+Org Type (from HubSpot CRM) contains "Venture Capital/Private Equity" and
+Overview note count > 0 (about 365 records). Open the field header's
+dropdown, hover **Run field agent**, and choose **Cells never modified** (skips
+the pilot cells) or **All cells in the view**. The same menu offers **Outdated
+cells** and **Cells with errors** for later. Spot-check ten results against
+their notes.
+
+Saving a changed prompt does not regenerate cells that already have content
+unless you choose **Continue** in the overwrite dialog; otherwise run
+**Outdated cells** or click **Run agent** on each cell.
 
 The roughly 270 VC/PE orgs without notes are out of scope for now. The prompt
 handles them ("No Portal meeting notes yet.") if they are ever run.
