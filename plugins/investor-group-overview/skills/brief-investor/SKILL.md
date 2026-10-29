@@ -14,9 +14,9 @@ field agent; this skill never writes it, and never writes anything else.
 - AIRTABLE_BASE: "Venture" — baseId `appAX3sMfPtCKv4nB`
 - INVESTORS_TABLE: "Organizations from Hubspot CRM" — tableId `tbl5bYS4WIAr3BFWK`
   - Name `fldXgesU5mz8YB1kq` (primary) · Org Type (from HubSpot CRM) `fldS2yWqOfPmkOLwE` (lookup; VCs read "Venture Capital/Private Equity")
-  - Group Overview `fldzKsGxC32svNmYK` — rich text, written by the field agent; the API returns markdown. **Never write it.**
+  - Group Overview `fldzKsGxC32svNmYK` — the agent's field. The API returns an object `{state, value, isStale}`; `value` is the markdown text. **Never write it.**
   - Overview note count `fldmtCayz9xI8Q9CR` · Newest note date `fldIDWMUq53JKX4Rn` (YYYY-MM-DD) · Stats modified `fldnHlQcpompozXS8`
-  - Investor stats (text) `fldRWCg1ST2nttz6Q` · Our companies with them `fldsT1ke8p6JXNnm0` · Portal contacts (text) `fld4WoLgxQlbzlAD2`
+  - Investor stats (text) `fldRWCg1ST2nttz6Q` · Our companies with them `fldsT1ke8p6JXNnm0` (each status line followed by Portal's own pipeline stage for those companies; 4.x = Portal portfolio) · Portal contacts (text) `fld4WoLgxQlbzlAD2`
   - Email Address (from HubSpot CRM) `fldckjoCBQTJKf3js`, for matching a firm by domain
 - NOTES_TABLE: "Investor Viewer Updater" — tableId `tblQbKYkiNx3rckpj`
   - Firm link `fldykXuyEBmt5x3JI` · Created `fldGt0NEloZyFgjZM` · Overview input `fldxGxioudTxEvZ9q` (the note already dated, with its status links, blank for filler)
@@ -30,7 +30,7 @@ field agent; this skill never writes it, and never writes anything else.
 
 2. **Read the record.** `list_records_for_table` with `recordIds` for that one record and the fields above.
 
-3. **Check the overview is current.** Parse the closing line. Then:
+3. **Check the overview is current.** Take `value` from the Group Overview object and parse its closing line. If `isStale` is true, Airtable itself says an input changed since the last run; say so first. Then:
    - **Empty cell.** Say "No Group Overview yet for this firm" and whether the firm has real notes (Overview note count). The agent may not be live, or may not have run on this cell.
    - **No closing line, or text that does not follow the agent's shape.** Say the overview looks hand-edited or stuck, so it will not refresh on its own, and that the fix is in Airtable (a maintainer clears the cell or re-runs the agent). Still show the text, marked as unverified.
    - **N differs from Overview note count, or the date is before Newest note date.** Say the overview is behind by that much (for example "written from 19 notes, the record now has 20; a note on 2026-10-14 is not in it yet"). The agent normally catches up within minutes; the newest notes below cover the gap.

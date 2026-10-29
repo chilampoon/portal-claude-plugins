@@ -124,6 +124,7 @@ workspace.
 
 ## Changes
 
+- **2.1.2** (2026-10-28). Step 6 reads the agent cell's `value` and `isStale`.
 - **2.1.1** (2026-10-15). The Group Overview setup sheet, field reference and
   rules move to the new **investor-group-overview** plugin; this README keeps a
   cross-reference. No behaviour change.

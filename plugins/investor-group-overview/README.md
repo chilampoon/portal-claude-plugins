@@ -26,11 +26,12 @@ Corrections go in as a new note, through **investor-meeting-summary** or the
 context when drafting a note and checks it refreshed after the submission, once
 its `GROUP_OVERVIEW_LIVE` flag is on.
 
-> **Not yet live.** The helper fields exist and were checked on the three pilot
-> firms named in the setup sheet on 2026-10-15, but the agent has not been converted, so every
-> Group Overview is still empty. Until it is, `brief-investor` says so and
-> briefs from the notes instead, and `audit-group-overviews` reports everything
-> as empty. See **Unverified** below for what the pilot should watch.
+> **Pilot in progress.** The agent is converted and has run on three records;
+> the full run over VC/PE firms has not happened yet, so most Group Overviews
+> are still empty. The companies input and the prompt changed on 2026-10-28
+> (co-investments, dates and deal direction); the setup sheet's "Changes"
+> section has the details, and the new prompt has to be pasted into the agent
+> by hand. See **Unverified** below for what the pilot should watch.
 
 ## What's inside
 
@@ -80,6 +81,12 @@ agent reads, made through the Airtable connector:
 | Investor stats (text) | Organizations | `fldRWCg1ST2nttz6Q` | formula |
 | Our companies with them | Organizations | `fldsT1ke8p6JXNnm0` | formula |
 | Portal contacts (text) | Organizations | `fld4WoLgxQlbzlAD2` | formula |
+| Portal stage · 1 - Non-con sent | Organizations | `fldkEvqPTgv5tRKC9` | lookup |
+| Portal stage · 2 - Intro meeting | Organizations | `fldExibrlu4XQfBzJ` | lookup |
+| Portal stage · 3 - In diligence | Organizations | `fld10JXwGrJS8CcMS` | lookup |
+| Portal stage · 4 - Likely in syndicate | Organizations | `fldFKwP6iNxSbPERo` | lookup |
+| Portal stage · 5 - Investment made | Organizations | `fldbA6OwZb13BnCHa` | lookup |
+| Portal stage · 6 - Passed | Organizations | `fldOdD2vb9rQtgkPf` | lookup |
 
 Formulas and the by-hand settings are in `docs/group-overview-field-agent.md`.
 Two build leftovers named `zz delete me - …` (`fldtT5CxQbu8YnK1R`,
@@ -108,8 +115,9 @@ Two build leftovers named `zz delete me - …` (`fldtT5CxQbu8YnK1R`,
 - The connector can read the field and its definition but cannot see the
   agent's configuration, model or run history, cannot trigger a run, and
   cannot delete a field.
-- The brief reads the overview as markdown, which is how the API returns a
-  rich-text cell.
+- The API returns the Group Overview cell as an object: `value` (the markdown
+  text), `state` and `isStale`. The skills read `value` and use `isStale` as
+  Airtable's own word on whether the agent has caught up.
 
 ## Rules
 
@@ -137,6 +145,11 @@ Code:
 
 ## Changes
 
+- **0.2.0** (2026-10-28). Companies input v2: six Portal-stage lookups and a
+  reworked "Our companies with them", so the agent can tell co-investments
+  from deals the firm did alone, date each company from the notes, and say who
+  brought a deal. Prompt updated to match; word limit 220. Skills read the
+  agent cell's `value` and `isStale`.
 - **0.1.0** (2026-10-15). First release: the setup sheet, the field reference,
   `brief-investor` and `audit-group-overviews`. Split out of
   investor-meeting-summary 2.1.0, which keeps its flag-gated overview steps.

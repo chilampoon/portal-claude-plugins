@@ -1,7 +1,7 @@
 {
   "name": "investor-group-overview",
   "displayName": "Investor Group Overview",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A short, always-current summary on every VC record in the Venture base, written by an Airtable field agent from Portal's own notes, stats and shared companies. The plugin reads it: brief me on a firm before a meeting, and audit which overviews are stale, empty or frozen. It never writes the field.",
   "author": {
     "name": "Portal"

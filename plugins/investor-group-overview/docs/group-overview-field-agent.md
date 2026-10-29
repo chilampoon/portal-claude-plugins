@@ -13,8 +13,10 @@ the base. The Airtable connector can create an AI field but cannot edit its
 prompt afterwards, pick the model or trigger a run, so nothing here goes
 through the API. Converting the existing empty field in place keeps its ID.
 
-**Status: not yet converted.** The helper fields exist (see Appendix A), the
-agent has not been set up, the pilot has not run, and `GROUP_OVERVIEW_LIVE` in
+**Status: pilot in progress.** The field was converted and the agent has run
+on three records (2026-10-28). The companies input and the prompt changed on
+2026-10-28 (see "Changes" at the end), so paste the prompt below again before
+running more cells. `GROUP_OVERVIEW_LIVE` in
 `plugins/investor-meeting-summary/skills/log-investor-meeting/SKILL.md` is
 still `false`.
 
@@ -95,7 +97,7 @@ Sources, in order of authority:
 2. Stats entered from earlier notes, last changed {Stats modified}:
 {Investor stats (text)}
 If a note dated after that says otherwise, use the note.
-3. Portal companies shared with this investor, by status:
+3. Portal companies shared with this investor, by their status with this firm. Each line is followed by Portal's own pipeline stage for those companies, in the same order: 4.x is a Portal portfolio company, 5.x means Portal passed or lost touch, anything else is still in Portal's pipeline.
 {Our companies with them}
 
 Portal notes ({Overview note count}, newest {Newest note date}):
@@ -104,11 +106,11 @@ Portal notes ({Overview note count}, newest {Newest note date}):
 Portal contacts on this relationship (names may repeat): {Portal contacts (text)}
 Older free-text notes on the firm (undated, lowest weight): {Notes}
 
-Write under 180 words as a bulleted list: one bullet per item below, in this order, and leave out any item you have nothing for. Begin each bullet with its label in bold, for example "- **Who they are:** ...". Use no other formatting: no headings, no nested bullets, no bold elsewhere.
+Write under 220 words as a bulleted list (the companies bullet carries the detail; keep the others tight): one bullet per item below, in this order, and leave out any item you have nothing for. Begin each bullet with its label in bold, for example "- **Who they are:** ...". Use no other formatting: no headings, no nested bullets, no bold elsewhere.
 - Who they are:
 - How they invest: stage, check size, lead or follow, sectors, geography.
 - Where we stand: date of the last real contact, who at Portal, how warm, any agreed cadence.
-- Our companies with them: status per company, with their stated reason for any pass.
+- Our companies with them: date each company from the notes; its latest mention or status line is its last update. Then, only the parts that apply: Co-invested (they invested and Portal's stage is 4.x), with the year. Invested without Portal. Active: status and last update for anything mentioned in the last 6 months. Earlier: anything older, as "Earlier, we discussed A, B and C, without a co-investment recorded", with the last-update dates. Passed, with their stated reason. Say when a company was referred to us by them.
 - Open threads: follow-ups from the two most recent notes, with who owes what.
 - Watch-outs: hard nos, mandates, sensitivities.
 After the list, end with one plain line: "Based on N Portal notes through YYYY-MM-DD."
@@ -118,6 +120,7 @@ Rules:
 - Skip pasted email signatures, phone numbers, addresses and scheduling chatter.
 - Leave out personal details about individuals: family, health, where they live. Professional background is fine.
 - Use people's names as they appear in the notes.
+- "Non-con sent" and "Intro meeting" mean Portal brought the company to them, unless the notes say the firm sent or referred it to us; then say "referred to us by them" and never treat it as a Portal pitch or an open thread of ours.
 - If there are no Portal notes, start with "No Portal meeting notes yet." and use the stats only.
 ```
 
@@ -126,7 +129,7 @@ Rules:
 | `{Name}` | Name `fldXgesU5mz8YB1kq` | Organizations | no |
 | `{Stats modified}` | Stats modified | Organizations | no |
 | `{Investor stats (text)}` | Investor stats (text) | Organizations | **yes** |
-| `{Our companies with them}` | Our companies with them | Organizations | **yes** |
+| `{Our companies with them}` | Our companies with them (each status line followed by Portal's own stage for those companies) | Organizations | **yes** |
 | `{Overview note count}` | Overview note count | Organizations | no |
 | `{Newest note date}` | Newest note date | Organizations | no |
 | `{Notes for overview}` | Notes for overview | Organizations | no |
@@ -221,7 +224,8 @@ cannot delete fields, so delete them by hand.
 | Newest note date | `fldIDWMUq53JKX4Rn` | Formula | `IF({Newest note (raw)}, DATETIME_FORMAT(SET_TIMEZONE({Newest note (raw)}, 'America/Chicago'), 'YYYY-MM-DD'))` |
 | Stats modified | `fldnHlQcpompozXS8` | Formula | `IF(LAST_MODIFIED_TIME(<six stat fields>), DATETIME_FORMAT(SET_TIMEZONE(LAST_MODIFIED_TIME(<six stat fields>), 'America/Chicago'), 'YYYY-MM-DD'), "never")` with AUM (M USD), Min check size (M USD), Max check size (M USD), Fund Stage, Lead deals?, Fund focus |
 | Investor stats (text) | `fldRWCg1ST2nttz6Q` | Formula | Six labelled lines, "not recorded" where empty, as in the brief. |
-| Our companies with them | `fldsT1ke8p6JXNnm0` | Formula | One labelled line per stage link, plus "Deals they referred to Portal" from Startups, as in the brief. |
+| Our companies with them | `fldsT1ke8p6JXNnm0` | Formula | One labelled line per stage link, each followed by `  Portal stage, same order: …` from the six lookups below, plus "Deals they referred to Portal" from Startups. Changed 2026-10-28. |
+| Portal stage · 1 - Non-con sent … 6 - Passed | `fldkEvqPTgv5tRKC9` `fldExibrlu4XQfBzJ` `fld10JXwGrJS8CcMS` `fldFKwP6iNxSbPERo` `fldbA6OwZb13BnCHa` `fldOdD2vb9rQtgkPf` | Lookups | Startups → Pipeline Stage (`fldX6aVYsZ0CdBaVR`) through each stage link. 4.x = Portal portfolio (a co-investment when the firm invested), 5.x = Portal passed or lost touch, else still in the pipeline. Added 2026-10-28. |
 | Portal contacts (text) | `fld4WoLgxQlbzlAD2` | Formula | `ARRAYJOIN(ARRAYUNIQUE(ARRAYCOMPACT({Portal Contact (from People)})), ", ")`. Airtable's ARRAYUNIQUE does not dedupe collaborators, so names repeat (SOSV lists Gianina Varea four times). Harmless for the agent; the prompt says names may repeat. |
 
 Overview input, in full:
@@ -283,3 +287,16 @@ Not verified, because they happen in the UI or need the agent running:
 - The UI labels quoted in sections 2 and 5, and whether the agent's output renders bold and bullets in the rich-text cell.
 - Credits per run, and the agent's behaviour on hand-edited cells.
 - The refresh check in `log-investor-meeting` end to end.
+
+## Changes
+
+- **2026-10-28.** The companies input could not tell a co-investment from a
+  deal the firm did alone, had no dates, and said nothing about who brought a
+  deal. Fix: six lookups pull Portal's Pipeline Stage for every company on each
+  stage link, "Our companies with them" pairs names with those stages, and the
+  prompt now dates each company from the notes, splits Co-invested / Invested
+  without Portal / Active / Earlier / Passed, and reads deal direction from the
+  notes. Word limit raised to 220 so the companies bullet has room. The agent
+  reads the same field token, so no token change in the UI; paste the new
+  prompt and re-run the cells already generated.
+- **2026-10-15.** First version.

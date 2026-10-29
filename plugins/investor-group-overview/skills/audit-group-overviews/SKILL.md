@@ -15,7 +15,7 @@ a view, or by clearing a hand-edited cell.
 - AIRTABLE_BASE: "Venture" — baseId `appAX3sMfPtCKv4nB`
 - INVESTORS_TABLE: "Organizations from Hubspot CRM" — tableId `tbl5bYS4WIAr3BFWK`. VCs view `viw2uiqBRhcjHucXY`.
   - Name `fldXgesU5mz8YB1kq` · Org Type (from HubSpot CRM) `fldS2yWqOfPmkOLwE` (lookup; "Venture Capital/Private Equity" marks the scope)
-  - Group Overview `fldzKsGxC32svNmYK` (rich text; the API returns markdown). **Never write it.**
+  - Group Overview `fldzKsGxC32svNmYK` — the API returns an object `{state, value, isStale}`; classify on `value`, and report `isStale` as Airtable's own staleness flag. **Never write it.**
   - Overview note count `fldmtCayz9xI8Q9CR` · Newest note date `fldIDWMUq53JKX4Rn` (YYYY-MM-DD)
 - Scope: VC/PE firms with Overview note count > 0 (about 365). Firms without a real note are out of scope and are only counted.
 - The agent's closing line reads `Based on N Portal notes through YYYY-MM-DD.`
@@ -27,10 +27,10 @@ a view, or by clearing a hand-edited cell.
 1. **Pull the records.** `list_records_for_table` on INVESTORS_TABLE with fields Name, Org Type, Group Overview, Overview note count and Newest note date, filtered on Overview note count > 0, `pageSize` 8000. Expect roughly 390 records and a large result; if the result is saved to a file rather than returned inline, process it with a script rather than reading it. Keep only records whose Org Type lookup contains "Venture Capital/Private Equity".
 
 2. **Classify each record.**
-   - **Empty**: no Group Overview text.
+   - **Empty**: no Group Overview object, or an empty `value`.
    - **No closing line**: text present, but no `Based on N Portal notes through YYYY-MM-DD.` line. Usually a hand edit, which freezes the cell, or an agent error.
    - **Stale**: closing line present, but N is not the record's Overview note count, or the date is earlier than Newest note date.
-   - **Current**: N and the date match.
+   - **Current**: N and the date match. Note separately any current overview whose `isStale` is true: an input changed and the agent has not re-run yet.
 
 3. **Report.** Counts for the four classes, the scope size, and the number of VC/PE firms with no real note (out of scope). Then a table of everything not current: Name, record ID, class, "N vs count", "through-date vs newest". Sort empties last, since they are usually one bulk run. Keep the table to what fits; say how many more there are.
 
